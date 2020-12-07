@@ -1,3 +1,6 @@
+*.thy~
+# other defaults
+
 *.annot
 *.cmo
 *.cma
