@@ -40,7 +40,7 @@ lemma "Fr_2 \<F> \<Longrightarrow> \<forall>A B. Op B \<longrightarrow> CoPw\<^s
 (**CoP1-I*)
 lemma "Fr_2 \<F> \<Longrightarrow> \<forall>A B. Cl A \<longrightarrow>  CoP1\<^sup>A\<^sup>B \<^bold>\<not>\<^sup>I" using Int_fr_def OpCldual conn by auto
 lemma "Fr_1b \<F> \<Longrightarrow> \<forall>A B. Op B \<longrightarrow>  CoP1\<^sup>A\<^sup>B \<^bold>\<not>\<^sup>I" by (smt IF2 dEXP_def MONO_def monI conn)
-lemma CoP1_I_rec: "Fr_2 \<F> \<Longrightarrow> Fr_3 \<F> \<Longrightarrow> \<forall>A B. Br (\<^bold>\<midarrow>B) \<longrightarrow> CoP1\<^sup>A\<^sup>B \<^bold>\<not>\<^sup>I" using IF3 dNOR_def Br_Izero unfolding conn by auto 
+lemma CoP1_I_rec: "Fr_2 \<F> \<Longrightarrow> Fr_3 \<F> \<Longrightarrow> \<forall>A B. Br (\<^bold>\<midarrow>B) \<longrightarrow> CoP1\<^sup>A\<^sup>B \<^bold>\<not>\<^sup>I" using IF3 dNOR_def Br_boundary unfolding conn by auto 
 lemma "Fr_2 \<F> \<Longrightarrow> \<forall>A B. Fr A \<longrightarrow> CoP1\<^sup>A\<^sup>B \<^bold>\<not>\<^sup>I" using fp1 pB3 unfolding conn equal_op_def by metis
 (**CoP1-C*)
 lemma "Fr_2 \<F> \<Longrightarrow> \<forall>A B. Op B \<longrightarrow> CoP1\<^sup>A\<^sup>B \<^bold>\<not>\<^sup>C" using Int_fr_def pC2 pF2 unfolding conn by metis

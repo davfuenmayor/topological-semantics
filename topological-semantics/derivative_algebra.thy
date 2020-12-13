@@ -98,11 +98,11 @@ lemma Cl_F: "Der_1 \<D> \<Longrightarrow> Der_4 \<D> \<Longrightarrow> \<forall>
 Here we uncover the minimal conditions under which they hold (taking frontier operation as primitive).*)
 lemma Cl_Bzero: "\<forall>A. Cl A \<longleftrightarrow> \<B>(\<^bold>\<midarrow>A) \<^bold>\<approx> \<^bold>\<bottom>" using pA2 pC1 unfolding conn by metis
 lemma Op_Bzero: "\<forall>A. Op A \<longleftrightarrow>  \<B> A \<^bold>\<approx> \<^bold>\<bottom>" using pB1 pI1 unfolding conn by metis
-lemma Br_Izero: "\<forall>A. Br(A) \<longleftrightarrow> \<I> A \<^bold>\<approx> \<^bold>\<bottom>" using Br_der_def2 Int_der_def2 unfolding conn by metis
+lemma Br_boundary: "\<forall>A. Br(A) \<longleftrightarrow> \<I> A \<^bold>\<approx> \<^bold>\<bottom>" using Br_der_def2 Int_der_def2 unfolding conn by metis
+lemma Fr_nowhereDense: "\<forall>A. Fr(A) \<longrightarrow> \<I>(\<C> A) \<^bold>\<approx> \<^bold>\<bottom>" using Fr_ClBr Br_boundary eq_ext by metis
 lemma Cl_FB: "\<forall>A. Cl A \<longleftrightarrow> \<F> A \<^bold>\<approx> \<B> A" using Br_der_def2 pA2 pF1 pF3 unfolding conn by metis
 lemma Op_FB: "\<forall>A. Op A \<longleftrightarrow> \<F> A \<^bold>\<approx> \<B>(\<^bold>\<midarrow>A)" using pA1 pA2 pF3 pI2 unfolding conn by metis
-lemma Clopen_FB: "\<forall>A. Cl A \<and> Op A \<longleftrightarrow> \<F> A \<^bold>\<approx> \<^bold>\<bottom>" using Cl_der_def Int_der_def Fr_der_def unfolding conn by smt
-
+lemma Clopen_Fzero: "\<forall>A. Cl A \<and> Op A \<longleftrightarrow> \<F> A \<^bold>\<approx> \<^bold>\<bottom>" using Cl_der_def Int_der_def Fr_der_def unfolding conn by smt
 
 lemma Int_sup_closed: "Der_1b \<D> \<Longrightarrow> supremum_closed (\<lambda>A. Op A)" by (smt IC1_dual ID1b Int_der_def2 PD1 sup_char diff_def)
 lemma Int_meet_closed: "Der_1a \<D> \<Longrightarrow> meet_closed (\<lambda>A. Op A)" by (metis ID1a Int_der_def MULT_b_def meet_def)
@@ -112,7 +112,28 @@ lemma Cl_join_closed: "Der_1a \<D> \<Longrightarrow> join_closed (\<lambda>A. Cl
 lemma Cl_sup_closed: "Der_inf \<D> \<Longrightarrow> supremum_closed (\<lambda>A. Cl A)" by (simp add: fp_CD_sup_closed)
 lemma Br_inf_closed: "Der_1b \<D> \<Longrightarrow> infimum_closed (\<lambda>A. Br A)" by (smt Br_der_def CI1b IC1_dual PD1 inf_char diff_def)
 lemma Fr_inf_closed: "Der_1b \<D> \<Longrightarrow> infimum_closed (\<lambda>A. Fr A)" by (metis (full_types) Br_der_def Br_inf_closed Cl_der_def Cl_inf_closed Fr_der_def join_def diff_def)
-lemma Fr_join_closed: "Der_1 \<D> \<Longrightarrow> Der_4 \<D> \<Longrightarrow> join_closed (\<lambda>A. Fr A)" sorry (*TODO*)
+lemma Br_Fr_join: "Der_1 \<D> \<Longrightarrow> Der_4 \<D> \<Longrightarrow> \<forall>A B. Br A \<and> Fr B \<longrightarrow> Br(A \<^bold>\<or> B)" proof -
+  assume der1: "Der_1 \<D>" and der4: "Der_4 \<D>"
+  { fix A B
+    { assume bra: "Br A" and frb: "Fr B"
+      from bra have "\<I> A \<^bold>\<approx> \<^bold>\<bottom>" using Br_boundary by auto
+      hence 1: "\<C>(\<^bold>\<midarrow>A) \<^bold>\<approx> \<^bold>\<top>" by (metis ICdual bottom_def compl_def dual_def eq_ext' top_def)
+      from frb have "\<I>(\<C> B) \<^bold>\<approx> \<^bold>\<bottom>" by (simp add: Fr_nowhereDense)
+      hence 2: "\<C>(\<^bold>\<midarrow>(\<C> B)) \<^bold>\<approx> \<^bold>\<top>" by (metis ICdual bottom_def compl_def dual_def eq_ext' top_def)
+      from der1 have "\<C>(\<^bold>\<midarrow>A) \<^bold>\<leftharpoonup> \<C> B \<^bold>\<preceq> \<C>((\<^bold>\<midarrow>A) \<^bold>\<leftharpoonup> B)" by (simp add: CD1 PD4)
+      hence "\<C>(\<^bold>\<midarrow>A) \<^bold>\<leftharpoonup> \<C> B \<^bold>\<preceq> \<C>(\<^bold>\<midarrow>(A \<^bold>\<or> B))" unfolding conn by simp
+      hence "\<^bold>\<top> \<^bold>\<leftharpoonup> \<C> B \<^bold>\<preceq> \<C>(\<^bold>\<midarrow>(A \<^bold>\<or> B))" using 1 unfolding conn by simp
+      hence 3: "\<^bold>\<midarrow>(\<C> B) \<^bold>\<preceq> \<C>(\<^bold>\<midarrow>(A \<^bold>\<or> B))" unfolding conn by simp
+      from der1 der4 have 4: "let M=\<^bold>\<midarrow>(\<C> B); N=\<^bold>\<midarrow>(A \<^bold>\<or> B) in  M \<^bold>\<preceq> \<C> N \<longrightarrow> \<C> M \<^bold>\<preceq> \<C> N" by (smt CD1b Cl_Closed PC1 PD1)
+      from 3 4 have "\<C>(\<^bold>\<midarrow>(\<C> B)) \<^bold>\<preceq> \<C>(\<^bold>\<midarrow>(A \<^bold>\<or> B))" by simp 
+      hence "\<^bold>\<top> \<^bold>\<approx> \<C>(\<^bold>\<midarrow>(A \<^bold>\<or> B))" using 2 unfolding top_def by simp
+      hence "\<^bold>\<bottom> \<^bold>\<approx> \<I>(A \<^bold>\<or> B)" using ICdual dual_def eq_ext' conn by metis
+      hence "Br (A \<^bold>\<or> B)" using Br_boundary by simp
+    } hence "Br A \<and> Fr B \<longrightarrow> Br (A \<^bold>\<or> B)" by simp
+  } hence "\<forall>A B. Br A \<and> Fr B \<longrightarrow> Br (A \<^bold>\<or> B)" by simp
+  thus ?thesis by simp
+qed
+lemma Fr_join_closed: "Der_1 \<D> \<Longrightarrow> Der_4 \<D> \<Longrightarrow> join_closed (\<lambda>A. Fr A)" by (simp add: Br_Fr_join Cl_join_closed Fr_ClBr PC1)
 
 
 (**Introduces a predicate for indicating that A and B are disjoint and proves some properties.*)
