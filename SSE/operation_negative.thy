@@ -282,6 +282,9 @@ declare lCoPw_def[Defs] lCoP1_def[Defs] lCoP1'_def[Defs]
 lemma lCoP1_defs_rel: "lCoP1 \<iota> \<eta> = lCoP1' \<iota> \<eta>" by (metis (full_types) lCoP1'_def lCoP1_def)
 lemma lCoP2_defs_rel: "lCoP2 \<iota> \<eta> = lCoP2' \<iota> \<eta>" by (metis (full_types) lCoP2'_def lCoP2_def)
 
+(**All local contraposition variants are in general independent from each other. However if we take
+classical implication we can verify some relationships.*)
+
 lemma lCoP1_def2: "lCoP1(\<^bold>\<rightarrow>) \<eta> = (lCoPw(\<^bold>\<rightarrow>) \<eta> \<and> DNI \<eta>)" unfolding Defs conn by smt
 lemma lCoP2_def2: "lCoP2(\<^bold>\<rightarrow>) \<eta> = (lCoPw(\<^bold>\<rightarrow>) \<eta> \<and> DNE \<eta>)" unfolding Defs conn by smt
 
@@ -305,6 +308,26 @@ lemma lCoP1_TND: "lCoP1(\<^bold>\<rightarrow>) \<eta> \<Longrightarrow> TND \<et
 lemma "TND \<eta> \<Longrightarrow> lCoP1(\<^bold>\<rightarrow>) \<eta>" nitpick oops
 lemma lCoP2_ECQ: "lCoP2(\<^bold>\<rightarrow>) \<eta> \<Longrightarrow> ECQ \<eta>" by (smt XCoP_CoPw XCoP_def2 CoP2_DNor CoP2_def2 nDNor_def ECQ_def ECQw_def lCoP2_def2 lCoPw_XCoP conn)
 lemma "ECQ \<eta> \<Longrightarrow> lCoP2(\<^bold>\<rightarrow>) \<eta>" nitpick oops
+
+
+(**lMT: Modus tollens (local/axiom variants).*)
+abbreviation MT0ax ("lMT0\<^sup>_\<^sup>_ _ _") where "lMT0\<^sup>a\<^sup>b \<iota> \<eta> \<equiv> (\<iota> a b::\<sigma>) \<^bold>\<and> (\<eta> b) \<^bold>\<preceq> (\<eta> a)"
+abbreviation MT1ax ("lMT1\<^sup>_\<^sup>_ _ _") where "lMT1\<^sup>a\<^sup>b \<iota> \<eta> \<equiv> (\<iota> a (\<eta> b::\<sigma>)) \<^bold>\<and> b \<^bold>\<preceq> (\<eta> a)"
+abbreviation MT2ax ("lMT2\<^sup>_\<^sup>_ _ _") where "lMT2\<^sup>a\<^sup>b \<iota> \<eta> \<equiv> (\<iota> (\<eta> a) b::\<sigma>) \<^bold>\<and> (\<eta> b) \<^bold>\<preceq> a"
+abbreviation MT3ax ("lMT3\<^sup>_\<^sup>_ _ _") where "lMT3\<^sup>a\<^sup>b \<iota> \<eta> \<equiv> (\<iota> (\<eta> a) (\<eta> b::\<sigma>)) \<^bold>\<and> b \<^bold>\<preceq> a"
+definition "lMT0 \<iota> \<eta> \<equiv> \<forall>a b. lMT0\<^sup>a\<^sup>b \<iota> \<eta>"
+definition "lMT1 \<iota> \<eta> \<equiv> \<forall>a b. lMT1\<^sup>a\<^sup>b \<iota> \<eta>"
+definition "lMT2 \<iota> \<eta> \<equiv> \<forall>a b. lMT2\<^sup>a\<^sup>b \<iota> \<eta>"
+definition "lMT3 \<iota> \<eta> \<equiv> \<forall>a b. lMT3\<^sup>a\<^sup>b \<iota> \<eta>"
+declare lMT0_def[Defs] lMT1_def[Defs] lMT2_def[Defs] lMT3_def[Defs]
+
+(**All local MT variants are in general independent from each other and also from local CoP instances.
+However if we take classical implication we can verify that local MT and CoP are indeed equivalent.*)
+lemma "lMT0(\<^bold>\<rightarrow>) \<eta> = lCoPw(\<^bold>\<rightarrow>) \<eta>" unfolding Defs conn by metis
+lemma "lMT1(\<^bold>\<rightarrow>) \<eta> = lCoP1(\<^bold>\<rightarrow>) \<eta>" unfolding Defs conn by metis
+lemma "lMT2(\<^bold>\<rightarrow>) \<eta> = lCoP2(\<^bold>\<rightarrow>) \<eta>" unfolding Defs conn by metis
+lemma "lMT3(\<^bold>\<rightarrow>) \<eta> = lCoP3(\<^bold>\<rightarrow>) \<eta>" unfolding Defs conn by metis
+
 
 (**DS: disjunctive syllogism.*)
 abbreviation rDS1 ("DS1\<^sup>_\<^sup>_ _ _") where "DS1\<^sup>a\<^sup>b \<iota> \<eta> \<equiv> (a \<^bold>\<or> b::\<sigma>) \<^bold>\<preceq> (\<iota> (\<eta> a) b)"
