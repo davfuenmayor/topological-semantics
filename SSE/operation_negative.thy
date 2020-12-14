@@ -11,9 +11,9 @@ this time involving negation-like properties. We show how they make use of quant
 named_theorems Defs
 
 (**TND: tertium non datur, aka law of excluded middle (resp: strong, weak, minimal).*)
-abbreviation rTND  ("TND\<^sup>_  _") where "TND\<^sup>a \<eta>  \<equiv>       \<^bold>\<top>  \<^bold>\<approx> a \<^bold>\<or> (\<eta> a)"
-abbreviation rTNDw ("TNDw\<^sup>_ _") where "TNDw\<^sup>a \<eta> \<equiv> \<forall>b. (\<eta> b) \<^bold>\<preceq> a \<^bold>\<or> (\<eta> a)"
-abbreviation rTNDm ("TNDm\<^sup>_ _") where "TNDm\<^sup>a \<eta> \<equiv>     (\<eta> \<^bold>\<bottom>) \<^bold>\<preceq> a \<^bold>\<or> (\<eta> a)"
+abbreviation pTND  ("TND\<^sup>_  _") where "TND\<^sup>a \<eta>  \<equiv>       \<^bold>\<top>  \<^bold>\<approx> a \<^bold>\<or> (\<eta> a)"
+abbreviation pTNDw ("TNDw\<^sup>_ _") where "TNDw\<^sup>a \<eta> \<equiv> \<forall>b. (\<eta> b) \<^bold>\<preceq> a \<^bold>\<or> (\<eta> a)"
+abbreviation pTNDm ("TNDm\<^sup>_ _") where "TNDm\<^sup>a \<eta> \<equiv>     (\<eta> \<^bold>\<bottom>) \<^bold>\<preceq> a \<^bold>\<or> (\<eta> a)"
 definition "TND  \<eta> \<equiv> \<forall>\<phi>. TND\<^sup>\<phi>  \<eta>"
 definition "TNDw \<eta> \<equiv> \<forall>\<phi>. TNDw\<^sup>\<phi> \<eta>"
 definition "TNDm \<eta> \<equiv> \<forall>\<phi>. TNDm\<^sup>\<phi> \<eta>"
@@ -25,10 +25,11 @@ lemma "TNDw \<eta> \<Longrightarrow> TND  \<eta>" nitpick oops
 lemma "TNDw \<eta> \<Longrightarrow> TNDm \<eta>" unfolding Defs by simp
 lemma "TNDm \<eta> \<Longrightarrow> TNDw \<eta>" nitpick oops
 
+
 (**ECQ: ex contradictione (sequitur) quodlibet (resp: strong, weak, minimal).*)
-abbreviation rECQ  ("ECQ\<^sup>_ _")  where "ECQ\<^sup>a \<eta>  \<equiv>     a \<^bold>\<and> (\<eta> a) \<^bold>\<approx> \<^bold>\<bottom>"
-abbreviation rECQw ("ECQw\<^sup>_ _") where "ECQw\<^sup>a \<eta> \<equiv> \<forall>b. a \<^bold>\<and> (\<eta> a) \<^bold>\<preceq> (\<eta> b)"
-abbreviation rECQm ("ECQm\<^sup>_ _") where "ECQm\<^sup>a \<eta> \<equiv>     a \<^bold>\<and> (\<eta> a) \<^bold>\<preceq> (\<eta> \<^bold>\<top>)"
+abbreviation pECQ  ("ECQ\<^sup>_ _")  where "ECQ\<^sup>a \<eta>  \<equiv>     a \<^bold>\<and> (\<eta> a) \<^bold>\<approx> \<^bold>\<bottom>"
+abbreviation pECQw ("ECQw\<^sup>_ _") where "ECQw\<^sup>a \<eta> \<equiv> \<forall>b. a \<^bold>\<and> (\<eta> a) \<^bold>\<preceq> (\<eta> b)"
+abbreviation pECQm ("ECQm\<^sup>_ _") where "ECQm\<^sup>a \<eta> \<equiv>     a \<^bold>\<and> (\<eta> a) \<^bold>\<preceq> (\<eta> \<^bold>\<top>)"
 definition "ECQ  \<eta> \<equiv> \<forall>a. ECQ\<^sup>a  \<eta>"
 definition "ECQw \<eta> \<equiv> \<forall>a. ECQw\<^sup>a \<eta>"
 definition "ECQm \<eta> \<equiv> \<forall>a. ECQm\<^sup>a \<eta>"
@@ -40,8 +41,9 @@ lemma "ECQw \<eta> \<Longrightarrow> ECQ  \<eta>" nitpick oops
 lemma "ECQw \<eta> \<Longrightarrow> ECQm \<eta>" unfolding Defs conn by simp
 lemma "ECQm \<eta> \<Longrightarrow> ECQw \<eta>" nitpick oops
 
+
 (**LNC: law of non-contradiction.*)
-abbreviation rLNC  ("LNC\<^sup>_ _")  where "LNC\<^sup>a \<eta> \<equiv> \<eta>(a \<^bold>\<and> \<eta> a) \<^bold>\<approx> \<^bold>\<top>"
+abbreviation pLNC  ("LNC\<^sup>_ _")  where "LNC\<^sup>a \<eta> \<equiv> \<eta>(a \<^bold>\<and> \<eta> a) \<^bold>\<approx> \<^bold>\<top>"
 definition "LNC \<eta> \<equiv> \<forall>a. LNC\<^sup>a \<eta>"
 declare LNC_def[Defs]
 
@@ -49,14 +51,15 @@ declare LNC_def[Defs]
 lemma "ECQ \<eta> \<Longrightarrow> LNC \<eta>" nitpick oops
 lemma "LNC \<eta> \<Longrightarrow> ECQm \<eta>" nitpick oops
 
+
 (**CoP: contraposition (global/rule variants, resp, weak, strong variant 1, strong var. 2, strong var. 3).*)
-abbreviation rCoPw ("CoPw\<^sup>_\<^sup>_ _") where "CoPw\<^sup>a\<^sup>b \<eta> \<equiv> a \<^bold>\<preceq> b \<longrightarrow> (\<eta> b) \<^bold>\<preceq> (\<eta> a)"
-abbreviation rCoP1 ("CoP1\<^sup>_\<^sup>_ _") where "CoP1\<^sup>a\<^sup>b \<eta> \<equiv> a \<^bold>\<preceq> (\<eta> b) \<longrightarrow> b \<^bold>\<preceq> (\<eta> a)"
-abbreviation rCoP2 ("CoP2\<^sup>_\<^sup>_ _") where "CoP2\<^sup>a\<^sup>b \<eta> \<equiv> (\<eta> a) \<^bold>\<preceq> b \<longrightarrow> (\<eta> b) \<^bold>\<preceq> a"
-abbreviation rCoP3 ("CoP3\<^sup>_\<^sup>_ _") where "CoP3\<^sup>a\<^sup>b \<eta> \<equiv> (\<eta> a) \<^bold>\<preceq> (\<eta> b) \<longrightarrow> b \<^bold>\<preceq> a"
+abbreviation pCoPw ("CoPw\<^sup>_\<^sup>_ _") where "CoPw\<^sup>a\<^sup>b \<eta> \<equiv> a \<^bold>\<preceq> b \<longrightarrow> (\<eta> b) \<^bold>\<preceq> (\<eta> a)"
+abbreviation pCoP1 ("CoP1\<^sup>_\<^sup>_ _") where "CoP1\<^sup>a\<^sup>b \<eta> \<equiv> a \<^bold>\<preceq> (\<eta> b) \<longrightarrow> b \<^bold>\<preceq> (\<eta> a)"
+abbreviation pCoP2 ("CoP2\<^sup>_\<^sup>_ _") where "CoP2\<^sup>a\<^sup>b \<eta> \<equiv> (\<eta> a) \<^bold>\<preceq> b \<longrightarrow> (\<eta> b) \<^bold>\<preceq> a"
+abbreviation pCoP3 ("CoP3\<^sup>_\<^sup>_ _") where "CoP3\<^sup>a\<^sup>b \<eta> \<equiv> (\<eta> a) \<^bold>\<preceq> (\<eta> b) \<longrightarrow> b \<^bold>\<preceq> a"
 definition "CoPw  \<eta> \<equiv> \<forall>a b. CoPw\<^sup>a\<^sup>b \<eta>"
 definition "CoP1  \<eta> \<equiv> \<forall>a b. CoP1\<^sup>a\<^sup>b \<eta>"
-definition "CoP1' \<eta> \<equiv> \<forall>a b. a \<^bold>\<preceq> (\<eta> b) \<longleftrightarrow> b \<^bold>\<preceq> (\<eta> a)" (*TODO does this help?*)
+definition "CoP1' \<eta> \<equiv> \<forall>a b. a \<^bold>\<preceq> (\<eta> b) \<longleftrightarrow> b \<^bold>\<preceq> (\<eta> a)"
 definition "CoP2  \<eta> \<equiv> \<forall>a b. CoP2\<^sup>a\<^sup>b \<eta>"
 definition "CoP2' \<eta> \<equiv> \<forall>a b. (\<eta> a) \<^bold>\<preceq> b \<longleftrightarrow> (\<eta> b) \<^bold>\<preceq> a"
 definition "CoP3  \<eta> \<equiv> \<forall>a b. CoP3\<^sup>a\<^sup>b \<eta>"
@@ -87,11 +90,12 @@ lemma CoP123: "CoP1 \<eta> \<and> CoP2 \<eta> \<Longrightarrow> CoP3 \<eta>" unf
 lemma "CoP1 \<eta> \<Longrightarrow> CoP2 \<eta> \<Longrightarrow> ECQm \<eta>" nitpick oops 
 lemma "CoP1 \<eta> \<Longrightarrow> CoP2 \<eta> \<Longrightarrow> TNDm \<eta>" nitpick oops 
 
+
 (**MT: modus (tollendo) tollens (global/rule variants, all of them independent).*)
-abbreviation rMT0 ("MT0\<^sup>_\<^sup>_ _") where "MT0\<^sup>a\<^sup>b \<eta> \<equiv> a \<^bold>\<preceq> b \<and> (\<eta> b) \<^bold>\<approx> \<^bold>\<top> \<longrightarrow> (\<eta> a) \<^bold>\<approx> \<^bold>\<top>"
-abbreviation rMT1 ("MT1\<^sup>_\<^sup>_ _") where "MT1\<^sup>a\<^sup>b \<eta> \<equiv> a \<^bold>\<preceq> (\<eta> b) \<and> b \<^bold>\<approx> \<^bold>\<top> \<longrightarrow> (\<eta> a) \<^bold>\<approx> \<^bold>\<top>"
-abbreviation rMT2 ("MT2\<^sup>_\<^sup>_ _") where "MT2\<^sup>a\<^sup>b \<eta> \<equiv> (\<eta> a) \<^bold>\<preceq> b \<and> (\<eta> b) \<^bold>\<approx> \<^bold>\<top> \<longrightarrow> a \<^bold>\<approx> \<^bold>\<top>"
-abbreviation rMT3 ("MT3\<^sup>_\<^sup>_ _") where "MT3\<^sup>a\<^sup>b \<eta> \<equiv> (\<eta> a) \<^bold>\<preceq> (\<eta> b) \<and> b \<^bold>\<approx> \<^bold>\<top> \<longrightarrow> a \<^bold>\<approx> \<^bold>\<top>"
+abbreviation pMT0 ("MT0\<^sup>_\<^sup>_ _") where "MT0\<^sup>a\<^sup>b \<eta> \<equiv> a \<^bold>\<preceq> b \<and> (\<eta> b) \<^bold>\<approx> \<^bold>\<top> \<longrightarrow> (\<eta> a) \<^bold>\<approx> \<^bold>\<top>"
+abbreviation pMT1 ("MT1\<^sup>_\<^sup>_ _") where "MT1\<^sup>a\<^sup>b \<eta> \<equiv> a \<^bold>\<preceq> (\<eta> b) \<and> b \<^bold>\<approx> \<^bold>\<top> \<longrightarrow> (\<eta> a) \<^bold>\<approx> \<^bold>\<top>"
+abbreviation pMT2 ("MT2\<^sup>_\<^sup>_ _") where "MT2\<^sup>a\<^sup>b \<eta> \<equiv> (\<eta> a) \<^bold>\<preceq> b \<and> (\<eta> b) \<^bold>\<approx> \<^bold>\<top> \<longrightarrow> a \<^bold>\<approx> \<^bold>\<top>"
+abbreviation pMT3 ("MT3\<^sup>_\<^sup>_ _") where "MT3\<^sup>a\<^sup>b \<eta> \<equiv> (\<eta> a) \<^bold>\<preceq> (\<eta> b) \<and> b \<^bold>\<approx> \<^bold>\<top> \<longrightarrow> a \<^bold>\<approx> \<^bold>\<top>"
 definition "MT0 \<eta> \<equiv> \<forall>a b. MT0\<^sup>a\<^sup>b \<eta>"
 definition "MT1 \<eta> \<equiv> \<forall>a b. MT1\<^sup>a\<^sup>b \<eta>"
 definition "MT2 \<eta> \<equiv> \<forall>a b. MT2\<^sup>a\<^sup>b \<eta>"
@@ -109,9 +113,10 @@ lemma "MT0 \<eta> \<Longrightarrow> MT1 \<eta> \<Longrightarrow> MT2 \<eta> \<Lo
 lemma "MT0 \<eta> \<Longrightarrow> MT1 \<eta> \<Longrightarrow> MT2 \<eta> \<Longrightarrow> MT3 \<eta> \<Longrightarrow> TNDm \<eta>" nitpick oops
 lemma MT123: "MT1 \<eta> \<Longrightarrow> MT2 \<eta> \<Longrightarrow> MT3 \<eta>"  unfolding Defs by smt
 
+
 (**DNI/DNE: double negation introduction/elimination.*)
-abbreviation rDNI ("DNI\<^sup>_ _") where "DNI\<^sup>a \<eta> \<equiv> a \<^bold>\<preceq> \<eta> (\<eta> a)"
-abbreviation rDNE ("DNE\<^sup>_ _") where "DNE\<^sup>a \<eta> \<equiv> \<eta> (\<eta> a) \<^bold>\<preceq> a"
+abbreviation pDNI ("DNI\<^sup>_ _") where "DNI\<^sup>a \<eta> \<equiv> a \<^bold>\<preceq> \<eta> (\<eta> a)"
+abbreviation pDNE ("DNE\<^sup>_ _") where "DNE\<^sup>a \<eta> \<equiv> \<eta> (\<eta> a) \<^bold>\<preceq> a"
 definition "DNI \<eta> \<equiv> \<forall>a. DNI\<^sup>a \<eta>"
 definition "DNE \<eta> \<equiv> \<forall>a. DNE\<^sup>a \<eta>"
 declare DNI_def[Defs] DNE_def[Defs]
@@ -131,7 +136,8 @@ lemma "DNI \<eta> \<Longrightarrow> DNE \<eta> \<Longrightarrow>  MT1 \<eta>" ni
 lemma "DNI \<eta> \<Longrightarrow> DNE \<eta> \<Longrightarrow>  MT2 \<eta>" nitpick oops
 lemma "DNI \<eta> \<Longrightarrow> DNE \<eta> \<Longrightarrow>  MT3 \<eta>" nitpick oops
 
-(**n(D)Nor: negative (dual) Normality.*)
+
+(**n(D)Nor: negative (dual) 'normality'.*)
 definition "nNor \<eta> \<equiv> (\<eta> \<^bold>\<bottom>) \<^bold>\<approx> \<^bold>\<top>"
 definition "nDNor \<eta> \<equiv> (\<eta> \<^bold>\<top>) \<^bold>\<approx> \<^bold>\<bottom>"
 declare nNor_def[Defs] nDNor_def[Defs]
@@ -142,11 +148,12 @@ lemma CoP1_Nor: "CoP1 \<eta> \<Longrightarrow> nNor \<eta>" unfolding Defs conn 
 lemma "DNE \<eta> \<Longrightarrow> nDNor \<eta>" nitpick oops 
 lemma CoP2_DNor: "CoP2 \<eta> \<Longrightarrow> nDNor \<eta>" unfolding Defs conn by fastforce
 
-(**DM(\<eta>): De Morgan rules.*)
-abbreviation rDM1 ("DM1\<^sup>_\<^sup>_ _") where "DM1\<^sup>a\<^sup>b \<eta> \<equiv> \<eta>(a \<^bold>\<or> b) \<^bold>\<preceq> (\<eta> a) \<^bold>\<and> (\<eta> b)"
-abbreviation rDM2 ("DM2\<^sup>_\<^sup>_ _") where "DM2\<^sup>a\<^sup>b \<eta> \<equiv> (\<eta> a) \<^bold>\<or> (\<eta> b) \<^bold>\<preceq> \<eta>(a \<^bold>\<and> b)"
-abbreviation rDM3 ("DM3\<^sup>_\<^sup>_ _") where "DM3\<^sup>a\<^sup>b \<eta> \<equiv> \<eta>(a \<^bold>\<and> b) \<^bold>\<preceq> (\<eta> a) \<^bold>\<or> (\<eta> b)"
-abbreviation rDM4 ("DM4\<^sup>_\<^sup>_ _") where "DM4\<^sup>a\<^sup>b \<eta> \<equiv> (\<eta> a) \<^bold>\<and> (\<eta> b) \<^bold>\<preceq>  \<eta>(a \<^bold>\<or> b)"
+
+(**DM: De Morgan laws.*)
+abbreviation pDM1 ("DM1\<^sup>_\<^sup>_ _") where "DM1\<^sup>a\<^sup>b \<eta> \<equiv> \<eta>(a \<^bold>\<or> b) \<^bold>\<preceq> (\<eta> a) \<^bold>\<and> (\<eta> b)"
+abbreviation pDM2 ("DM2\<^sup>_\<^sup>_ _") where "DM2\<^sup>a\<^sup>b \<eta> \<equiv> (\<eta> a) \<^bold>\<or> (\<eta> b) \<^bold>\<preceq> \<eta>(a \<^bold>\<and> b)"
+abbreviation pDM3 ("DM3\<^sup>_\<^sup>_ _") where "DM3\<^sup>a\<^sup>b \<eta> \<equiv> \<eta>(a \<^bold>\<and> b) \<^bold>\<preceq> (\<eta> a) \<^bold>\<or> (\<eta> b)"
+abbreviation pDM4 ("DM4\<^sup>_\<^sup>_ _") where "DM4\<^sup>a\<^sup>b \<eta> \<equiv> (\<eta> a) \<^bold>\<and> (\<eta> b) \<^bold>\<preceq>  \<eta>(a \<^bold>\<or> b)"
 definition "DM1 \<eta> \<equiv> \<forall>a b. DM1\<^sup>a\<^sup>b \<eta>"
 definition "DM2 \<eta> \<equiv> \<forall>a b. DM2\<^sup>a\<^sup>b \<eta>"
 definition "DM3 \<eta> \<equiv> \<forall>a b. DM3\<^sup>a\<^sup>b \<eta>"
@@ -233,12 +240,8 @@ lemma "CoPw \<eta> \<Longrightarrow> DM3 \<eta> \<Longrightarrow> DM4 \<eta> \<L
 lemma "CoPw \<eta> \<Longrightarrow> DM3 \<eta> \<Longrightarrow> DM4 \<eta> \<Longrightarrow> DNI \<eta> \<Longrightarrow> DNE \<eta> \<Longrightarrow> TNDm \<eta>" nitpick oops 
 
 
-lemma "DM3 \<eta> \<Longrightarrow> DM4 \<eta> \<Longrightarrow> CoPw \<eta>" nitpick oops
-lemma "DM3 \<eta> \<Longrightarrow> DM4 \<eta> \<Longrightarrow>  MT1 \<eta> \<Longrightarrow> MT2 \<eta> \<Longrightarrow> CoPw \<eta>" unfolding Defs oops (*TODO prove*)
-
-
 (**XCoP: contextual contraposition (global variant).*)
-abbreviation gXCoP ("XCoP\<^sup>_\<^sup>_ _") where "XCoP\<^sup>a\<^sup>b \<eta> \<equiv> \<forall>c. c \<^bold>\<and> a \<^bold>\<preceq> b \<longrightarrow> c \<^bold>\<and> (\<eta> b) \<^bold>\<preceq> (\<eta> a)"
+abbreviation pXCoP ("XCoP\<^sup>_\<^sup>_ _") where "XCoP\<^sup>a\<^sup>b \<eta> \<equiv> \<forall>c. c \<^bold>\<and> a \<^bold>\<preceq> b \<longrightarrow> c \<^bold>\<and> (\<eta> b) \<^bold>\<preceq> (\<eta> a)"
 definition "XCoP \<eta> \<equiv> \<forall>a b. XCoP\<^sup>a\<^sup>b \<eta>"
 declare XCoP_def[Defs]
 
@@ -266,10 +269,10 @@ lemma XCoP_DM4: "XCoP \<eta> \<Longrightarrow> DM4 \<eta>" unfolding DM4_def XCo
 (**The following definitions take implication as an additional parameter: @{text "\<iota>"}.*)
 
 (**lCoP: contraposition (local/axiom variants).*)
-abbreviation rlCoPw ("lCoPw\<^sup>_\<^sup>_ _ _") where "lCoPw\<^sup>a\<^sup>b \<iota> \<eta> \<equiv> (\<iota> a b::\<sigma>) \<^bold>\<preceq> (\<iota> (\<eta> b) (\<eta> a))"
-abbreviation rlCoP1 ("lCoP1\<^sup>_\<^sup>_ _ _") where "lCoP1\<^sup>a\<^sup>b \<iota> \<eta> \<equiv> (\<iota> a (\<eta> b::\<sigma>)) \<^bold>\<preceq> (\<iota> b (\<eta> a))"
-abbreviation rlCoP2 ("lCoP2\<^sup>_\<^sup>_ _ _") where "lCoP2\<^sup>a\<^sup>b \<iota> \<eta> \<equiv> (\<iota> (\<eta> a) b::\<sigma>) \<^bold>\<preceq> (\<iota> (\<eta> b) a)"
-abbreviation rlCoP3 ("lCoP3\<^sup>_\<^sup>_ _ _") where "lCoP3\<^sup>a\<^sup>b \<iota> \<eta> \<equiv> (\<iota> (\<eta> a) (\<eta> b::\<sigma>)) \<^bold>\<preceq> (\<iota> b a)"
+abbreviation plCoPw ("lCoPw\<^sup>_\<^sup>_ _ _") where "lCoPw\<^sup>a\<^sup>b \<iota> \<eta> \<equiv> (\<iota> a b::\<sigma>) \<^bold>\<preceq> (\<iota> (\<eta> b) (\<eta> a))"
+abbreviation plCoP1 ("lCoP1\<^sup>_\<^sup>_ _ _") where "lCoP1\<^sup>a\<^sup>b \<iota> \<eta> \<equiv> (\<iota> a (\<eta> b::\<sigma>)) \<^bold>\<preceq> (\<iota> b (\<eta> a))"
+abbreviation plCoP2 ("lCoP2\<^sup>_\<^sup>_ _ _") where "lCoP2\<^sup>a\<^sup>b \<iota> \<eta> \<equiv> (\<iota> (\<eta> a) b::\<sigma>) \<^bold>\<preceq> (\<iota> (\<eta> b) a)"
+abbreviation plCoP3 ("lCoP3\<^sup>_\<^sup>_ _ _") where "lCoP3\<^sup>a\<^sup>b \<iota> \<eta> \<equiv> (\<iota> (\<eta> a) (\<eta> b::\<sigma>)) \<^bold>\<preceq> (\<iota> b a)"
 definition "lCoPw  \<iota> \<eta> \<equiv> \<forall>a b. lCoPw\<^sup>a\<^sup>b \<iota> \<eta>"
 definition "lCoP1  \<iota> \<eta> \<equiv> \<forall>a b. lCoP1\<^sup>a\<^sup>b \<iota> \<eta>"
 definition "lCoP1' \<iota> \<eta> \<equiv> \<forall>a b. (\<iota> a (\<eta> b)) \<^bold>\<approx> (\<iota> b (\<eta> a))"
@@ -311,10 +314,10 @@ lemma "ECQ \<eta> \<Longrightarrow> lCoP2(\<^bold>\<rightarrow>) \<eta>" nitpick
 
 
 (**lMT: Modus tollens (local/axiom variants).*)
-abbreviation MT0ax ("lMT0\<^sup>_\<^sup>_ _ _") where "lMT0\<^sup>a\<^sup>b \<iota> \<eta> \<equiv> (\<iota> a b::\<sigma>) \<^bold>\<and> (\<eta> b) \<^bold>\<preceq> (\<eta> a)"
-abbreviation MT1ax ("lMT1\<^sup>_\<^sup>_ _ _") where "lMT1\<^sup>a\<^sup>b \<iota> \<eta> \<equiv> (\<iota> a (\<eta> b::\<sigma>)) \<^bold>\<and> b \<^bold>\<preceq> (\<eta> a)"
-abbreviation MT2ax ("lMT2\<^sup>_\<^sup>_ _ _") where "lMT2\<^sup>a\<^sup>b \<iota> \<eta> \<equiv> (\<iota> (\<eta> a) b::\<sigma>) \<^bold>\<and> (\<eta> b) \<^bold>\<preceq> a"
-abbreviation MT3ax ("lMT3\<^sup>_\<^sup>_ _ _") where "lMT3\<^sup>a\<^sup>b \<iota> \<eta> \<equiv> (\<iota> (\<eta> a) (\<eta> b::\<sigma>)) \<^bold>\<and> b \<^bold>\<preceq> a"
+abbreviation plMT0 ("lMT0\<^sup>_\<^sup>_ _ _") where "lMT0\<^sup>a\<^sup>b \<iota> \<eta> \<equiv> (\<iota> a b::\<sigma>) \<^bold>\<and> (\<eta> b) \<^bold>\<preceq> (\<eta> a)"
+abbreviation plMT1 ("lMT1\<^sup>_\<^sup>_ _ _") where "lMT1\<^sup>a\<^sup>b \<iota> \<eta> \<equiv> (\<iota> a (\<eta> b::\<sigma>)) \<^bold>\<and> b \<^bold>\<preceq> (\<eta> a)"
+abbreviation plMT2 ("lMT2\<^sup>_\<^sup>_ _ _") where "lMT2\<^sup>a\<^sup>b \<iota> \<eta> \<equiv> (\<iota> (\<eta> a) b::\<sigma>) \<^bold>\<and> (\<eta> b) \<^bold>\<preceq> a"
+abbreviation plMT3 ("lMT3\<^sup>_\<^sup>_ _ _") where "lMT3\<^sup>a\<^sup>b \<iota> \<eta> \<equiv> (\<iota> (\<eta> a) (\<eta> b::\<sigma>)) \<^bold>\<and> b \<^bold>\<preceq> a"
 definition "lMT0 \<iota> \<eta> \<equiv> \<forall>a b. lMT0\<^sup>a\<^sup>b \<iota> \<eta>"
 definition "lMT1 \<iota> \<eta> \<equiv> \<forall>a b. lMT1\<^sup>a\<^sup>b \<iota> \<eta>"
 definition "lMT2 \<iota> \<eta> \<equiv> \<forall>a b. lMT2\<^sup>a\<^sup>b \<iota> \<eta>"
@@ -330,8 +333,8 @@ lemma "lMT3(\<^bold>\<rightarrow>) \<eta> = lCoP3(\<^bold>\<rightarrow>) \<eta>"
 
 
 (**DS: disjunctive syllogism.*)
-abbreviation rDS1 ("DS1\<^sup>_\<^sup>_ _ _") where "DS1\<^sup>a\<^sup>b \<iota> \<eta> \<equiv> (a \<^bold>\<or> b::\<sigma>) \<^bold>\<preceq> (\<iota> (\<eta> a) b)"
-abbreviation rDS2 ("DS2\<^sup>_\<^sup>_ _ _") where "DS2\<^sup>a\<^sup>b \<iota> \<eta> \<equiv> (\<iota> (\<eta> a) b::\<sigma>) \<^bold>\<preceq> (a \<^bold>\<or> b)"
+abbreviation pDS1 ("DS1\<^sup>_\<^sup>_ _ _") where "DS1\<^sup>a\<^sup>b \<iota> \<eta> \<equiv> (a \<^bold>\<or> b::\<sigma>) \<^bold>\<preceq> (\<iota> (\<eta> a) b)"
+abbreviation pDS2 ("DS2\<^sup>_\<^sup>_ _ _") where "DS2\<^sup>a\<^sup>b \<iota> \<eta> \<equiv> (\<iota> (\<eta> a) b::\<sigma>) \<^bold>\<preceq> (a \<^bold>\<or> b)"
 definition "DS1 \<iota> \<eta> \<equiv> \<forall>a b. DS1\<^sup>a\<^sup>b \<iota> \<eta>"
 definition "DS2 \<iota> \<eta> \<equiv> \<forall>a b. DS2\<^sup>a\<^sup>b \<iota> \<eta>"
 declare DS1_def[Defs] DS2_def[Defs]

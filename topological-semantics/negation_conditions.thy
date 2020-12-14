@@ -11,12 +11,11 @@ section \<open>Frontier-based negation - Semantic conditions\<close>
 We take the frontier operator as primitive and explore which semantic conditions are minimally required
 to obtain some relevant properties of negation.*)
 
-definition neg_I::"\<sigma>\<Rightarrow>\<sigma>" ("\<^bold>\<not>\<^sup>I")  where  "\<^bold>\<not>\<^sup>I \<phi> \<equiv> \<I>(\<^bold>\<midarrow>\<phi>)"
-definition neg_C::"\<sigma>\<Rightarrow>\<sigma>" ("\<^bold>\<not>\<^sup>C")  where  "\<^bold>\<not>\<^sup>C \<phi> \<equiv> \<C>(\<^bold>\<midarrow>\<phi>)"
+definition neg_I::"\<sigma>\<Rightarrow>\<sigma>" ("\<^bold>\<not>\<^sup>I")  where  "\<^bold>\<not>\<^sup>I A \<equiv> \<I>(\<^bold>\<midarrow>A)"
+definition neg_C::"\<sigma>\<Rightarrow>\<sigma>" ("\<^bold>\<not>\<^sup>C")  where  "\<^bold>\<not>\<^sup>C A \<equiv> \<C>(\<^bold>\<midarrow>A)"
 declare neg_I_def[conn] neg_C_def[conn]
 
-
-subsection \<open>'Explosion' (ECQ) and excluded middle (TND)\<close>
+subsection \<open>'Explosion' (ECQ), non-contradiction (LNC) and excluded middle (TND)\<close>
 
 (**TND*)
 lemma "\<FF> \<F> \<Longrightarrow> TNDm \<^bold>\<not>\<^sup>I" nitpick oops (*still not recovering minimally weak TND*)
@@ -26,12 +25,17 @@ lemma TND_C: "TND \<^bold>\<not>\<^sup>C" by (simp add: pC2 Defs conn) (*TND val
 lemma ECQ_I: "ECQ \<^bold>\<not>\<^sup>I" by (simp add: pI2 Defs conn) (*ECQ valid in general*)
 lemma "\<FF> \<F> \<Longrightarrow> ECQm \<^bold>\<not>\<^sup>C" nitpick oops (*still not recovering minimally weak ECQ*)
 
-(**Relations between LNC and different ECQ variants.*)
+(**LNC*)
+lemma "LNC \<^bold>\<not>\<^sup>I" nitpick oops (*countermodel*)
+lemma LNC_I: "Fr_2 \<F> \<Longrightarrow> Fr_3 \<F> \<Longrightarrow>  LNC \<^bold>\<not>\<^sup>I" using ECQ_I ECQ_def IF3 LNC_def dNOR_def unfolding conn by auto
+lemma "LNC \<^bold>\<not>\<^sup>C" nitpick oops (*countermodel*)
+lemma LNC_C: "Fr_6 \<F> \<Longrightarrow> LNC \<^bold>\<not>\<^sup>C" unfolding Defs by (smt Cl_fr_def MONO_def compl_def join_def meet_def monC neg_C_def top_def)
+
+(**Relations between LNC and different ECQ variants (only relevant for paraconsistent negation).*)
 lemma "ECQ \<^bold>\<not>\<^sup>C \<longrightarrow>  LNC \<^bold>\<not>\<^sup>C" by (simp add: pC2 Defs conn)
 lemma ECQw_LNC: "ECQw \<^bold>\<not>\<^sup>C \<longrightarrow>  LNC \<^bold>\<not>\<^sup>C" by (smt ECQw_def LNC_def pC2 conn)
 lemma ECQm_LNC: "Fr_1 \<F> \<Longrightarrow> Fr_2 \<F> \<Longrightarrow> ECQm \<^bold>\<not>\<^sup>C \<longrightarrow> LNC \<^bold>\<not>\<^sup>C" using Cl_fr_def Fr_1_def pF2 unfolding Defs conn by metis
-lemma "\<FF> \<F> \<Longrightarrow> LNC \<^bold>\<not>\<^sup>C \<longrightarrow>  ECQm \<^bold>\<not>\<^sup>C" nitpick oops
-lemma "Fr_2 \<F> \<Longrightarrow> Fr_3 \<F> \<Longrightarrow>  LNC \<^bold>\<not>\<^sup>I" using ECQ_I ECQ_def IF3 LNC_def dNOR_def unfolding conn by auto
+lemma "\<FF> \<F> \<Longrightarrow> LNC \<^bold>\<not>\<^sup>C \<longrightarrow>  ECQm \<^bold>\<not>\<^sup>C" nitpick oops  (*countermodel*)
 
 (**Below we show that enforcing all conditions on the frontier operator still leaves room
 for both boldly paraconsistent and paracomplete models. We use Nitpick to generate a non-trivial 
@@ -55,8 +59,8 @@ lemma "\<sim>TNDm \<^bold>\<not>\<^sup>I \<and> Fr_1a \<F> \<and> Fr_2 \<F> \<an
 lemma "\<sim>TNDm \<^bold>\<not>\<^sup>I \<and> MT0 \<^bold>\<not>\<^sup>I \<and> MT1 \<^bold>\<not>\<^sup>I \<and> MT2 \<^bold>\<not>\<^sup>I \<and> MT3 \<^bold>\<not>\<^sup>I" nitpick[satisfy,card w=3] oops
 (**MT-C*)
 lemma "Fr_2 \<F> \<Longrightarrow> MT0 \<^bold>\<not>\<^sup>C" nitpick oops (*countermodel*)
-lemma MT0_C: "Fr_1b \<F> \<Longrightarrow> Fr_2 \<F> \<Longrightarrow> MT0 \<^bold>\<not>\<^sup>C" unfolding Defs by (smt ICdual MONO_def PF6 compl_def monC neg_C_def top_def)
-lemma MT1_C: "Fr_1b \<F> \<Longrightarrow> Fr_2 \<F> \<Longrightarrow> MT1 \<^bold>\<not>\<^sup>C" unfolding Defs by (smt Cl_fr_def Fr_6_def PF6 conn)
+lemma MT0_C: "Fr_6 \<F> \<Longrightarrow> MT0 \<^bold>\<not>\<^sup>C" unfolding Defs by (smt ICdual MONO_def compl_def monC neg_C_def top_def)
+lemma MT1_C: "Fr_6 \<F> \<Longrightarrow> MT1 \<^bold>\<not>\<^sup>C" unfolding Defs by (smt Cl_fr_def Fr_6_def conn)
 lemma "\<FF> \<F> \<Longrightarrow> MT2 \<^bold>\<not>\<^sup>C" nitpick oops (*countermodel*)
 lemma "\<sim>ECQm \<^bold>\<not>\<^sup>C \<and> \<FF> \<F> \<and> MT2 \<^bold>\<not>\<^sup>C" nitpick[satisfy,card w=3] oops (*model found*)
 lemma MT3_C: "Fr_1b \<F> \<Longrightarrow> Fr_2 \<F> \<Longrightarrow> Fr_3 \<F> \<Longrightarrow> MT3 \<^bold>\<not>\<^sup>C" unfolding Defs using MONO_def monI by (metis ClOpdual IF3 compl_def dNOR_def diff_def neg_C_def pA2 top_def)
@@ -181,7 +185,6 @@ lemma "\<FF> \<F> \<Longrightarrow> Fr_inf \<F> \<Longrightarrow> iDM3 \<^bold>\
 lemma "\<sim>TND \<^bold>\<not>\<^sup>I \<and> Fr_1 \<F> \<and> Fr_2 \<F> \<and> Fr_4 \<F> \<and> iDM3 \<^bold>\<not>\<^sup>I" nitpick[satisfy] oops
 lemma "\<sim>TND \<^bold>\<not>\<^sup>I \<and> Fr_1 \<F> \<and> Fr_3 \<F> \<and> Fr_4 \<F> \<and> iDM3 \<^bold>\<not>\<^sup>I" nitpick[satisfy] oops
 lemma "\<sim>TNDm \<^bold>\<not>\<^sup>I \<and> iDM3 \<^bold>\<not>\<^sup>I" (*nitpick[satisfy]*) oops (*cannot find (finite) models*)
-lemma "iDM3 \<^bold>\<not>\<^sup>I \<longrightarrow> TNDm \<^bold>\<not>\<^sup>I" unfolding Defs oops (*TODO*)
 (**iDM3-C*)
 lemma "iDM3 \<^bold>\<not>\<^sup>C" nitpick oops (*countermodel*)
 lemma iDM3_C: "Fr_2 \<F> \<Longrightarrow> Fr_inf \<F> \<Longrightarrow> iDM3 \<^bold>\<not>\<^sup>C" unfolding Defs by (metis (full_types) CF_inf Ra_restr_ex dom_compl_def iADDI_a_def iDM_a neg_C_def)
@@ -192,7 +195,6 @@ lemma iDM4_I: "Fr_inf \<F> \<Longrightarrow> iDM4 \<^bold>\<not>\<^sup>I" unfold
 lemma "\<FF> \<F> \<Longrightarrow> Fr_inf \<F> \<Longrightarrow> iDM4 \<^bold>\<not>\<^sup>C" nitpick oops (*countermodel*)
 lemma "\<sim>ECQ \<^bold>\<not>\<^sup>C \<and> Fr_1 \<F> \<and> Fr_2 \<F> \<and> Fr_4 \<F> \<and> iDM4 \<^bold>\<not>\<^sup>C" nitpick[satisfy] oops
 lemma "\<sim>ECQm \<^bold>\<not>\<^sup>C \<and> iDM4 \<^bold>\<not>\<^sup>C" (*nitpick[satisfy]*) oops (*cannot find (finite) models*)
-lemma "iDM4 \<^bold>\<not>\<^sup>C \<longrightarrow> ECQm \<^bold>\<not>\<^sup>C" unfolding Defs oops (*TODO*)
 
 
 subsection \<open>Contraposition (local) axioms (lCoP)\<close>
