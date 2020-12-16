@@ -1,12 +1,13 @@
 theory operators_basic
   imports "../SSE/operation_positive_quantification"
 begin
-nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format = 3] (*default settings*)
+nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format=3] (*default Nitpick settings*)
+
 abbreviation implies_rl::"bool\<Rightarrow>bool\<Rightarrow>bool" (infixl "\<longleftarrow>" 25) where "\<phi> \<longleftarrow> \<psi> \<equiv> \<psi> \<longrightarrow> \<phi>" (*for readability*)
 
 section \<open>Topological operators\<close>
 
-(**Below we define some conditions on algebraic operations (of type @{type "\<sigma>\<Rightarrow>\<sigma>"}).
+(**Below we define some conditions on algebraic operations (aka. operators) with type @{type "\<sigma>\<Rightarrow>\<sigma>"}.
 Those operations are aimed at extending a Boolean 'algebra of propositions' towards different
 generalizations of topological algebras.
 We divide this section into two parts. In the first we define and interrelate the topological operators of 
@@ -393,7 +394,7 @@ lemma CF4: "Fr_1a \<phi> \<Longrightarrow> Fr_2 \<phi> \<Longrightarrow> Fr_4 \<
 qed
 
 
-subsection \<open>Infinitary conditions\<close>
+subsubsection \<open>Infinitary conditions\<close>
 
 (**We define the essential infinitary conditions for the closure and interior operators (entailing infinite
 additivity and multiplicativity resp.). Observe that the other direction is implied by monotonicity (MONO).*)
@@ -408,7 +409,7 @@ lemma CF_inf: "Fr_2 \<phi> \<Longrightarrow> Fr_inf \<phi> \<Longrightarrow> Cl_
 lemma IF_inf: "Fr_inf \<phi> \<Longrightarrow> Int_inf(\<I>\<^sub>F \<phi>)" unfolding Fr_inf_def iMULT_b_def Int_fr_def Ra_restr_all
   by (metis (mono_tags, hide_lams) diff_def infimum_def meet_def pfunRange_restr_def supremum_def)
 
-(**This condition is indeed strong enough to entail closure of the fixed-point predicates under infimum/closure.*)
+(**This condition is indeed strong enough to entail closure of the fixed-point predicates under infimum/supremum.*)
 lemma fp_IF_inf_closed: "Fr_inf \<phi> \<Longrightarrow> infimum_closed (fp (\<I>\<^sub>F \<phi>))" by (metis (full_types) IF2 IF_inf Ra_restr_all dEXP_def iMULT_b_def infimum_def)
 lemma fp_CF_sup_closed: "Fr_inf \<phi> \<Longrightarrow> Fr_2 \<phi> \<Longrightarrow> supremum_closed (fp (\<C>\<^sub>F \<phi>))" by (metis (full_types) CF2 CF_inf EXP_def Ra_restr_ex iADDI_a_def supremum_def)
 

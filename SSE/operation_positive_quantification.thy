@@ -1,14 +1,13 @@
 theory operation_positive_quantification
   imports operation_positive boolean_algebra_quantification
 begin
-nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format = 3] (*default settings*)
+nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format=3] (*default Nitpick settings*)
 
-section \<open>Positive Conditions on Operations (Infinitary)\<close>
 
-(**We define and interrelate infinitary variants for some previously introduced ('positive') conditions on operations
-and show how they make use of quantifiers as previously defined.*)
+subsection \<open>Definitions (infinitary case)\<close>
 
-subsection \<open>Definitions\<close>
+(**We define and interrelate infinitary variants for some previously introduced ('positive') conditions 
+on operations and show how they relate to quantifiers as previously defined.*)
 
 (**Distribution over infinite meets (infima) or infinite multiplicativity (iMULT).*)
 definition "iMULT \<phi>   \<equiv> \<forall>S. \<phi>(\<^bold>\<And>S) \<^bold>\<approx> \<^bold>\<And>Ra[\<phi>|S]" 
@@ -20,9 +19,10 @@ definition "iADDI \<phi>   \<equiv> \<forall>S. \<phi>(\<^bold>\<Or>S) \<^bold>\
 definition "iADDI_a \<phi> \<equiv> \<forall>S. \<phi>(\<^bold>\<Or>S) \<^bold>\<preceq> \<^bold>\<Or>Ra[\<phi>|S]" 
 definition "iADDI_b \<phi> \<equiv> \<forall>S. \<phi>(\<^bold>\<Or>S) \<^bold>\<succeq> \<^bold>\<Or>Ra[\<phi>|S]"
 
-subsection \<open>Relations among conditions\<close>
 
-(**We start by showing that there is a duality between iADDI-a and iMULT-b.*)
+subsection \<open>Relations among conditions (infinitary case)\<close>
+
+(**We start by noting that there is a duality between iADDI-a and iMULT-b.*)
 lemma iADDI_MULT_dual1: "iADDI_a \<phi> \<Longrightarrow> iMULT_b \<phi>\<^sup>d" unfolding iADDI_a_def iMULT_b_def by (metis compl_def dual_def iDM_a iDM_b Ra_dual1)
 lemma iADDI_MULT_dual2: "iMULT_b \<phi> \<Longrightarrow> iADDI_a \<phi>\<^sup>d" unfolding iADDI_a_def iMULT_b_def by (metis compl_def dual_def iDM_b Ra_dual3)
 
@@ -60,14 +60,22 @@ lemma MONO_iADDIb: "MONO \<phi> = iADDI_b \<phi>" using MONO_ADDIb iADDIb_rel by
 lemma MONO_iMULTa: "MONO \<phi> = iMULT_a \<phi>" using MONO_MULTa iMULTa_rel by simp
 lemma iADDI_b_iMULTa: "iADDI_b \<phi> = iMULT_a \<phi>" using MONO_iADDIb MONO_iMULTa by auto
 
+lemma PI_imult: "MONO \<phi> \<Longrightarrow> iMULT_b \<phi> \<Longrightarrow> iMULT \<phi>" using MONO_MULTa iMULT_a_def iMULT_b_def iMULT_def iMULTa_rel by auto
+lemma PC_iaddi: "MONO \<phi> \<Longrightarrow> iADDI_a \<phi> \<Longrightarrow> iADDI \<phi>"  using MONO_ADDIb iADDI_a_def iADDI_b_def iADDI_def iADDIb_rel by auto
 
-subsection \<open>Exploring the (converse) Barcan formula\<close>
+(**Interestingly, we can show that suitable (infinitary) conditions on an operation can make the set
+of its fixed points closed under infinite meets/joins.*)
+lemma fp_inf_closed: "MONO \<phi> \<Longrightarrow> iMULT_b \<phi> \<Longrightarrow> infimum_closed (fp \<phi>)" by (metis (full_types) PI_imult Ra_restr_all iMULT_def infimum_def)
+lemma fp_sup_closed: "MONO \<phi> \<Longrightarrow> iADDI_a \<phi> \<Longrightarrow> supremum_closed (fp \<phi>)" by (metis (full_types) PC_iaddi Ra_restr_ex iADDI_def supremum_def) 
 
-(**The converse Barcan formula follows already from monotonicity.*)
+
+subsection \<open>Exploring the Barcan formula and its converse\<close>
+
+(**The converse Barcan formula follows readily from monotonicity.*)
 lemma CBarcan1: "MONO \<phi> \<Longrightarrow> \<forall>\<pi>.  \<phi>(\<^bold>\<forall>x. \<pi> x)  \<^bold>\<preceq> (\<^bold>\<forall>x. \<phi>(\<pi> x))" by (metis (mono_tags, lifting) MONO_def)
 lemma CBarcan2: "MONO \<phi> \<Longrightarrow> \<forall>\<pi>. (\<^bold>\<exists>x. \<phi>(\<pi> x)) \<^bold>\<preceq> \<phi>(\<^bold>\<exists>x. \<pi> x)" by (metis (mono_tags, lifting) MONO_def)
 
-(**However the Barcan formula requires a stronger assumption (of an infinitary character).*)
+(**However, the Barcan formula requires a stronger assumption (of an infinitary character).*)
 lemma Barcan1: "iMULT_b \<phi> \<Longrightarrow> \<forall>\<pi>. (\<^bold>\<forall>x. \<phi>(\<pi> x)) \<^bold>\<preceq> \<phi>(\<^bold>\<forall>x. \<pi> x)" proof -
   assume imultb: "iMULT_b \<phi>"
   { fix \<pi>::"'a\<Rightarrow>\<sigma>"
@@ -86,15 +94,5 @@ lemma Barcan2: "iADDI_a \<phi> \<Longrightarrow> \<forall>\<pi>. \<phi>(\<^bold>
     ultimately have "\<phi>(\<^bold>\<exists>x. \<pi> x) \<^bold>\<preceq> (\<^bold>\<exists>x. \<phi>(\<pi> x))" by simp
   } thus ?thesis by simp
 qed
-
-subsection \<open>Fixed-points\<close>
-
-lemma PI_imult: "MONO \<phi> \<Longrightarrow> iMULT_b \<phi> \<Longrightarrow> iMULT \<phi>" using MONO_MULTa iMULT_a_def iMULT_b_def iMULT_def iMULTa_rel by auto
-lemma PC_iaddi: "MONO \<phi> \<Longrightarrow> iADDI_a \<phi> \<Longrightarrow> iADDI \<phi>"  using MONO_ADDIb iADDI_a_def iADDI_b_def iADDI_def iADDIb_rel by auto
-
-(**Interestingly, we can show that suitable (infinitary) conditions on an operation can make the set
-of its fixed points closed under infinite meets/joins.*)
-lemma fp_inf_closed: "MONO \<phi> \<Longrightarrow> iMULT_b \<phi> \<Longrightarrow> infimum_closed (fp \<phi>)" by (metis (full_types) PI_imult Ra_restr_all iMULT_def infimum_def)
-lemma fp_sup_closed: "MONO \<phi> \<Longrightarrow> iADDI_a \<phi> \<Longrightarrow> supremum_closed (fp \<phi>)" by (metis (full_types) PC_iaddi Ra_restr_ex iADDI_def supremum_def) 
 
 end

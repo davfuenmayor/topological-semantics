@@ -1,15 +1,16 @@
 theory LFUs
   imports "../topological-semantics/derivative_algebra" "../SSE/operation_negative"
 begin
-nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format = 3] (*default settings*)
-(*(We rename (classical) meta-logical negation to avoid terminological confusion)*)
-abbreviation cneg::"bool\<Rightarrow>bool" ("\<sim>_" [40]40) where "\<sim>\<phi> \<equiv> \<not>\<phi>" 
+nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format=3] (*default Nitpick settings*)
 
 section \<open>Logics of Formal Undeterminedness (LFUs)\<close>
-(**The LFUs @{cite LFU} are a family of paracomplete logics featuring a "determinedness" operator @{text "\<^bold>\<circ>"}
+(**The LFUs @{cite LFU} are a family of paracomplete logics featuring a 'determinedness' operator @{text "\<^bold>\<circ>"}
 that can be used to recover some classical properties of negation (in particular TND).
 LFUs behave in a sense dually to LFIs. Both can be semantically embedded as extensions of Boolean algebras.
 Here we show how to semantically embed LFUs as derivative algebras.*)
+
+(**(We rename (classical) meta-logical negation to avoid terminological confusion)*)
+abbreviation cneg::"bool\<Rightarrow>bool" ("\<sim>_" [40]40) where "\<sim>\<phi> \<equiv> \<not>\<phi>" 
 
 (**Logical validity can be defined as truth in all worlds/points (i.e. as denoting the top element)*)
 abbreviation gtrue::"\<sigma>\<Rightarrow>bool" ("[\<^bold>\<turnstile> _]") where  "[\<^bold>\<turnstile>  A] \<equiv> \<forall>w. A w"   

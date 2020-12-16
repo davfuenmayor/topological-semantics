@@ -1,13 +1,11 @@
 theory derivative_algebra
   imports operators_deriv
 begin
-nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format = 3] (*default settings*)
+nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format=3] (*default Nitpick settings*)
 
 section \<open>Derivative algebra\<close>
-
 (**The closure of a set A @{text "\<C>(A)"} can be seen as the set A augmented by (i) its boundary points, or
-(ii) its accumulation/limit points. In this section we explore the second variant by drawing on the notion
-of a derivative algebra.*)
+(ii) its accumulation/limit points. We explore the second variant by drawing on the notion of derivative algebra.*)
 
 (**Declares a primitive (unconstrained) derivative (aka. derived-set) operation and defines others from it.*)
 consts \<D>::"\<sigma>\<Rightarrow>\<sigma>"
@@ -16,6 +14,9 @@ abbreviation "\<C> \<equiv> \<C>\<^sub>D \<D>" (**closure*)
 abbreviation "\<B> \<equiv> \<B>\<^sub>D \<D>" (**border*)
 abbreviation "\<F> \<equiv> \<F>\<^sub>D \<D>" (**frontier*)
 abbreviation "\<K> \<equiv> \<K>\<^sub>D \<D>" (**coherence*)
+
+
+subsection \<open>Basic properties\<close>
 
 (**Verifies minimal conditions under which operators resulting from conversion functions coincide.*)
 lemma ICdual: "\<I> \<^bold>\<equiv> \<C>\<^sup>d" by (simp add: dual_der2 equal_op_def)
@@ -28,8 +29,8 @@ lemma FI_rel: "\<F> \<^bold>\<equiv> \<F>\<^sub>I \<I>" by (metis Cl_der_def FI2
 lemma FC_rel: "\<F> \<^bold>\<equiv> \<F>\<^sub>C \<C>" by (simp add: Cl_der_def Fr_cl_def Fr_der_def2 equal_op_def)
 lemma FB_rel: "\<F> \<^bold>\<equiv> \<F>\<^sub>B \<B>" by (smt Br_der_def CB_rel Cl_br_def Cl_der_def Fr_br_def Fr_der_def Fr_der_def2 equal_op_def conn)
 
-(**Recall that derivative and coherence operations cannot be obtained from any of interior, closure, border
-or frontier. The derivative operation can indeed be seen as being more fundamental than the other ones.*)
+(**Recall that derivative and coherence operations cannot be obtained from either interior, closure, border
+nor frontier. The derivative operation can indeed be seen as being more fundamental than the other ones.*)
 
 (**Fixed-point and other operators are interestingly related.*)
 lemma fp1: "\<I>\<^sup>f\<^sup>p \<^bold>\<equiv> \<B>\<^sup>c" by (smt BI_rel Br_int_def IB_rel Int_br_def equal_op_def conn)
@@ -76,7 +77,6 @@ lemma IC_imp: "Der_1 \<D> \<Longrightarrow> Der_3 \<D> \<Longrightarrow> \<foral
   } thus ?thesis unfolding conn by simp
 qed
 
-
 (**Define some fixed-point predicates and prove some properties.*)
 abbreviation openset ("Op") where "Op A \<equiv> fp \<I> A"
 abbreviation closedset ("Cl") where "Cl A \<equiv> fp \<C> A"
@@ -93,6 +93,9 @@ lemma OpCldual: "\<forall>A. Cl A \<longleftrightarrow> Op(\<^bold>\<midarrow>A)
 lemma ClOpdual: "\<forall>A. Op A \<longleftrightarrow> Cl(\<^bold>\<midarrow>A)" by (simp add: dual_def dual_der1 conn)
 lemma Fr_ClBr: "\<forall>A. Fr(A) = (Cl(A) \<and> Br(A))" using join_def meet_def pB2 pC2 by auto
 lemma Cl_F: "Der_1 \<D> \<Longrightarrow> Der_4 \<D> \<Longrightarrow> \<forall>A. Cl(\<F> A)" using FD4 Fr_4_def join_def pC2 by auto
+
+
+subsection \<open>Further properties\<close>
 
 (**The definitions and theorems below are well known in the literature (cf. @{cite Kuratowski-2}).
 Here we uncover the minimal conditions under which they hold (taking frontier operation as primitive).*)

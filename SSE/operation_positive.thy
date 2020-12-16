@@ -1,15 +1,15 @@
 theory operation_positive
   imports boolean_algebra
 begin
-nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format = 3] (*default settings*)
+nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format=3] (*default Nitpick settings*)
 
-section \<open>Positive Conditions on Operations (Basic)\<close>
+section \<open>Positive semantic conditions for operations\<close>
 
-(**In this section we define and interrelate some useful conditions on propositional functions which do not involve
-complement/negation (hence 'positive'). We focus on those propositional functions which correspond to unary connectives
-of the algebra (having as type @{type "\<sigma>\<Rightarrow>\<sigma>"}). We call such propositional functions 'operations'.*)
+(**We define and interrelate some useful conditions on propositional functions which do not involve
+negative-like properties (hence 'positive'). We focus on propositional functions which correspond to unary
+connectives of the algebra (with type @{type "\<sigma>\<Rightarrow>\<sigma>"}). We call such propositional functions 'operations'.*)
 
-subsection \<open>Definitions\<close>
+subsection \<open>Definitions (finitary case)\<close>
 
 (**Monotonicity (MONO).*)
 definition "MONO \<phi> \<equiv> \<forall>A B. A \<^bold>\<preceq> B \<longrightarrow> \<phi> A \<^bold>\<preceq> \<phi> B" 
@@ -17,7 +17,7 @@ lemma MONO_ant: "MONO \<phi> \<Longrightarrow> \<forall>A B C. A \<^bold>\<prece
 lemma MONO_cons: "MONO \<phi> \<Longrightarrow> \<forall>A B C. A \<^bold>\<preceq> B \<longrightarrow> \<phi>(C \<^bold>\<rightarrow> A) \<^bold>\<preceq> \<phi>(C \<^bold>\<rightarrow> B)" by (smt MONO_def conn)
 lemma MONO_dual: "MONO \<phi> \<Longrightarrow> MONO \<phi>\<^sup>d" by (smt MONO_def dual_def compl_def)
 
-(**Extensive/Expansive (EXP) and its dual (dEXP) aka. 'contractive'.*)
+(**Extensive/expansive (EXP) and its dual (dEXP), aka. 'contractive'.*)
 definition "EXP \<phi>  \<equiv> \<forall>A. A \<^bold>\<preceq> \<phi> A" 
 definition "dEXP \<phi> \<equiv> \<forall>A. \<phi> A \<^bold>\<preceq> A"
 lemma EXP_dual1: "EXP \<phi> \<Longrightarrow> dEXP \<phi>\<^sup>d" by (metis EXP_def dEXP_def dual_def compl_def)
@@ -48,13 +48,17 @@ definition "ADDI_a \<phi> \<equiv> \<forall>A B. \<phi>(A \<^bold>\<or> B) \<^bo
 definition "ADDI_b \<phi> \<equiv> \<forall>A B. \<phi>(A \<^bold>\<or> B) \<^bold>\<succeq> (\<phi> A) \<^bold>\<or> (\<phi> B)" 
 
 
-subsection \<open>Relations among conditions\<close>
+subsection \<open>Relations among conditions (finitary case)\<close>
 
 (**dEXP and dNOR entail NOR.*)
 lemma "dEXP \<phi> \<Longrightarrow> dNOR \<phi> \<Longrightarrow> NOR \<phi>" by (meson bottom_def dEXP_def NOR_def)
 
 (**EXP and NOR entail dNOR.*)
 lemma "EXP \<phi> \<Longrightarrow> NOR \<phi> \<Longrightarrow> dNOR \<phi>" by (simp add: EXP_def dNOR_def top_def)
+
+(**Interestingly, EXP and its dual allow for an alternative characterization of fixed-point operators.*)
+lemma EXP_fp:  "EXP  \<phi> \<Longrightarrow> \<phi>\<^sup>f\<^sup>p \<^bold>\<equiv> (\<phi>\<^sup>c \<^bold>\<squnion> id)" by (smt id_def EXP_def dual_def dual_symm equal_op_def conn)
+lemma dEXP_fp: "dEXP \<phi> \<Longrightarrow> \<phi>\<^sup>f\<^sup>p \<^bold>\<equiv> (\<phi> \<^bold>\<squnion> compl)" by (smt dEXP_def equal_op_def conn)
 
 (**MONO, MULT-a and ADDI-b are equivalent.*)
 lemma MONO_MULTa: "MONO \<phi> = MULT_a \<phi>" proof -
@@ -88,12 +92,5 @@ lemma MONO_ADDIb: "MONO \<phi> = ADDI_b \<phi>" proof -
   from lr rl show ?thesis by auto
 qed
 lemma ADDIb_MULTa: "ADDI_b \<phi> = MULT_a \<phi>" using MONO_ADDIb MONO_MULTa by auto
-
-
-subsection \<open>Fixed-point relations\<close>
-
-(**Some conditions allow for an interesting characterization of fixed-point operators.*)
-lemma EXP_fp:  "EXP  \<phi> \<Longrightarrow> \<phi>\<^sup>f\<^sup>p \<^bold>\<equiv> (\<phi>\<^sup>c \<^bold>\<squnion> id)" by (smt id_def EXP_def dual_def dual_symm equal_op_def conn)
-lemma dEXP_fp: "dEXP \<phi> \<Longrightarrow> \<phi>\<^sup>f\<^sup>p \<^bold>\<equiv> (\<phi> \<^bold>\<squnion> compl)" by (smt dEXP_def equal_op_def conn)
 
 end

@@ -1,13 +1,14 @@
 theory operation_negative_quantification
   imports operation_negative boolean_algebra_quantification
 begin
-nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format = 3] (*default settings*)
+nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format=3] (*default Nitpick settings*)
 
-section \<open>Negative Conditions on Operations (Infinitary)\<close>
+subsection \<open>Definitions and interrelations (infinitary case)\<close>
 
-(**We define and interrelate infinitary variants for some previously introduced ('negative') conditions on operations.*)
+(**We define and interrelate infinitary variants for some previously introduced ('negative') conditions
+on operations. We show how they relate to quantifiers as previously defined.*)
 
-(**iDM1-4: infinite De Morgan rules.*)
+(**iDM: infinitary De Morgan laws.*)
 abbreviation riDM1 ("iDM1\<^sup>_ _") where "iDM1\<^sup>S \<eta> \<equiv> \<eta>(\<^bold>\<Or>S) \<^bold>\<preceq> \<^bold>\<And>Ra[\<eta>|S]"
 abbreviation riDM2 ("iDM2\<^sup>_ _") where "iDM2\<^sup>S \<eta> \<equiv> \<^bold>\<Or>Ra[\<eta>|S] \<^bold>\<preceq> \<eta>(\<^bold>\<And>S)"
 abbreviation riDM3 ("iDM3\<^sup>_ _") where "iDM3\<^sup>S \<eta> \<equiv> \<eta>(\<^bold>\<And>S) \<^bold>\<preceq> \<^bold>\<Or>Ra[\<eta>|S]"
@@ -54,7 +55,7 @@ lemma "DM1 \<eta> = iDM1 \<eta>" using CoPw_iDM1 DM1_CoPw iDM1_rel by blast
 lemma "DM2 \<eta> = iDM2 \<eta>" using CoPw_iDM2 DM2_CoPw iDM2_rel by blast
 lemma "iDM1 \<eta> = iDM2 \<eta>" using CoPw_iDM1 CoPw_iDM2 DM1_CoPw DM2_CoPw iDM1_rel iDM2_rel by blast
 
-(**iDM3/4 entail their finite variants but not the other way round.*)
+(**iDM3/4 entail their finitary variants but not the other way round.*)
 lemma iDM3_rel: "iDM3 \<eta> \<Longrightarrow> DM3 \<eta>" proof -
   assume idm3: "iDM3 \<eta>" 
    { fix a::"\<sigma>" and b::"\<sigma>"
@@ -82,7 +83,7 @@ lemma iDM4_rel: "iDM4 \<eta> \<Longrightarrow> DM4 \<eta>" proof -
 lemma "DM3 \<eta> \<Longrightarrow> iDM3 \<eta>" nitpick oops
 lemma "DM4 \<eta> \<Longrightarrow> iDM4 \<eta>" nitpick oops
 
-(**Indeed the previous characterization of the infinite De Morgan laws is fairly general and entails
+(**Indeed the previous characterization of the infinitary De Morgan laws is fairly general and entails
 the traditional version employing quantifiers (though not the other way round).*)
 (**The first two variants DM1/2 follow easily from DM1/2, iDM1/2 or CoPw (all of them equivalent).*)
 lemma iDM1_trad: "iDM1 \<eta> \<Longrightarrow> \<forall>\<pi>. \<eta>(\<^bold>\<exists>x. \<pi> x)  \<^bold>\<preceq>  (\<^bold>\<forall>x. \<eta>(\<pi> x))" by (metis (mono_tags, lifting) CoPw_def DM1_CoPw iDM1_rel)
@@ -96,7 +97,7 @@ abbreviation "piDM2 \<pi> \<eta> \<equiv> \<^bold>\<Or>Ra[\<eta>|Ra(\<pi>)] \<^b
 abbreviation "piDM3 \<pi> \<eta> \<equiv> \<eta>(\<^bold>\<And>Ra(\<pi>)) \<^bold>\<preceq> \<^bold>\<Or>Ra[\<eta>|Ra(\<pi>)]"
 abbreviation "piDM4 \<pi> \<eta> \<equiv> \<^bold>\<And>Ra[\<eta>|Ra(\<pi>)] \<^bold>\<preceq> \<eta>(\<^bold>\<Or>Ra(\<pi>))"
 
-(**They are entailed (unidirectionally) by the general DM laws.*)
+(**They are entailed (unidirectionally) by the general De Morgan laws.*)
 lemma "iDM1 \<eta> \<Longrightarrow> \<forall>\<pi>. piDM1 \<pi> \<eta>" by (simp add: iDM1_def)
 lemma "iDM2 \<eta> \<Longrightarrow> \<forall>\<pi>. piDM2 \<pi> \<eta>" by (simp add: iDM2_def)
 lemma "iDM3 \<eta> \<Longrightarrow> \<forall>\<pi>. piDM3 \<pi> \<eta>" by (simp add: iDM3_def)

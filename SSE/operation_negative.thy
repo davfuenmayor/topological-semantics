@@ -166,7 +166,7 @@ lemma CoP2_DNor: "CoP2 \<eta> \<Longrightarrow> nDNor \<eta>" unfolding Defs con
 lemma "DNI \<eta> \<Longrightarrow> nNor \<eta>" nitpick oops 
 lemma "DNE \<eta> \<Longrightarrow> nDNor \<eta>" nitpick oops 
 (**nNor and nDNor together entail the rule variant of DNI (rDNI).*)
-lemma "nNor \<eta> \<Longrightarrow> nDNor \<eta> \<Longrightarrow> rDNI \<eta>" unfolding Defs using nDNor_def nNor_def eq_ext by metis
+lemma nDNor_rDNI: "nNor \<eta> \<Longrightarrow> nDNor \<eta> \<Longrightarrow> rDNI \<eta>" unfolding Defs using nDNor_def nNor_def eq_ext by metis
 lemma "nNor \<eta> \<Longrightarrow> nDNor \<eta> \<Longrightarrow> rDNE \<eta>" nitpick oops
 
 

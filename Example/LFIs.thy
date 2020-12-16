@@ -1,10 +1,10 @@
 theory LFIs
   imports "../topological-semantics/negation_conditions"
 begin
-nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format = 3] (*default settings*)
+nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format=3] (*default Nitpick settings*)
 
 section \<open>Logics of Formal Inconsistency (LFIs)\<close>
-(**The LFIs @{cite LFI} are a family of paraconsistent logics featuring a "consistency" operator @{text "\<^bold>\<circ>"}
+(**The LFIs @{cite LFI} are a family of paraconsistent logics featuring a 'consistency' operator @{text "\<^bold>\<circ>"}
 that can be used to recover some classical properties of negation (in particular ECQ).
 We show how to semantically embed LFIs as extensions of Boolean algebras (here as frontier algebras).*)
 
@@ -36,13 +36,13 @@ lemma "[a, \<^bold>\<not>a \<^bold>\<turnstile>\<^sub>g b]" nitpick oops (*count
 lemma "[a, \<^bold>\<not>a \<^bold>\<turnstile>\<^sub>g \<^bold>\<not>b]" nitpick oops (*countermodel*)
 
 (**We define two pairs of in/consistency operators and show how they relate to each other.
-Using LFIs terminology, the minimal logic so encoded corresponds to "RmbC-ciw" (cf. @{cite RLFI}).*)
+Using LFIs terminology, the minimal logic so encoded corresponds to 'RmbC-ciw' (cf. @{cite RLFI}).*)
 abbreviation op_inc_a :: "\<sigma>\<Rightarrow>\<sigma>" ("\<bullet>\<^sup>A_" [57]58) where "\<bullet>\<^sup>AA  \<equiv> A \<^bold>\<and> \<^bold>\<not>A"
 abbreviation op_con_a :: "\<sigma>\<Rightarrow>\<sigma>" ("\<^bold>\<circ>\<^sup>A_" [57]58) where "\<^bold>\<circ>\<^sup>AA  \<equiv> \<^bold>\<midarrow>\<bullet>\<^sup>AA"
 abbreviation op_inc_b :: "\<sigma>\<Rightarrow>\<sigma>" ("\<bullet>\<^sup>B_" [57]58) where "\<bullet>\<^sup>BA  \<equiv> \<B> A"
 abbreviation op_con_b :: "\<sigma>\<Rightarrow>\<sigma>" ("\<^bold>\<circ>\<^sup>B_" [57]58) where "\<^bold>\<circ>\<^sup>BA  \<equiv> \<^bold>\<midarrow>\<bullet>\<^sup>BA"
 
-(**Observe that assumming condition Fr-2 are we allowed to exchange A and B variants*)
+(**Observe that assumming condition Fr-2 are we allowed to exchange A and B variants.*)
 lemma pincAB: "Fr_2 \<F> \<Longrightarrow> \<bullet>\<^sup>AA \<^bold>\<approx> \<bullet>\<^sup>BA" using Br_fr_def Cl_fr_def pF2 conn by auto
 lemma pconAB: "Fr_2 \<F> \<Longrightarrow> \<^bold>\<circ>\<^sup>AA \<^bold>\<approx> \<^bold>\<circ>\<^sup>BA" using pincAB unfolding conn by simp
 
@@ -56,7 +56,7 @@ lemma Prop3: "Cl A \<longleftrightarrow> \<bullet>\<^sup>A\<^bold>\<midarrow>A \
 lemma Prop4: "Op A \<longleftrightarrow> \<^bold>\<circ>\<^sup>BA \<^bold>\<approx> \<^bold>\<top>" using Op_Bzero unfolding conn by simp
 lemma Prop5: "Op A \<longleftrightarrow> \<bullet>\<^sup>BA \<^bold>\<approx> \<^bold>\<bottom>" using Op_Bzero by simp
 
-(**Importantly, LFIs must satisfy the so-called "principle of gentle explosion". Only variant A works here:*)
+(**Importantly, LFIs must satisfy the so-called 'principle of gentle explosion'. Only variant A works here:*)
 lemma "[\<^bold>\<circ>\<^sup>Aa, a, \<^bold>\<not>a \<^bold>\<turnstile> b]" using compl_def meet_def by auto
 lemma "[\<^bold>\<circ>\<^sup>Aa, a, \<^bold>\<not>a \<^bold>\<turnstile>\<^sub>g b]" using compl_def meet_def by auto
 lemma "[\<^bold>\<circ>\<^sup>Ba, a, \<^bold>\<not>a \<^bold>\<turnstile> b]" nitpick oops (*countermodel*)

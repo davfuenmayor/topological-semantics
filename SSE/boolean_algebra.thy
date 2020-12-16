@@ -1,17 +1,18 @@
 theory boolean_algebra
   imports Main
 begin
-declare [[ smt_timeout = 30]]
-nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format = 3] (*default settings*)
+declare[[smt_timeout=30]]
+declare[[syntax_ambiguity_warning=false]] 
+nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format=3] (*default Nitpick settings*)
 
-section \<open>Shallow Embedding of a Boolean Algebra of Propositions\<close>
+section \<open>Shallow embedding of a Boolean algebra of propositions\<close>
 
 (**Two notions play a fundamental role in this work: propositions and propositional functions.
-Propositions work as denotations of sentences and are modeled as objects of type @{type "w\<Rightarrow>bool"} (shortened as @{type "\<sigma>"}).
-Propositional functions, as the name indicates, are basically anything with a (parametric) type @{type "'a\<Rightarrow>\<sigma>"}.*)
+Propositions, qua sentence denotations, are modeled as objects of type @{type "w\<Rightarrow>bool"} (shortened as @{type "\<sigma>"}).
+Propositional functions, as the name indicates, are basically anything with a (parametric) type @{type "'t\<Rightarrow>\<sigma>"}.*)
 
 (**We introduce a type @{type "w"} for the domain of points (aka. 'worlds', 'states', etc.).
-@{type "\<sigma>"} is a type alias for sets of points (i.e. propositions) encoded as their respective characteristic functions.*)
+@{type "\<sigma>"} is a type alias for sets of points (i.e. propositions) encoded as characteristic functions.*)
 typedecl w                  
 type_synonym \<sigma> = "w\<Rightarrow>bool"
 
@@ -21,9 +22,9 @@ type_synonym \<sigma> = "w\<Rightarrow>bool"
 however, we reserve letters D and S to denote sets of propositions (aka. domains/spaces) and
 the letters u, v and w to denote worlds/points.
 
-(ii) Greek letters (in particular @{text "\<pi>"}) denote propositional functions (type @{type "'a\<Rightarrow>\<sigma>"});
-among the latter we may employ the letters @{text "\<phi>"}, @{text "\<psi>"} and @{text "\<eta>"} to explicitly differentiate
-those corresponding to unary connectives (type @{type "\<sigma>\<Rightarrow>\<sigma>"}).*)
+(ii) Greek letters (in particular @{text "\<pi>"}) denote propositional functions (type @{type "'t\<Rightarrow>\<sigma>"});
+among the latter we may employ the letters @{text "\<phi>"}, @{text "\<psi>"} and @{text "\<eta>"} to explicitly
+name those corresponding to unary connectives/operations (type @{type "\<sigma>\<Rightarrow>\<sigma>"}).*)
 
 subsection \<open>Encoding Boolean operations\<close>
 
@@ -66,18 +67,18 @@ lemma "a \<^bold>\<preceq> c \<Longrightarrow> b \<^bold>\<preceq> d \<Longright
 subsection \<open>Second-order operations and fixed-points\<close>
 
 (**We define equality for propositional functions as follows.*)
-definition equal_op::"('a\<Rightarrow>\<sigma>)\<Rightarrow>('a\<Rightarrow>\<sigma>)\<Rightarrow>bool" (infix "\<^bold>\<equiv>" 60) where "\<phi> \<^bold>\<equiv> \<psi> \<equiv> \<forall>X. \<phi> X \<^bold>\<approx> \<psi> X"
+definition equal_op::"('t\<Rightarrow>\<sigma>)\<Rightarrow>('t\<Rightarrow>\<sigma>)\<Rightarrow>bool" (infix "\<^bold>\<equiv>" 60) where "\<phi> \<^bold>\<equiv> \<psi> \<equiv> \<forall>X. \<phi> X \<^bold>\<approx> \<psi> X"
 
 (**Moreover, we define some useful Boolean (2nd-order) operations on propositional functions,*)
-abbreviation unionOp::"('a\<Rightarrow>\<sigma>)\<Rightarrow>('a\<Rightarrow>\<sigma>)\<Rightarrow>('a\<Rightarrow>\<sigma>)" (infixr "\<^bold>\<squnion>" 61) where "\<phi> \<^bold>\<squnion> \<psi> \<equiv> \<lambda>X. \<phi> X \<^bold>\<or> \<psi> X"
-abbreviation interOp::"('a\<Rightarrow>\<sigma>)\<Rightarrow>('a\<Rightarrow>\<sigma>)\<Rightarrow>('a\<Rightarrow>\<sigma>)" (infixr "\<^bold>\<sqinter>" 62) where "\<phi> \<^bold>\<sqinter> \<psi> \<equiv> \<lambda>X. \<phi> X \<^bold>\<and> \<psi> X"
-abbreviation compOp::"('a\<Rightarrow>\<sigma>)\<Rightarrow>('a\<Rightarrow>\<sigma>)" ("(_\<^sup>c)") where "\<phi>\<^sup>c \<equiv> \<lambda>X. \<^bold>\<midarrow>\<phi> X"
+abbreviation unionOp::"('t\<Rightarrow>\<sigma>)\<Rightarrow>('t\<Rightarrow>\<sigma>)\<Rightarrow>('t\<Rightarrow>\<sigma>)" (infixr "\<^bold>\<squnion>" 61) where "\<phi> \<^bold>\<squnion> \<psi> \<equiv> \<lambda>X. \<phi> X \<^bold>\<or> \<psi> X"
+abbreviation interOp::"('t\<Rightarrow>\<sigma>)\<Rightarrow>('t\<Rightarrow>\<sigma>)\<Rightarrow>('t\<Rightarrow>\<sigma>)" (infixr "\<^bold>\<sqinter>" 62) where "\<phi> \<^bold>\<sqinter> \<psi> \<equiv> \<lambda>X. \<phi> X \<^bold>\<and> \<psi> X"
+abbreviation compOp::"('t\<Rightarrow>\<sigma>)\<Rightarrow>('t\<Rightarrow>\<sigma>)" ("(_\<^sup>c)") where "\<phi>\<^sup>c \<equiv> \<lambda>X. \<^bold>\<midarrow>\<phi> X"
 (**some of them explicitly targeting operations,*)
 definition dual::"(\<sigma>\<Rightarrow>\<sigma>)\<Rightarrow>(\<sigma>\<Rightarrow>\<sigma>)" ("(_\<^sup>d)") where "\<phi>\<^sup>d \<equiv> \<lambda>X. \<^bold>\<midarrow>(\<phi>(\<^bold>\<midarrow>X))"
-(**and also an useful technical operation*)
+(**and also define an useful operation (for technical purposes).*)
 definition id::"\<sigma>\<Rightarrow>\<sigma>" ("id") where "id A \<equiv> A"
 
-(**and prove some useful lemmas (some of them may help the provers in their hard work).*)
+(**We now prove some useful lemmas (some of them may help the provers in their hard work).*)
 lemma comp_symm: "\<phi>\<^sup>c = \<psi> \<Longrightarrow> \<phi> = \<psi>\<^sup>c" unfolding conn by blast
 lemma comp_invol: "\<phi>\<^sup>c\<^sup>c = \<phi>" unfolding conn by blast
 lemma dual_symm: "(\<phi> \<equiv> \<psi>\<^sup>d) \<Longrightarrow> (\<psi> \<equiv> \<phi>\<^sup>d)" unfolding dual_def conn by simp
@@ -90,15 +91,15 @@ lemma "(A \<^bold>\<squnion> B)\<^sup>c \<^bold>\<equiv> (A\<^sup>c) \<^bold>\<s
 lemma "(A \<^bold>\<sqinter> B)\<^sup>d \<^bold>\<equiv> (A\<^sup>d) \<^bold>\<squnion> (B\<^sup>d)" by (simp add: dual_def equal_op_def conn)
 lemma "(A \<^bold>\<sqinter> B)\<^sup>c \<^bold>\<equiv> (A\<^sup>c) \<^bold>\<squnion> (B\<^sup>c)" by (simp add: equal_op_def conn)
 
-(**The notion of a fixed point is a fundamental one. We speak of propositions being fixed points of operations.
-For a given operation we define in the usual way a fixed-point predicate for propositions.*)
+(**The notion of a fixed point is a fundamental one. We speak of propositions being fixed points of
+operations. For a given operation we define in the usual way a fixed-point predicate for propositions.*)
 abbreviation fixedpoint::"(\<sigma>\<Rightarrow>\<sigma>)\<Rightarrow>(\<sigma>\<Rightarrow>bool)" ("fp") where "fp \<phi> \<equiv> \<lambda>X. \<phi> X \<^bold>\<approx> X"
 
 lemma fp_d: "(fp \<phi>\<^sup>d) X = (fp \<phi>)(\<^bold>\<midarrow>X)" unfolding dual_def conn by auto
 lemma fp_c: "(fp \<phi>\<^sup>c) X = (X \<^bold>\<approx> \<^bold>\<midarrow>(\<phi> X))" unfolding conn by auto
 lemma fp_dc:"(fp \<phi>\<^sup>d\<^sup>c) X = (X \<^bold>\<approx> \<phi>(\<^bold>\<midarrow>X))" unfolding dual_def conn by auto
 
-(**In the same spirit we can also define a fixed-point operator.*)
+(**Indeed, we can 'operationalize' this predicate by defining a fixed-point operator as follows:*)
 abbreviation fixedpoint_op::"(\<sigma>\<Rightarrow>\<sigma>)\<Rightarrow>(\<sigma>\<Rightarrow>\<sigma>)" ("(_\<^sup>f\<^sup>p)") where "\<phi>\<^sup>f\<^sup>p  \<equiv> \<lambda>X. (\<phi> X) \<^bold>\<leftrightarrow> X"
 
 lemma ofp_c: "(\<phi>\<^sup>c)\<^sup>f\<^sup>p \<^bold>\<equiv> (\<phi>\<^sup>f\<^sup>p)\<^sup>c" unfolding conn equal_op_def by auto
@@ -124,7 +125,7 @@ lemma join_char: "a \<^bold>\<preceq> b \<longleftrightarrow> a \<^bold>\<or> b 
  
 (**We can verify indeed that the algebra is atomic (in three different ways) by relying on the
 presence of primitive equality in HOL. A more general class of Boolean algebras could in principle
-be obtained in systems without primitive equality and/or by suitably restricting quantification over
+be obtained in systems without primitive equality or by suitably restricting quantification over
 propositions (e.g. defining a topology and restricting quantifiers to open/closed sets).*)
 definition "atom a \<equiv> \<not>(a \<^bold>\<approx> \<^bold>\<bottom>) \<and> (\<forall>p. a \<^bold>\<preceq> p \<or> a \<^bold>\<preceq> \<^bold>\<midarrow>p)"
 lemma atomic1: "\<forall>w. \<exists>q. q w \<and> (\<forall>p. p w \<longrightarrow> q \<^bold>\<preceq> p)" using the_sym_eq_trivial by (metis (full_types))
@@ -134,7 +135,7 @@ lemma atomic3: "\<forall>p. \<not>(p \<^bold>\<approx> \<^bold>\<bottom>) \<long
     { assume "\<not>(p \<^bold>\<approx> \<^bold>\<bottom>)"
       hence "\<exists>v. p v" unfolding conn by simp
       then obtain w where 1:"p w" by (rule exE)
-      let ?q="\<lambda>v. v = w"
+      let ?q="\<lambda>v. v = w" (*using HOL primitive equality*)
       have 2: "atom ?q" unfolding atom_def unfolding conn by simp
       have "\<forall>v. ?q v \<longrightarrow> p v" using 1 by simp
       hence 3: "?q \<^bold>\<preceq> p" by simp

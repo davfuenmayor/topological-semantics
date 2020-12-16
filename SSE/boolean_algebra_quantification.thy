@@ -3,21 +3,19 @@ theory boolean_algebra_quantification
 begin
 hide_const(open) List.list.Nil no_notation List.list.Nil ("[]")  (*We have no use for lists... *)
 hide_const(open) Relation.converse no_notation Relation.converse ("(_\<inverse>)" [1000] 999) (*..nor for relations in this work*)
-nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format = 3] (*default settings*)
-
-section \<open>Adding Quantification\<close>
-
-(**The aim of this section is to obtain a complete Boolean algebra which we can use to interpret
-quantified formulas (in the spirit of Boolean-valued models for first-order logic).*)
+nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format=3] (*default Nitpick settings*)
 
 
 subsection \<open>Obtaining a complete Boolean Algebra\<close>
 
-(**We start by defining infinite meet (infimum) and infinite join (supremum) operations.*)
+(**Our aim is to obtain a complete Boolean algebra which we can use to interpret
+quantified formulas (in the spirit of Boolean-valued models for set theory).*)
+
+(**We start by defining infinite meet (infimum) and infinite join (supremum) operations,*)
 definition infimum:: "(\<sigma>\<Rightarrow>bool)\<Rightarrow>\<sigma>" ("\<^bold>\<And>_") where "\<^bold>\<And>S \<equiv> \<lambda>w. \<forall>X. S X \<longrightarrow> X w"
 definition supremum::"(\<sigma>\<Rightarrow>bool)\<Rightarrow>\<sigma>" ("\<^bold>\<Or>_") where "\<^bold>\<Or>S \<equiv> \<lambda>w. \<exists>X. S X  \<and>  X w"
 
-(**We can show that the algebra as defined is complete.*)
+(**and show that the corresponding lattice is complete.*)
 abbreviation "upper_bound U S \<equiv> \<forall>X. (S X) \<longrightarrow> X \<^bold>\<preceq> U"
 abbreviation "lower_bound L S \<equiv> \<forall>X. (S X) \<longrightarrow> L \<^bold>\<preceq> X"
 abbreviation "is_supremum U S \<equiv> upper_bound U S \<and> (\<forall>X. upper_bound X S \<longrightarrow> U \<^bold>\<preceq> X)"
@@ -28,7 +26,7 @@ lemma sup_ext: "\<forall>S. \<exists>X. is_supremum X S" by (metis supremum_def)
 lemma inf_char: "is_infimum \<^bold>\<And>S S" unfolding infimum_def by auto
 lemma inf_ext: "\<forall>S. \<exists>X. is_infimum X S" by (metis infimum_def)
 
-(**Additionally, we can check that being closed under supremum/infimum entails being closed under join/meet.*)
+(**We can check that being closed under supremum/infimum entails being closed under join/meet.*)
 abbreviation "meet_closed S \<equiv>  \<forall>X Y. (S X \<and> S Y) \<longrightarrow> S(X \<^bold>\<and> Y)"
 abbreviation "join_closed S \<equiv>  \<forall>X Y. (S X \<and> S Y) \<longrightarrow> S(X \<^bold>\<or> Y)"
 
@@ -75,31 +73,31 @@ lemma sup_join_closed: "\<forall>P. supremum_closed P \<longrightarrow> join_clo
 qed
 
 
-subsection \<open>Quantifiers (restricted and unrestricted)\<close>
+subsection \<open>Adding quantifiers (restricted and unrestricted)\<close>
 
-(**We can harness HOL to define quantification over individuals of arbitrary type (using polymorphic types).
+(**We can harness HOL to define quantification over individuals of arbitrary type (using polymorphism).
 These (unrestricted) quantifiers take a propositional function and give a proposition.*)  
-abbreviation mforall::"('a\<Rightarrow>\<sigma>)\<Rightarrow>\<sigma>" ("\<^bold>\<forall>_" [55]56) where "\<^bold>\<forall>\<pi> \<equiv> \<lambda>w. \<forall>X. (\<pi> X) w"
-abbreviation mexists::"('a\<Rightarrow>\<sigma>)\<Rightarrow>\<sigma>" ("\<^bold>\<exists>_" [55]56) where "\<^bold>\<exists>\<pi> \<equiv> \<lambda>w. \<exists>X. (\<pi> X) w"
+abbreviation mforall::"('t\<Rightarrow>\<sigma>)\<Rightarrow>\<sigma>" ("\<^bold>\<forall>_" [55]56) where "\<^bold>\<forall>\<pi> \<equiv> \<lambda>w. \<forall>X. (\<pi> X) w"
+abbreviation mexists::"('t\<Rightarrow>\<sigma>)\<Rightarrow>\<sigma>" ("\<^bold>\<exists>_" [55]56) where "\<^bold>\<exists>\<pi> \<equiv> \<lambda>w. \<exists>X. (\<pi> X) w"
 (**To improve readability, we introduce for them an useful binder notation.*)
 abbreviation mforallB (binder"\<^bold>\<forall>"[55]56) where "\<^bold>\<forall>X. \<pi> X \<equiv> \<^bold>\<forall>\<pi>"
 abbreviation mexistsB (binder"\<^bold>\<exists>"[55]56) where "\<^bold>\<exists>X. \<pi> X \<equiv> \<^bold>\<exists>\<pi>"
 
 (*TODO: is it possible to also add binder notation to the ones below?*)
-(**Moreover, we can define restricted quantifiers which take a 'functional domain' as additional parameter.
-Such a 'domain' can be seen as a propositional function that maps each element 'e' to the proposition 'e exists'.*)
-abbreviation mforall_restr::"('a\<Rightarrow>\<sigma>)\<Rightarrow>('a\<Rightarrow>\<sigma>)\<Rightarrow>\<sigma>" ("\<^bold>\<forall>\<^sup>R(_)_") where "\<^bold>\<forall>\<^sup>R(\<delta>)\<pi> \<equiv> \<lambda>w.\<forall>X. (\<delta> X) w \<longrightarrow> (\<pi> X) w" 
-abbreviation mexists_restr::"('a\<Rightarrow>\<sigma>)\<Rightarrow>('a\<Rightarrow>\<sigma>)\<Rightarrow>\<sigma>" ("\<^bold>\<exists>\<^sup>R(_)_") where "\<^bold>\<exists>\<^sup>R(\<delta>)\<pi> \<equiv> \<lambda>w.\<exists>X. (\<delta> X) w  \<and>  (\<pi> X) w"
+(**Moreover, we define restricted quantifiers which take a 'functional domain' as additional parameter.
+The latter is a propositional function that maps each element 'e' to the proposition 'e exists'.*)
+abbreviation mforall_restr::"('t\<Rightarrow>\<sigma>)\<Rightarrow>('t\<Rightarrow>\<sigma>)\<Rightarrow>\<sigma>" ("\<^bold>\<forall>\<^sup>R(_)_") where "\<^bold>\<forall>\<^sup>R(\<delta>)\<pi> \<equiv> \<lambda>w.\<forall>X. (\<delta> X) w \<longrightarrow> (\<pi> X) w" 
+abbreviation mexists_restr::"('t\<Rightarrow>\<sigma>)\<Rightarrow>('t\<Rightarrow>\<sigma>)\<Rightarrow>\<sigma>" ("\<^bold>\<exists>\<^sup>R(_)_") where "\<^bold>\<exists>\<^sup>R(\<delta>)\<pi> \<equiv> \<lambda>w.\<exists>X. (\<delta> X) w  \<and>  (\<pi> X) w"
 
 
 subsection \<open>Relating quantifiers with further operators\<close>
 
 (**The following 'type-lifting' function is useful for converting sets into 'rigid' propositional functions.*)
-abbreviation lift_conv::"('a\<Rightarrow>bool)\<Rightarrow>('a\<Rightarrow>\<sigma>)" ("\<lparr>_\<rparr>") where "\<lparr>S\<rparr> \<equiv> \<lambda>X. \<lambda>w. S X"
+abbreviation lift_conv::"('t\<Rightarrow>bool)\<Rightarrow>('t\<Rightarrow>\<sigma>)" ("\<lparr>_\<rparr>") where "\<lparr>S\<rparr> \<equiv> \<lambda>X. \<lambda>w. S X"
 
-(**We now introduce an useful operator: the range of a propositional function (resp. restricted over a domain),*)
-definition pfunRange::"('a\<Rightarrow>\<sigma>)\<Rightarrow>(\<sigma>\<Rightarrow>bool)" ("Ra(_)") where "Ra(\<pi>) \<equiv> \<lambda>Y. \<exists>x. (\<pi> x) = Y"
-definition pfunRange_restr::"('a\<Rightarrow>\<sigma>)\<Rightarrow>('a\<Rightarrow>bool)\<Rightarrow>(\<sigma>\<Rightarrow>bool)" ("Ra[_|_]") where "Ra[\<pi>|D] \<equiv> \<lambda>Y. \<exists>x. (D x) \<and> (\<pi> x) = Y"
+(**We introduce an useful operator: the range of a propositional function (resp. restricted over a domain),*)
+definition pfunRange::"('t\<Rightarrow>\<sigma>)\<Rightarrow>(\<sigma>\<Rightarrow>bool)" ("Ra(_)") where "Ra(\<pi>) \<equiv> \<lambda>Y. \<exists>x. (\<pi> x) = Y"
+definition pfunRange_restr::"('t\<Rightarrow>\<sigma>)\<Rightarrow>('t\<Rightarrow>bool)\<Rightarrow>(\<sigma>\<Rightarrow>bool)" ("Ra[_|_]") where "Ra[\<pi>|D] \<equiv> \<lambda>Y. \<exists>x. (D x) \<and> (\<pi> x) = Y"
 
 (**and check that taking infinite joins/meets (suprema/infima) over the range of a propositional function
 can be equivalently codified by using quantifiers. This is a quite useful simplifying relationship.*)
@@ -108,9 +106,9 @@ lemma Ra_ex:  "\<^bold>\<Or>Ra(\<pi>) = \<^bold>\<exists>\<pi>" by (metis (full_
 lemma Ra_restr_all: "\<^bold>\<And>Ra[\<pi>|D] = \<^bold>\<forall>\<^sup>R\<lparr>D\<rparr>\<pi>" by (metis (full_types) pfunRange_restr_def infimum_def)
 lemma Ra_restr_ex:  "\<^bold>\<Or>Ra[\<pi>|D] = \<^bold>\<exists>\<^sup>R\<lparr>D\<rparr>\<pi>" by (metis pfunRange_restr_def supremum_def)
 
-(**We introduce further useful operators: the positive (negative) restriction of a propositional function wrt. a domain,*)
-abbreviation pfunRestr_pos::"('a\<Rightarrow>\<sigma>)\<Rightarrow>('a\<Rightarrow>\<sigma>)\<Rightarrow>('a\<Rightarrow>\<sigma>)" ("[_|_]\<^sup>P") where "[\<pi>|\<delta>]\<^sup>P \<equiv> \<lambda>X. \<lambda>w. (\<delta> X) w \<longrightarrow> (\<pi> X) w"
-abbreviation pfunRestr_neg::"('a\<Rightarrow>\<sigma>)\<Rightarrow>('a\<Rightarrow>\<sigma>)\<Rightarrow>('a\<Rightarrow>\<sigma>)" ("[_|_]\<^sup>N") where "[\<pi>|\<delta>]\<^sup>N \<equiv> \<lambda>X. \<lambda>w. (\<delta> X) w  \<and>  (\<pi> X) w"
+(**We further introduce the positive (negative) restriction of a propositional function wrt. a domain,*)
+abbreviation pfunRestr_pos::"('t\<Rightarrow>\<sigma>)\<Rightarrow>('t\<Rightarrow>\<sigma>)\<Rightarrow>('t\<Rightarrow>\<sigma>)" ("[_|_]\<^sup>P") where "[\<pi>|\<delta>]\<^sup>P \<equiv> \<lambda>X. \<lambda>w. (\<delta> X) w \<longrightarrow> (\<pi> X) w"
+abbreviation pfunRestr_neg::"('t\<Rightarrow>\<sigma>)\<Rightarrow>('t\<Rightarrow>\<sigma>)\<Rightarrow>('t\<Rightarrow>\<sigma>)" ("[_|_]\<^sup>N") where "[\<pi>|\<delta>]\<^sup>N \<equiv> \<lambda>X. \<lambda>w. (\<delta> X) w  \<and>  (\<pi> X) w"
 
 (**and check that some additional simplifying relationships obtain.*)
 lemma all_restr: "\<^bold>\<forall>\<^sup>R(\<delta>)\<pi> = \<^bold>\<forall>[\<pi>|\<delta>]\<^sup>P" by simp
@@ -122,22 +120,21 @@ lemma Ra_ex_restr:  "\<^bold>\<Or>Ra[\<pi>|D] = \<^bold>\<exists>[\<pi>|\<lparr>
 lemma "\<^bold>\<forall>X. [\<pi>|\<delta>]\<^sup>P X = \<^bold>\<forall>[\<pi>|\<delta>]\<^sup>P" by simp
 lemma "\<^bold>\<exists>X. [\<pi>|\<delta>]\<^sup>N X = \<^bold>\<exists>[\<pi>|\<delta>]\<^sup>N" by simp
 
-(**noting that extra care should be taken when working with complements or negations:
+(**noting that extra care should be taken when working with complements or negations;
 always remember to switch P/N (positive/negative restriction) accordingly.*)
 lemma "\<^bold>\<forall>\<^sup>R(\<delta>)\<pi>  = \<^bold>\<forall>X.  [\<pi>|\<delta>]\<^sup>P X" by simp
 lemma "\<^bold>\<forall>\<^sup>R(\<delta>)\<pi>\<^sup>c = \<^bold>\<forall>X. \<^bold>\<midarrow>[\<pi>|\<delta>]\<^sup>N X" by (simp add: compl_def)
 lemma "\<^bold>\<exists>\<^sup>R(\<delta>)\<pi>  = \<^bold>\<exists>X.  [\<pi>|\<delta>]\<^sup>N X" by simp
 lemma "\<^bold>\<exists>\<^sup>R(\<delta>)\<pi>\<^sup>c = \<^bold>\<exists>X. \<^bold>\<midarrow>[\<pi>|\<delta>]\<^sup>P X" by (simp add: compl_def)
 
-(**And, finally, the previous definitions allow us to nicely characterize the interaction
+(**The previous definitions allow us to nicely characterize the interaction
 between function composition and (restricted) quantification:*)
 lemma Ra_all_comp1: "\<^bold>\<forall>(\<pi>\<circ>\<gamma>) = \<^bold>\<forall>[\<pi>|\<lparr>Ra \<gamma>\<rparr>]\<^sup>P" by (metis comp_apply pfunRange_def)
 lemma Ra_all_comp2: "\<^bold>\<forall>(\<pi>\<circ>\<gamma>) = \<^bold>\<forall>\<^sup>R\<lparr>Ra \<gamma>\<rparr> \<pi>" by (metis comp_apply pfunRange_def)
 lemma Ra_ex_comp1:  "\<^bold>\<exists>(\<pi>\<circ>\<gamma>) = \<^bold>\<exists>[\<pi>|\<lparr>Ra \<gamma>\<rparr>]\<^sup>N" by (metis comp_apply pfunRange_def)
 lemma Ra_ex_comp2:  "\<^bold>\<exists>(\<pi>\<circ>\<gamma>) = \<^bold>\<exists>\<^sup>R\<lparr>Ra \<gamma>\<rparr> \<pi>" by (metis comp_apply pfunRange_def)
 
-
-(**We introduce an useful operator which returns for a given domain of propositions the domain of their complements.*)
+(**This useful operator returns for a given domain of propositions the domain of their complements:*)
 definition dom_compl::"(\<sigma>\<Rightarrow>bool)\<Rightarrow>(\<sigma>\<Rightarrow>bool)" ("(_\<inverse>)") where "D\<inverse> \<equiv> \<lambda>X. \<exists>Y. (D Y) \<and> (X = \<^bold>\<midarrow>Y)"
 lemma dom_compl_def2: "D\<inverse> = (\<lambda>X. D(\<^bold>\<midarrow>X))" unfolding dom_compl_def by (metis comp_symm fun_upd_same)
 lemma dom_compl_invol: "D = (D\<inverse>)\<inverse>" unfolding dom_compl_def by (metis comp_symm fun_upd_same)
@@ -167,7 +164,7 @@ lemma "\<^bold>\<exists>X. \<^bold>\<midarrow>[\<pi>|\<delta>]\<^sup>N X = \<^bo
 lemma "\<^bold>\<forall>X. \<^bold>\<midarrow>[\<pi>|\<delta>]\<^sup>N X = \<^bold>\<midarrow>(\<^bold>\<exists>X. [\<pi>|\<delta>]\<^sup>N X)" using compl_def by auto
 
 (**Warning: Do not switch P and N when passing to the dual form.*)
-lemma "\<^bold>\<forall>X. [\<pi>|\<delta>]\<^sup>P X = \<^bold>\<midarrow>(\<^bold>\<exists>X. \<^bold>\<midarrow>[\<pi>|\<delta>]\<^sup>N X)" nitpick oops (**wrong: counterexample found*)
+lemma "\<^bold>\<forall>X. [\<pi>|\<delta>]\<^sup>P X = \<^bold>\<midarrow>(\<^bold>\<exists>X. \<^bold>\<midarrow>[\<pi>|\<delta>]\<^sup>N X)" nitpick oops (**wrong: counterexample*)
 lemma "\<^bold>\<forall>X. [\<pi>|\<delta>]\<^sup>P X = \<^bold>\<midarrow>(\<^bold>\<exists>X. \<^bold>\<midarrow>[\<pi>|\<delta>]\<^sup>P X)" using compl_def by auto (**correct*)
 
 end

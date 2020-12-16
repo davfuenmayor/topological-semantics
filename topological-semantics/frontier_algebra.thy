@@ -1,7 +1,7 @@
 theory frontier_algebra
   imports operators_basic
 begin
-nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format = 3] (*default settings*)
+nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format=3] (*default Nitpick settings*)
 
 section \<open>Frontier Algebra\<close>
 
@@ -14,6 +14,9 @@ consts \<F>::"\<sigma>\<Rightarrow>\<sigma>"
 abbreviation "\<I> \<equiv> \<I>\<^sub>F \<F>" (**interior*)
 abbreviation "\<C> \<equiv> \<C>\<^sub>F \<F>" (**closure*)
 abbreviation "\<B> \<equiv> \<B>\<^sub>F \<F>" (**border*)
+
+
+subsection \<open>Basic properties\<close>
 
 (**Verifies minimal conditions under which operators resulting from conversion functions coincide.*)
 lemma ICdual: "Fr_2 \<F> \<Longrightarrow> \<I> \<^bold>\<equiv> \<C>\<^sup>d" by (simp add: Cl_fr_def Fr_2_def Int_fr_def dual_def equal_op_def conn)
@@ -87,6 +90,8 @@ lemma ClOpdual: "Fr_2 \<F> \<Longrightarrow> \<forall>A. Op A \<longleftrightarr
 lemma Fr_ClBr: "\<forall>A. Fr(A) = (Cl(A) \<and> Br(A))" using Br_fr_def Cl_fr_def join_def meet_def by auto
 lemma Cl_F: "Fr_4 \<F> \<Longrightarrow> \<forall>A. Cl(\<F> A)" using Cl_fr_def Fr_4_def conn by auto
 
+
+subsection \<open>Further properties\<close>
 
 (**The definitions and theorems below are well known in the literature (cf. @{cite Kuratowski-2}).
 Here we uncover the minimal conditions under which they hold (taking frontier operation as primitive).*)

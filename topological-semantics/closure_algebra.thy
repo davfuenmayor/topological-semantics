@@ -1,16 +1,19 @@
 theory closure_algebra
   imports operators_basic
 begin
-nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format = 3] (*default settings*)
+nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format=3] (*default Nitpick settings*)
 
 section \<open>Closure algebra\<close>
-(**We define a topological Boolean algebra with a promitive closure operator and verify a few properties.*)
+(**We define a topological Boolean algebra with a primitive closure operator and verify a few properties.*)
 
 (**Declares a primitive (unconstrained) closure operation and defines others from it.*)
 consts \<C>::"\<sigma>\<Rightarrow>\<sigma>"
 abbreviation "\<I> \<equiv> \<C>\<^sup>d" (**interior*)
 abbreviation "\<B> \<equiv> \<B>\<^sub>C \<C>" (**border*)
 abbreviation "\<F> \<equiv> \<F>\<^sub>C \<C>" (**frontier*)
+
+
+subsection \<open>Basic properties\<close>
 
 (**Verifies minimal conditions under which operators resulting from conversion functions coincide.*)
 lemma ICdual': "\<C> \<^bold>\<equiv> \<I>\<^sup>d" using dual_symm equal_op_def by auto

@@ -1,7 +1,7 @@
 theory strict_implication
   imports frontier_algebra
 begin
-nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format = 3] (*default settings*)
+nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format=3] (*default Nitpick settings*)
 
 section \<open>Strict implication\<close>
 
@@ -24,13 +24,13 @@ lemma MT: "\<forall>a b. (a \<^bold>\<Rightarrow> b) \<^bold>\<and> \<^bold>\<mi
 
 (**However the full DT (right-to-left: implication introduction) is not valid.*)
 lemma DT1: "\<forall>a b X. X \<^bold>\<preceq> a \<^bold>\<Rightarrow> b \<longrightarrow> X \<^bold>\<and> a \<^bold>\<preceq> b" by (simp add: Int_fr_def conn)
-lemma DT2: "\<FF> \<F> \<Longrightarrow> \<forall>a b X. X \<^bold>\<and> a \<^bold>\<preceq> b \<longrightarrow> X \<^bold>\<preceq> a \<^bold>\<Rightarrow> b" nitpick oops (*counterexample found*)
+lemma DT2: "\<FF> \<F> \<Longrightarrow> \<forall>a b X. X \<^bold>\<and> a \<^bold>\<preceq> b \<longrightarrow> X \<^bold>\<preceq> a \<^bold>\<Rightarrow> b" nitpick oops (*counterexample*)
 
 (**This implication has thus a sort of 'relevant' behaviour. For instance, the following are not valid:*)
-lemma "\<FF> \<F> \<Longrightarrow> \<forall>a b. (a \<^bold>\<Rightarrow> (b \<^bold>\<Rightarrow> a)) \<^bold>\<approx> \<^bold>\<top>" nitpick oops (*counterexample found*)
-lemma "\<FF> \<F> \<Longrightarrow> \<forall>a b. (a \<^bold>\<Rightarrow> ((a \<^bold>\<Rightarrow> b) \<^bold>\<Rightarrow> b)) \<^bold>\<approx> \<^bold>\<top>" nitpick oops
-lemma "\<FF> \<F> \<Longrightarrow> \<forall>a b c. (a \<^bold>\<Rightarrow> b) \<^bold>\<or> (b \<^bold>\<Rightarrow> c) \<^bold>\<approx> \<^bold>\<top>" nitpick oops 
-lemma "\<FF> \<F> \<Longrightarrow> \<forall>a b. ((a \<^bold>\<Rightarrow> b) \<^bold>\<Rightarrow> a) \<^bold>\<Rightarrow> a \<^bold>\<approx> \<^bold>\<top>" nitpick oops 
+lemma "\<FF> \<F> \<Longrightarrow> \<forall>a b. (a \<^bold>\<Rightarrow> (b \<^bold>\<Rightarrow> a)) \<^bold>\<approx> \<^bold>\<top>" nitpick oops (*counterexample*)
+lemma "\<FF> \<F> \<Longrightarrow> \<forall>a b. (a \<^bold>\<Rightarrow> ((a \<^bold>\<Rightarrow> b) \<^bold>\<Rightarrow> b)) \<^bold>\<approx> \<^bold>\<top>" nitpick oops (*counterexample*)
+lemma "\<FF> \<F> \<Longrightarrow> \<forall>a b c. (a \<^bold>\<Rightarrow> b) \<^bold>\<or> (b \<^bold>\<Rightarrow> c) \<^bold>\<approx> \<^bold>\<top>" nitpick oops (*counterexample*)
+lemma "\<FF> \<F> \<Longrightarrow> \<forall>a b. ((a \<^bold>\<Rightarrow> b) \<^bold>\<Rightarrow> a) \<^bold>\<Rightarrow> a \<^bold>\<approx> \<^bold>\<top>" nitpick oops (*counterexample*) 
 
 (**In contrast the properties below are valid for appropriate conditions.*)
 lemma iprop0: "Fr_2 \<F> \<Longrightarrow> Fr_3 \<F> \<Longrightarrow> \<forall>a. a \<^bold>\<Rightarrow> a \<^bold>\<approx> \<^bold>\<top>" using DTw2 pI2 by fastforce

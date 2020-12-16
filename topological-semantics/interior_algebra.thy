@@ -1,7 +1,7 @@
 theory interior_algebra
   imports operators_basic
 begin
-nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format = 3] (*default settings*)
+nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format=3] (*default Nitpick settings*)
 
 section \<open>Interior algebra\<close>
 (**We define a topological Boolean algebra taking the interior operator as primitive and verify some properties.*)
@@ -11,6 +11,9 @@ consts \<I>::"\<sigma>\<Rightarrow>\<sigma>"
 abbreviation "\<C> \<equiv> \<I>\<^sup>d" (**closure*)
 abbreviation "\<B> \<equiv> \<B>\<^sub>I \<I>" (**border*)
 abbreviation "\<F> \<equiv> \<F>\<^sub>I \<I>" (**frontier*)
+
+
+subsection \<open>Basic properties\<close>
 
 (**Verifies minimal conditions under which operators resulting from conversion functions coincide.*)
 lemma ICdual:  "\<I> \<^bold>\<equiv> \<C>\<^sup>d" using dual_symm equal_op_def by auto
