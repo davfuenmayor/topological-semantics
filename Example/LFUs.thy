@@ -37,7 +37,7 @@ abbreviation op_det::"\<sigma>\<Rightarrow>\<sigma>" ("\<^bold>\<circ>_" [57]58)
 abbreviation op_ind::"\<sigma>\<Rightarrow>\<sigma>" ("\<bullet>_" [57]58) where "\<bullet>A  \<equiv> \<^bold>\<midarrow>\<^bold>\<circ>A"
 
 lemma op_det_def: "\<^bold>\<circ>a \<^bold>\<approx> a \<^bold>\<or> \<^bold>\<not>a" by (simp add: compl_def diff_def dual_def ineg_def join_def pB1)
-lemma Prop1: "\<^bold>\<circ>A \<^bold>\<approx> A \<^bold>\<leftrightarrow> \<C> A" by (metis dimp_def eq_ext' fp3)
+lemma Prop1: "\<^bold>\<circ>A \<^bold>\<approx> \<C>\<^sup>f\<^sup>p A" by (metis dimp_def eq_ext' fp3)
 lemma Prop2: "Op A \<longleftrightarrow> \<^bold>\<circ>\<^bold>\<midarrow>A \<^bold>\<approx> \<^bold>\<top>" by (metis dual_def dual_symm pB1 pI1 top_def compl_def diff_def)
 lemma Prop3: "Op A \<longleftrightarrow> \<bullet>\<^bold>\<midarrow>A \<^bold>\<approx> \<^bold>\<bottom>" by (metis Op_Bzero dual_def dual_symm)
 lemma Prop4: "Cl A \<longleftrightarrow> \<^bold>\<circ>A \<^bold>\<approx> \<^bold>\<top>" by (metis Prop1 dimp_def top_def)

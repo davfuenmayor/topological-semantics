@@ -37,24 +37,26 @@ lemma "[a, \<^bold>\<not>a \<^bold>\<turnstile>\<^sub>g \<^bold>\<not>b]" nitpic
 
 (**We define two pairs of in/consistency operators and show how they relate to each other.
 Using LFIs terminology, the minimal logic so encoded corresponds to 'RmbC-ciw' (cf. @{cite RLFI}).*)
-abbreviation op_inc_a :: "\<sigma>\<Rightarrow>\<sigma>" ("\<bullet>\<^sup>A_" [57]58) where "\<bullet>\<^sup>AA  \<equiv> A \<^bold>\<and> \<^bold>\<not>A"
-abbreviation op_con_a :: "\<sigma>\<Rightarrow>\<sigma>" ("\<^bold>\<circ>\<^sup>A_" [57]58) where "\<^bold>\<circ>\<^sup>AA  \<equiv> \<^bold>\<midarrow>\<bullet>\<^sup>AA"
-abbreviation op_inc_b :: "\<sigma>\<Rightarrow>\<sigma>" ("\<bullet>\<^sup>B_" [57]58) where "\<bullet>\<^sup>BA  \<equiv> \<B> A"
-abbreviation op_con_b :: "\<sigma>\<Rightarrow>\<sigma>" ("\<^bold>\<circ>\<^sup>B_" [57]58) where "\<^bold>\<circ>\<^sup>BA  \<equiv> \<^bold>\<midarrow>\<bullet>\<^sup>BA"
+abbreviation op_inc_a::"\<sigma>\<Rightarrow>\<sigma>" ("\<bullet>\<^sup>A_" [57]58) where "\<bullet>\<^sup>AA \<equiv> A \<^bold>\<and> \<^bold>\<not>A"
+abbreviation op_con_a::"\<sigma>\<Rightarrow>\<sigma>" ("\<^bold>\<circ>\<^sup>A_" [57]58) where "\<^bold>\<circ>\<^sup>AA \<equiv> \<^bold>\<midarrow>\<bullet>\<^sup>AA"
+abbreviation op_inc_b::"\<sigma>\<Rightarrow>\<sigma>" ("\<bullet>\<^sup>B_" [57]58) where "\<bullet>\<^sup>BA \<equiv> \<B> A"
+abbreviation op_con_b::"\<sigma>\<Rightarrow>\<sigma>" ("\<^bold>\<circ>\<^sup>B_" [57]58) where "\<^bold>\<circ>\<^sup>BA \<equiv> \<B>\<^sup>c A"
 
 (**Observe that assumming condition Fr-2 are we allowed to exchange A and B variants.*)
 lemma pincAB: "Fr_2 \<F> \<Longrightarrow> \<bullet>\<^sup>AA \<^bold>\<approx> \<bullet>\<^sup>BA" using Br_fr_def Cl_fr_def pF2 conn by auto
 lemma pconAB: "Fr_2 \<F> \<Longrightarrow> \<^bold>\<circ>\<^sup>AA \<^bold>\<approx> \<^bold>\<circ>\<^sup>BA" using pincAB unfolding conn by simp
 
-(**Observe that without assuming Fr-2 we obtain slightly different properties.*)
+(**Variants A and B give us slightly different properties.*)
+lemma Prop1: "\<^bold>\<circ>\<^sup>BA \<^bold>\<approx> \<I>\<^sup>f\<^sup>p A" using fp1 unfolding conn equal_op_def by metis
 lemma "\<^bold>\<circ>\<^sup>AA \<^bold>\<approx> A \<^bold>\<rightarrow> \<I> A" nitpick oops (*countermodel*)
-lemma "Cl A \<longleftrightarrow> \<^bold>\<circ>\<^sup>B\<^bold>\<midarrow>A \<^bold>\<approx> \<^bold>\<top>" nitpick oops (*countermodel*)
-lemma "Op A \<longleftrightarrow> \<^bold>\<circ>\<^sup>AA \<^bold>\<approx> \<^bold>\<top>" nitpick oops (*countermodel*)
-lemma Prop1: "\<^bold>\<circ>\<^sup>BA \<^bold>\<approx> A \<^bold>\<leftrightarrow> \<I> A" using fp1 unfolding conn equal_op_def by metis
 lemma Prop2: "Cl A \<longleftrightarrow> \<^bold>\<circ>\<^sup>A\<^bold>\<midarrow>A \<^bold>\<approx> \<^bold>\<top>" using pC2 unfolding conn by auto
+lemma "Cl A \<longrightarrow> \<^bold>\<circ>\<^sup>B\<^bold>\<midarrow>A \<^bold>\<approx> \<^bold>\<top>" nitpick oops (*countermodel*)
 lemma Prop3: "Cl A \<longleftrightarrow> \<bullet>\<^sup>A\<^bold>\<midarrow>A \<^bold>\<approx> \<^bold>\<bottom>" using Cl_fr_def unfolding conn by auto
+lemma "Cl A \<longrightarrow> \<bullet>\<^sup>B\<^bold>\<midarrow>A \<^bold>\<approx> \<^bold>\<bottom>" nitpick oops (*countermodel*)
 lemma Prop4: "Op A \<longleftrightarrow> \<^bold>\<circ>\<^sup>BA \<^bold>\<approx> \<^bold>\<top>" using Op_Bzero unfolding conn by simp
+lemma "Op A \<longrightarrow> \<^bold>\<circ>\<^sup>AA \<^bold>\<approx> \<^bold>\<top>" nitpick oops (*countermodel*)
 lemma Prop5: "Op A \<longleftrightarrow> \<bullet>\<^sup>BA \<^bold>\<approx> \<^bold>\<bottom>" using Op_Bzero by simp
+lemma "Op A \<longrightarrow> \<bullet>\<^sup>AA \<^bold>\<approx> \<^bold>\<bottom>" nitpick oops (*countermodel*)
 
 (**Importantly, LFIs must satisfy the so-called 'principle of gentle explosion'. Only variant A works here:*)
 lemma "[\<^bold>\<circ>\<^sup>Aa, a, \<^bold>\<not>a \<^bold>\<turnstile> b]" using compl_def meet_def by auto
