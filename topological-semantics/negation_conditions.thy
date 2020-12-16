@@ -1,9 +1,7 @@
 theory negation_conditions
   imports frontier_algebra "../SSE/operation_negative_quantification"
 begin
-nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format = 3] (*default settings*)
-(*(We rename (classical) meta-logical negation to avoid terminological confusion)*)
-abbreviation cneg::"bool\<Rightarrow>bool" ("\<sim>_" [40]40) where "\<sim>\<phi> \<equiv> \<not>\<phi>" 
+nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format=3] (*default Nitpick settings*)
 
 section \<open>Frontier-based negation - Semantic conditions\<close>
 
@@ -14,6 +12,9 @@ to obtain some relevant properties of negation.*)
 definition neg_I::"\<sigma>\<Rightarrow>\<sigma>" ("\<^bold>\<not>\<^sup>I")  where  "\<^bold>\<not>\<^sup>I A \<equiv> \<I>(\<^bold>\<midarrow>A)"
 definition neg_C::"\<sigma>\<Rightarrow>\<sigma>" ("\<^bold>\<not>\<^sup>C")  where  "\<^bold>\<not>\<^sup>C A \<equiv> \<C>(\<^bold>\<midarrow>A)"
 declare neg_I_def[conn] neg_C_def[conn]
+
+(**(We rename the meta-logical HOL negation to avoid terminological confusion)*)
+abbreviation cneg::"bool\<Rightarrow>bool" ("\<sim>_" [40]40) where "\<sim>\<phi> \<equiv> \<not>\<phi>" 
 
 subsection \<open>'Explosion' (ECQ), non-contradiction (LNC) and excluded middle (TND)\<close>
 
@@ -115,6 +116,21 @@ lemma "\<sim>ECQ \<^bold>\<not>\<^sup>C \<and> Fr_1 \<F> \<and> Fr_2 \<F> \<and>
 lemma "XCoP \<^bold>\<not>\<^sup>C \<longrightarrow> ECQm \<^bold>\<not>\<^sup>C" by (simp add: XCoP_def2 ECQm_def ECQw_def)
 
 
+subsection \<open>Normality (negative) and its dual (nNor/nDNor)\<close>
+
+(**nNor-I*) 
+lemma "nNor \<^bold>\<not>\<^sup>I" nitpick oops (*countermodel*)
+lemma nNor_I: "Fr_2 \<F> \<Longrightarrow> Fr_3 \<F> \<Longrightarrow> nNor \<^bold>\<not>\<^sup>I"  using IF3 dNOR_def unfolding Defs conn by auto
+(**nNor-C*) 
+lemma nNor_C: "nNor \<^bold>\<not>\<^sup>C" unfolding Cl_fr_def Defs conn by simp
+
+(**nDNor-I*) 
+lemma nDNor_I: "nDNor \<^bold>\<not>\<^sup>I" unfolding Int_fr_def Defs conn by simp
+(**nDNor-C*) 
+lemma "nDNor \<^bold>\<not>\<^sup>C" nitpick oops (*countermodel*)
+lemma nDNor_C: "Fr_3 \<F> \<Longrightarrow> nDNor \<^bold>\<not>\<^sup>C" using pC2 NOR_def unfolding Defs conn by simp
+
+
 subsection \<open>Double negation introduction/elimination (DNI/DNE)\<close>
 
 (**DNI-I*)
@@ -135,24 +151,24 @@ lemma "\<sim>TND \<^bold>\<not>\<^sup>I  \<and> DNE \<^bold>\<not>\<^sup>I \<and
 (**DNE-C*)
 lemma "\<FF> \<F> \<Longrightarrow> DNE \<^bold>\<not>\<^sup>C" nitpick oops (*countermodel*)
 lemma "\<sim>ECQm \<^bold>\<not>\<^sup>C \<and> \<FF> \<F> \<and> DNE \<^bold>\<not>\<^sup>C" nitpick[satisfy,card w=3] oops
+
 lemma "\<sim>ECQ \<^bold>\<not>\<^sup>C  \<and> DNE \<^bold>\<not>\<^sup>C \<and> DNI \<^bold>\<not>\<^sup>C" (*nitpick[satisfy]*) oops (*cannot find (finite) models*)
 
+(**rDNI-I*)
+lemma "Fr_2 \<F> \<Longrightarrow> Fr_3 \<F> \<Longrightarrow> rDNI \<^bold>\<not>\<^sup>I" using nNor_I nDNor_I nDNor_rDNI by simp
+(**rDNI-C*)
+lemma "Fr_3 \<F> \<Longrightarrow> rDNI \<^bold>\<not>\<^sup>C" using nNor_C nDNor_C nDNor_rDNI by simp
 
-subsection \<open>Normality (negative) and its dual (nNor/nDNor)\<close>
+(**rDNE-I*)
+lemma "\<FF> \<F> \<Longrightarrow> rDNE \<^bold>\<not>\<^sup>I" nitpick oops (*countermodel*)
+lemma "\<sim>TNDm \<^bold>\<not>\<^sup>I \<and> Fr_1 \<F> \<and> Fr_2 \<F> \<and> Fr_4 \<F> \<and> rDNE \<^bold>\<not>\<^sup>I" nitpick[satisfy,card w=3] oops
+lemma "\<sim>TNDm \<^bold>\<not>\<^sup>I \<and> Fr_1 \<F> \<and> Fr_3 \<F> \<and> Fr_4 \<F> \<and> rDNE \<^bold>\<not>\<^sup>I" nitpick[satisfy,card w=3] oops
+lemma "\<sim>TNDm \<^bold>\<not>\<^sup>I \<and> Fr_2 \<F> \<and> Fr_3 \<F> \<and> Fr_4 \<F> \<and> rDNE \<^bold>\<not>\<^sup>I" nitpick[satisfy,card w=3] oops
+(**rDNE-C*)
+lemma "\<FF> \<F> \<Longrightarrow> rDNE \<^bold>\<not>\<^sup>C" nitpick oops (*countermodel*)
+lemma "\<sim>ECQm \<^bold>\<not>\<^sup>C \<and> \<FF> \<F> \<and> rDNE \<^bold>\<not>\<^sup>C" nitpick[satisfy,card w=3] oops
 
-(**nNor-I*) 
-lemma "nNor \<^bold>\<not>\<^sup>I" nitpick oops (*countermodel*)
-lemma nNor_I: "Fr_2 \<F> \<Longrightarrow> Fr_3 \<F> \<Longrightarrow> nNor \<^bold>\<not>\<^sup>I"  using IF3 dNOR_def unfolding Defs conn by auto
-lemma "\<sim>TNDm \<^bold>\<not>\<^sup>I \<and> \<FF> \<F> \<and> nNor \<^bold>\<not>\<^sup>I" nitpick[satisfy,card w=3] oops
-(**nNor-C*) 
-lemma nNor_C: "nNor \<^bold>\<not>\<^sup>C" unfolding Cl_fr_def Defs conn by simp
-
-(**nDNor-I*) 
-lemma nDNor_I: "nDNor \<^bold>\<not>\<^sup>I" unfolding Int_fr_def Defs conn by simp
-(**nDNor-C*) 
-lemma "nDNor \<^bold>\<not>\<^sup>C" nitpick oops (*countermodel*)
-lemma nDNor_C: "Fr_3 \<F> \<Longrightarrow> nDNor \<^bold>\<not>\<^sup>C" using pC2 NOR_def unfolding Defs conn by simp
-lemma "\<sim>ECQm \<^bold>\<not>\<^sup>C \<and> \<FF> \<F> \<and> nDNor \<^bold>\<not>\<^sup>C" nitpick[satisfy,card w=3] oops
+lemma "\<sim>ECQm \<^bold>\<not>\<^sup>C  \<and> rDNE \<^bold>\<not>\<^sup>C \<and> rDNI \<^bold>\<not>\<^sup>C" nitpick[satisfy,card w=3] oops
 
 
 subsection \<open>De Morgan laws\<close>
@@ -197,7 +213,7 @@ lemma "\<sim>ECQ \<^bold>\<not>\<^sup>C \<and> Fr_1 \<F> \<and> Fr_2 \<F> \<and>
 lemma "\<sim>ECQm \<^bold>\<not>\<^sup>C \<and> iDM4 \<^bold>\<not>\<^sup>C" (*nitpick[satisfy]*) oops (*cannot find (finite) models*)
 
 
-subsection \<open>Contraposition (local) axioms (lCoP)\<close>
+subsection \<open>Local contraposition axioms (lCoP)\<close>
 
 (**lCoPw-I*)
 lemma "\<FF> \<F> \<Longrightarrow> lCoPw(\<^bold>\<rightarrow>) \<^bold>\<not>\<^sup>I" nitpick oops (*countermodel*)
