@@ -4,7 +4,7 @@ begin
 nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format=3] (*default Nitpick settings*)
 
 section \<open>Derivative algebra\<close>
-(**The closure of a set A @{text "\<C>(A)"} can be seen as the set A augmented by (i) its boundary points, or
+(**The closure of a set A (@{text "\<C>(A)"}) can be seen as the set A augmented by (i) its boundary points, or
 (ii) its accumulation/limit points. We explore the second variant by drawing on the notion of derivative algebra.*)
 
 (**Declares a primitive (unconstrained) derivative (aka. derived-set) operation and defines others from it.*)
@@ -51,8 +51,8 @@ lemma pB5: "Der_1b \<D> \<Longrightarrow> \<forall>A. \<B>(\<C> A) \<^bold>\<pre
 lemma pF1: "\<forall>A. \<F> A \<^bold>\<approx> \<C> A \<^bold>\<leftharpoonup> \<I> A"  using Cl_der_def Fr_der_def Int_der_def conn by auto
 lemma pF2: "\<forall>A. \<F> A \<^bold>\<approx> \<C> A \<^bold>\<and> \<C>(\<^bold>\<midarrow>A)" by (simp add: Cl_der_def Fr_der_def2)
 lemma pF3: "\<forall>A. \<F> A \<^bold>\<approx> \<B> A \<^bold>\<or> \<B>(\<^bold>\<midarrow>A)" by (smt Br_der_def Cl_der_def dual_def dual_der1 dual_der2 pF2 conn)
-lemma pF4: "Der_1 \<D> \<Longrightarrow> Der_4 \<D> \<Longrightarrow> \<forall>A. \<F>(\<I> A) \<^bold>\<preceq> \<F> A" by (metis CD1 CD2 CD4a ICdual ID4 IDEM_def PC1 PC4 PC5 PD8 diff_def eq_ext' pF1)
-lemma pF5: "Der_1 \<D> \<Longrightarrow> Der_4 \<D> \<Longrightarrow> \<forall>A. \<F>(\<C> A) \<^bold>\<preceq> \<F> A" by (metis FD2 Fr_2_def ICdual' dual_def eq_ext' pF4)
+lemma pF4: "Der_1 \<D> \<Longrightarrow> Der_4e \<D> \<Longrightarrow> \<forall>A. \<F>(\<I> A) \<^bold>\<preceq> \<F> A" by (metis CD1 CD2 CD4a ICdual ID4 IDEM_def PC1 PC4 PC5 PD8 diff_def eq_ext' pF1)
+lemma pF5: "Der_1 \<D> \<Longrightarrow> Der_4e \<D> \<Longrightarrow> \<forall>A. \<F>(\<C> A) \<^bold>\<preceq> \<F> A" by (metis FD2 Fr_2_def ICdual' dual_def eq_ext' pF4)
 lemma pA1: "\<forall>A. A \<^bold>\<approx> \<I> A \<^bold>\<or> \<B> A" using Br_der_def2 Int_der_def2 conn by auto
 lemma pA2: "\<forall>A. A \<^bold>\<approx> \<C> A \<^bold>\<leftharpoonup> \<B>(\<^bold>\<midarrow>A)" using Cl_der_def pB4 conn by auto
 lemma pC1: "\<forall>A. \<C> A \<^bold>\<approx> A \<^bold>\<or> \<B>(\<^bold>\<midarrow>A)" using CB_rel Cl_br_def eq_ext' by fastforce
@@ -83,16 +83,16 @@ abbreviation closedset ("Cl") where "Cl A \<equiv> fp \<C> A"
 abbreviation borderset ("Br") where "Br A \<equiv> fp \<B> A"
 abbreviation frontierset ("Fr") where "Fr A \<equiv> fp \<F> A"
 
-lemma Int_Open: "Der_1a \<D> \<Longrightarrow> Der_4 \<D> \<Longrightarrow> \<forall>A. Op(\<I> A)" using ID4a IDEM_def by blast
-lemma Cl_Closed: "Der_1a \<D> \<Longrightarrow> Der_4 \<D> \<Longrightarrow> \<forall>A. Cl(\<C> A)" using CD4a IDEM_def by blast
+lemma Int_Open: "Der_1a \<D> \<Longrightarrow> Der_4e \<D> \<Longrightarrow> \<forall>A. Op(\<I> A)" using ID4a IDEM_def by blast
+lemma Cl_Closed: "Der_1a \<D> \<Longrightarrow> Der_4e \<D> \<Longrightarrow> \<forall>A. Cl(\<C> A)" using CD4a IDEM_def by blast
 lemma Br_Border: "Der_1b \<D> \<Longrightarrow> \<forall>A. Br(\<B> A)" by (smt Br_der_def CI1b IC1_dual PD1 conn)
 (**In contrast, there is no analogous fixed-point result for frontier:*)
 lemma "\<DD> \<D> \<Longrightarrow> \<forall>A. Fr(\<F> A)" nitpick oops (*counterexample even if assuming all derivative conditions*)
-   
+  
 lemma OpCldual: "\<forall>A. Cl A \<longleftrightarrow> Op(\<^bold>\<midarrow>A)" using dual_def dual_der1 conn by auto
 lemma ClOpdual: "\<forall>A. Op A \<longleftrightarrow> Cl(\<^bold>\<midarrow>A)" by (simp add: dual_def dual_der1 conn)
 lemma Fr_ClBr: "\<forall>A. Fr(A) = (Cl(A) \<and> Br(A))" using join_def meet_def pB2 pC2 by auto
-lemma Cl_F: "Der_1 \<D> \<Longrightarrow> Der_4 \<D> \<Longrightarrow> \<forall>A. Cl(\<F> A)" using FD4 Fr_4_def join_def pC2 by auto
+lemma Cl_F: "Der_1 \<D> \<Longrightarrow> Der_4e \<D> \<Longrightarrow> \<forall>A. Cl(\<F> A)" using FD4 Fr_4_def join_def pC2 by auto
 
 
 subsection \<open>Further properties\<close>
@@ -115,8 +115,8 @@ lemma Cl_join_closed: "Der_1a \<D> \<Longrightarrow> join_closed (\<lambda>A. Cl
 lemma Cl_sup_closed: "Der_inf \<D> \<Longrightarrow> supremum_closed (\<lambda>A. Cl A)" by (simp add: fp_CD_sup_closed)
 lemma Br_inf_closed: "Der_1b \<D> \<Longrightarrow> infimum_closed (\<lambda>A. Br A)" by (smt Br_der_def CI1b IC1_dual PD1 inf_char diff_def)
 lemma Fr_inf_closed: "Der_1b \<D> \<Longrightarrow> infimum_closed (\<lambda>A. Fr A)" by (metis (full_types) Br_der_def Br_inf_closed Cl_der_def Cl_inf_closed Fr_der_def join_def diff_def)
-lemma Br_Fr_join: "Der_1 \<D> \<Longrightarrow> Der_4 \<D> \<Longrightarrow> \<forall>A B. Br A \<and> Fr B \<longrightarrow> Br(A \<^bold>\<or> B)" proof -
-  assume der1: "Der_1 \<D>" and der4: "Der_4 \<D>"
+lemma Br_Fr_join: "Der_1 \<D> \<Longrightarrow> Der_4e \<D> \<Longrightarrow> \<forall>A B. Br A \<and> Fr B \<longrightarrow> Br(A \<^bold>\<or> B)" proof -
+  assume der1: "Der_1 \<D>" and der4: "Der_4e \<D>"
   { fix A B
     { assume bra: "Br A" and frb: "Fr B"
       from bra have "\<I> A \<^bold>\<approx> \<^bold>\<bottom>" using Br_boundary by auto
@@ -136,7 +136,7 @@ lemma Br_Fr_join: "Der_1 \<D> \<Longrightarrow> Der_4 \<D> \<Longrightarrow> \<f
   } hence "\<forall>A B. Br A \<and> Fr B \<longrightarrow> Br (A \<^bold>\<or> B)" by simp
   thus ?thesis by simp
 qed
-lemma Fr_join_closed: "Der_1 \<D> \<Longrightarrow> Der_4 \<D> \<Longrightarrow> join_closed (\<lambda>A. Fr A)" by (simp add: Br_Fr_join Cl_join_closed Fr_ClBr PC1)
+lemma Fr_join_closed: "Der_1 \<D> \<Longrightarrow> Der_4e \<D> \<Longrightarrow> join_closed (\<lambda>A. Fr A)" by (simp add: Br_Fr_join Cl_join_closed Fr_ClBr PC1)
 
 
 (**Introduces a predicate for indicating that A and B are disjoint and proves some properties.*)
@@ -147,14 +147,14 @@ lemma Disj_IF: "\<forall>A. Disj (\<I> A) (\<F> A)" by (simp add: Cl_der_def Fr_
 lemma Disj_B: "\<forall>A. Disj (\<B> A) (\<B>(\<^bold>\<midarrow>A))" by (simp add: Br_der_def2 conn)
 lemma Disj_I: "\<forall>A. Disj (\<I> A) (\<^bold>\<midarrow>A)" by (simp add: Int_der_def conn)
 lemma Disj_BCI: "\<forall>A. Disj (\<B>(\<C> A)) (\<I>(\<^bold>\<midarrow>A))" by (simp add: Br_der_def2 dual_def dual_der1 conn)
-lemma Disj_CBI: "Der_1b \<D> \<Longrightarrow> Der_4 \<D> \<Longrightarrow> \<forall>A. Disj (\<C>(\<B>(\<^bold>\<midarrow>A))) (\<I>(\<^bold>\<midarrow>A))" by (smt Br_der_def2 IDEMb_def Cl_der_def Int_der_def2 PD3 conn)
+lemma Disj_CBI: "Der_1b \<D> \<Longrightarrow> Der_4e \<D> \<Longrightarrow> \<forall>A. Disj (\<C>(\<B>(\<^bold>\<midarrow>A))) (\<I>(\<^bold>\<midarrow>A))" by (smt Br_der_def2 Der_4e_def Cl_der_def Int_der_def2 PD3 conn)
 
 (**Introduce a predicate for indicating that A and B are separated and proves some properties.*)
 definition "Sep A B \<equiv> Disj (\<C> A) B \<and> Disj (\<C> B) A"
 
 lemma Sep_comm: "\<forall>A B. Sep A B \<longrightarrow> Sep B A" by (simp add: Sep_def)
 lemma Sep_disj: "\<forall>A B. Sep A B \<longrightarrow> Disj A B" using CD2 EXP_def Sep_def conn by auto
-lemma Sep_I: "Der_1 \<D> \<Longrightarrow> Der_4 \<D> \<Longrightarrow> \<forall>A. Sep (\<I> A) (\<I> (\<^bold>\<midarrow>A))" unfolding Sep_def by (smt CD2 CD4 IC1 ID1 PC4 PC5 PD8 dual_def dual_der1 dual_der2 conn)
+lemma Sep_I: "Der_1 \<D> \<Longrightarrow> Der_4e \<D> \<Longrightarrow> \<forall>A. Sep (\<I> A) (\<I> (\<^bold>\<midarrow>A))" unfolding Sep_def by (smt CD2 CD4 IC1 ID1 PC4 PC5 PD8 dual_def dual_der1 dual_der2 conn)
 
 lemma Sep_sub: "Der_1b \<D> \<Longrightarrow> \<forall>A B C D. Sep A B \<and> C \<^bold>\<preceq> A \<and> D \<^bold>\<preceq> B \<longrightarrow> Sep C D" using MONO_ADDIb PD2 dual_der1 monI unfolding Sep_def conn by metis
 lemma Sep_Cl_diff: "Der_1b \<D> \<Longrightarrow> \<forall>A B. Cl(A) \<and> Cl(B) \<longrightarrow> Sep (A \<^bold>\<leftharpoonup> B) (B \<^bold>\<leftharpoonup> A)" unfolding Sep_def using CD1b PD1 bottom_def diff_def meet_def by smt
@@ -188,7 +188,7 @@ lemma "Der_1a \<D> \<Longrightarrow> \<forall>A B C. Sep A B \<and> Sep A C \<lo
 
 (**Verifies a neighborhood-based definition of interior.*)
 definition "nbhd A p \<equiv> \<exists>E. E \<^bold>\<preceq> A \<and> Op(E) \<and> (E p)"
-lemma nbhd_def2: "Der_1 \<D> \<Longrightarrow> Der_4 \<D> \<Longrightarrow> \<forall>A p. (nbhd A p) = (\<I> A p)" unfolding nbhd_def by (smt Int_Open MONO_def PC1 monI pI2 conn)
+lemma nbhd_def2: "Der_1 \<D> \<Longrightarrow> Der_4e \<D> \<Longrightarrow> \<forall>A p. (nbhd A p) = (\<I> A p)" unfolding nbhd_def by (smt Int_Open MONO_def PC1 monI pI2 conn)
 
 lemma I_def'_lr': "\<forall>A p. (\<I> A p) \<longrightarrow> (\<exists>E. (\<I> E p) \<and> E \<^bold>\<preceq> A)" by blast
 lemma I_def'_rl': "Der_1b \<D> \<Longrightarrow> \<forall>A p. (\<I> A p) \<longleftarrow> (\<exists>E. (\<I> E p) \<and> E \<^bold>\<preceq> A)" using MONO_def monI by metis

@@ -75,6 +75,7 @@ lemma "\<DD> \<D> \<Longrightarrow> lCoP2(\<^bold>\<rightarrow>)(\<^bold>\<not>)
 lemma det_lcop3: "[\<^bold>\<circ>a, \<^bold>\<not>a \<^bold>\<rightarrow> b \<^bold>\<turnstile> \<^bold>\<not>b \<^bold>\<rightarrow> a]" using dual_def pI1 conn by auto
 lemma "\<DD> \<D> \<Longrightarrow> lCoP3(\<^bold>\<rightarrow>)(\<^bold>\<not>)" nitpick oops (*countermodel*)
 lemma det_lcop4: "[\<^bold>\<circ>a, \<^bold>\<not>a \<^bold>\<rightarrow> \<^bold>\<not>b \<^bold>\<turnstile> b \<^bold>\<rightarrow> a]" using dual_def pI1 conn by auto
+
 (**Disjunctive syllogism (DS).*)
 lemma "DS1(\<^bold>\<rightarrow>)(\<^bold>\<not>)" by (simp add: DS1_def diff_def impl_def ineg_prop join_def)
 lemma "\<DD> \<D> \<Longrightarrow> DS2(\<^bold>\<rightarrow>)(\<^bold>\<not>)" nitpick oops (*countermodel*)

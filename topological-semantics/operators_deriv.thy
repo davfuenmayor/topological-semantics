@@ -37,7 +37,7 @@ When other derivative axioms are assumed, Der-5 above as used by Zarycki @{cite 
 the only clopen sets in the space are the top and bottom elements (empty set and universe, resp.).
 We verify some properties:*)
 
-lemma Der_4_rel: "Der_4 \<phi> \<Longrightarrow> Der_4e \<phi>" by (simp add: IDEMb_def Der_4e_def conn)
+lemma Der4e_rel: "Der_4 \<phi> \<Longrightarrow> Der_4e \<phi>" by (simp add: IDEMb_def Der_4e_def conn)
 lemma PD1: "Der_1b \<phi> \<Longrightarrow> \<forall>A B. A \<^bold>\<preceq> B \<longrightarrow> \<phi> A \<^bold>\<preceq> \<phi> B" using MONO_def MONO_ADDIb by auto
 lemma PD2: "Der_1b \<phi> \<Longrightarrow> \<forall>A B. A \<^bold>\<preceq> B \<longrightarrow> \<phi>\<^sup>d A \<^bold>\<preceq> \<phi>\<^sup>d B" using CI1b MONO_def MONO_MULTa dual_def by fastforce
 lemma PD3: "Der_1b \<phi> \<Longrightarrow> \<forall>A B. \<phi>(A \<^bold>\<and> B) \<^bold>\<preceq> \<phi> A \<^bold>\<and> \<phi> B" unfolding conn by (metis (no_types, lifting) PD1)
@@ -71,7 +71,8 @@ abbreviation "\<DD>k \<phi>  \<equiv> Der_1 \<phi> \<and> Der_2 \<phi> \<and> De
 abbreviation "\<DD>mt \<phi> \<equiv> Der_1 \<phi>           \<and> Der_3 \<phi> \<and> Der_4 \<phi>"
 abbreviation "\<DD>e \<phi>  \<equiv> Der_1 \<phi>           \<and> Der_3 \<phi> \<and> Der_4e \<phi>"
 
-(**Our `default' derivative operator will coincide with that of Kuratowski (also employed by Zarycki).
+(**Our `default' derivative operator will coincide with @{text "\<DD>k"} from Kuratowski (also Zarycki).
+However, for proving theorems we will employ the weaker variant Der-4e instead of Der-4 whenever possible.
 We start by defining a dual operator and verifying some dualities; we then define conversion operators.
 Observe that conditions Der-2 and  Der-5 are not used in the rest of this subsection.
 Der-2 will be required later when working with the coherence operator.*)
@@ -92,9 +93,9 @@ lemma CD1b: "Der_1b \<D> \<Longrightarrow> Cl_1b (\<C>\<^sub>D \<D>)" unfolding 
 lemma CD1 : "Der_1 \<D> \<Longrightarrow> Cl_1 (\<C>\<^sub>D \<D>)" unfolding Cl_der_def ADDI_def conn by blast
 lemma CD2: "Cl_2 (\<C>\<^sub>D \<D>)" unfolding Cl_der_def EXP_def conn by simp
 lemma CD3: "Der_3 \<D> \<Longrightarrow> Der_3 (\<C>\<^sub>D \<D>)" unfolding Cl_der_def NOR_def conn by simp
-lemma CD4a: "Der_1a \<D> \<Longrightarrow> Der_4 \<D> \<Longrightarrow> Cl_4 (\<C>\<^sub>D \<D>)" unfolding Cl_der_def ADDI_a_def IDEM_def IDEMb_def conn by blast
-lemma CD4b: "Der_1b \<D> \<Longrightarrow> Der_4 \<D> \<Longrightarrow> Cl_4 (\<C>\<^sub>D \<D>)" nitpick oops (*countermodel*)
-lemma CD4: "Der_1 \<D> \<Longrightarrow> Der_4 \<D> \<Longrightarrow> Cl_4 (\<C>\<^sub>D \<D>)" unfolding Cl_der_def ADDI_def IDEM_def IDEMb_def conn by blast
+lemma CD4a: "Der_1a \<D> \<Longrightarrow> Der_4e \<D> \<Longrightarrow> Cl_4 (\<C>\<^sub>D \<D>)" unfolding Cl_der_def by (smt ADDI_a_def Der_4e_def IDEM_def join_def)
+lemma "Der_1b \<D> \<Longrightarrow> Der_4 \<D> \<Longrightarrow> Cl_4 (\<C>\<^sub>D \<D>)" nitpick oops (*countermodel*)
+lemma CD4: "Der_1 \<D> \<Longrightarrow> Der_4e \<D> \<Longrightarrow> Cl_4 (\<C>\<^sub>D \<D>)" unfolding Cl_der_def by (metis (no_types, lifting) CD4a Cl_der_def IDEM_def PC1)
 
 (**Interior operator as derived from (dual) derivative.*)
 definition Int_der::"(\<sigma>\<Rightarrow>\<sigma>)\<Rightarrow>(\<sigma>\<Rightarrow>\<sigma>)" ("\<I>\<^sub>D") where "\<I>\<^sub>D \<D> \<equiv> \<lambda>A. A \<^bold>\<and> \<D>\<^sup>d(A)" 
@@ -108,9 +109,9 @@ lemma ID1a: "Der_1a \<D> \<Longrightarrow> Int_1b (\<I>\<^sub>D \<D>)" by (simp 
 lemma ID1b: "Der_1b \<D> \<Longrightarrow> Int_1a (\<I>\<^sub>D \<D>)" by (simp add: CI1b dual_der2 CD1b)
 lemma ID2: "Int_2 (\<I>\<^sub>D \<D>)" unfolding Int_der_def dEXP_def conn by simp
 lemma ID3: "Der_3 \<D> \<Longrightarrow> Int_3 (\<I>\<^sub>D \<D>)" by (simp add: CI3 CD3 dual_der2)
-lemma ID4: "Der_1 \<D> \<Longrightarrow> Der_4 \<D> \<Longrightarrow> Int_4 (\<I>\<^sub>D \<D>)" using CI4 CD4 dual_der2 by simp
-lemma ID4a: "Der_1a \<D> \<Longrightarrow> Der_4 \<D> \<Longrightarrow> Int_4 (\<I>\<^sub>D \<D>)" by (simp add: CI4 dual_der2 CD4a)
-lemma ID4b: "Der_1b \<D> \<Longrightarrow> Der_4 \<D> \<Longrightarrow> Int_4 (\<I>\<^sub>D \<D>)" nitpick oops (*countermodel*)
+lemma ID4: "Der_1 \<D> \<Longrightarrow> Der_4e \<D> \<Longrightarrow> Int_4 (\<I>\<^sub>D \<D>)" using CI4 CD4 dual_der2 by simp
+lemma ID4a: "Der_1a \<D> \<Longrightarrow> Der_4e \<D> \<Longrightarrow> Int_4 (\<I>\<^sub>D \<D>)" by (simp add: CI4 dual_der2 CD4a)
+lemma "Der_1b \<D> \<Longrightarrow> Der_4 \<D> \<Longrightarrow> Int_4 (\<I>\<^sub>D \<D>)" nitpick oops (*countermodel*)
 
 (**Border operator as derived from (dual) derivative.*)
 definition Br_der::"(\<sigma>\<Rightarrow>\<sigma>)\<Rightarrow>(\<sigma>\<Rightarrow>\<sigma>)" ("\<B>\<^sub>D") where "\<B>\<^sub>D \<D> \<equiv> \<lambda>A. A \<^bold>\<leftharpoonup> \<D>\<^sup>d(A)"
@@ -119,7 +120,7 @@ lemma Br_der_def2: "\<B>\<^sub>D \<D> = (\<lambda>A. A \<^bold>\<and> \<D>(\<^bo
 (**Verify properties:*)
 lemma BD1: "Der_1 \<D> \<Longrightarrow> Br_1 (\<B>\<^sub>D \<D>)" using Br_der_def Br_1_def CI1 MULT_def conn by auto 
 lemma BD2: "Der_3 \<D> \<Longrightarrow> Br_2 (\<B>\<^sub>D \<D>)" using Br_der_def Br_2_def CI3 dNOR_def unfolding conn by auto
-lemma BD3: "MONO \<D> \<Longrightarrow> Der_4 \<D> \<Longrightarrow> Br_3 (\<B>\<^sub>D \<D>)" unfolding Br_der_def Br_3_def dual_def IDEMb_def MONO_def conn by smt
+lemma BD3: "Der_1b \<D> \<Longrightarrow> Der_4e \<D> \<Longrightarrow> Br_3 (\<B>\<^sub>D \<D>)" using dual_def Der_4e_def MONO_ADDIb MONO_def  unfolding Br_der_def Br_3_def conn by smt
 
 (**Frontier operator as derived from derivative.*)
 definition Fr_der::"(\<sigma>\<Rightarrow>\<sigma>)\<Rightarrow>(\<sigma>\<Rightarrow>\<sigma>)" ("\<F>\<^sub>D") where "\<F>\<^sub>D \<D> \<equiv> \<lambda>A. (A \<^bold>\<leftharpoonup> \<D>\<^sup>d(A)) \<^bold>\<or> (\<D>(A) \<^bold>\<leftharpoonup> A)"
@@ -131,7 +132,7 @@ lemma FD1b: "Der_1b \<D> \<Longrightarrow> Fr_1b(\<F>\<^sub>D \<D>)" unfolding F
 lemma FD1: "Der_1 \<D> \<Longrightarrow> Fr_1(\<F>\<^sub>D \<D>)" unfolding Fr_1_def Fr_der_def using CI1 MULT_def conn by auto
 lemma FD2: "Fr_2(\<F>\<^sub>D \<D>)" using dual_def dual_symm unfolding Fr_2_def Fr_der_def conn by metis
 lemma FD3: "Der_3 \<D> \<Longrightarrow> Fr_3(\<F>\<^sub>D \<D>)" by (simp add: NOR_def Fr_der_def conn)
-lemma FD4: "Der_1 \<D> \<Longrightarrow> Der_4 \<D> \<Longrightarrow> Fr_4(\<F>\<^sub>D \<D>)" by (metis CD1b CD2 CD4 Cl_8_def Cl_der_def Fr_4_def Fr_der_def2 PC1 PC8 meet_def)
+lemma FD4: "Der_1 \<D> \<Longrightarrow> Der_4e \<D> \<Longrightarrow> Fr_4(\<F>\<^sub>D \<D>)" by (metis CD1b CD2 CD4 Cl_8_def Cl_der_def Fr_4_def Fr_der_def2 PC1 PC8 meet_def)
 
 (**Note that the derivative operation cannot be obtained from interior, closure, border, nor frontier.
 In this respect the derivative is a fundamental operation.*)
@@ -180,7 +181,7 @@ lemma PK8: "Kh_3 \<phi> \<Longrightarrow>  \<forall>A. \<phi>(\<^bold>\<midarrow
   } thus ?thesis  by simp
 qed
 
-(**Coherence operator as derived from derivative (assuming condition Der-2).*)
+(**Coherence operator as derived from derivative (requires conditions Der-2 and Der-4).*)
 definition Kh_der::"(\<sigma>\<Rightarrow>\<sigma>)\<Rightarrow>(\<sigma>\<Rightarrow>\<sigma>)" ("\<K>\<^sub>D") where "\<K>\<^sub>D \<D> \<equiv> \<lambda>A. A \<^bold>\<and> (\<D> A)"
 (**Verify properties:*)
 lemma KD1: "Der_1 \<phi> \<Longrightarrow> Kh_1 (\<K>\<^sub>D \<phi>)" using PC1 PD3 PK2 ADDI_def Kh_der_def unfolding conn by (metis (full_types))  
