@@ -1,2 +1,3 @@
-# topological-semantics
-SSE for non-classical logics drawing on topological semantics
+# Topological semantics for paraconsistent and paracomplete logics
+
+We introduce a generalized topological semantics for paraconsistent and paracomplete (e.g. intuitionistic) logics by drawing upon early works on topological Boolean algebras (cf. Kuratowski, Zarycki, McKinsey & Tarski). In particular, this work exemplarily illustrates the shallow semantical embeddings approach ([SSE][http://doi.org/10.13140/RG.2.2.11039.61609/2]) employing the proof assistant Isabelle/HOL. By means of the SSE technique we can effectively harness theorem provers, model finders and 'hammers' for reasoning with quantified non-classical logics.
