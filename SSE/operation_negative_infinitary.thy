@@ -1,5 +1,5 @@
-theory operation_negative_quantification
-  imports operation_negative boolean_algebra_quantification
+theory operation_negative_infinitary
+  imports operation_negative boolean_algebra_infinitary
 begin
 nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format=3] (*default Nitpick settings*)
 
