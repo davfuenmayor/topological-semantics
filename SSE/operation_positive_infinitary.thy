@@ -1,5 +1,5 @@
-theory operation_positive_quantification
-  imports operation_positive boolean_algebra_quantification
+theory operation_positive_infinitary
+  imports operation_positive boolean_algebra_infinitary
 begin
 nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format=3] (*default Nitpick settings*)
 
@@ -23,7 +23,23 @@ definition "iADDI_b \<phi> \<equiv> \<forall>S. \<phi>(\<^bold>\<Or>S) \<^bold>\
 subsection \<open>Relations among conditions (infinitary case)\<close>
 
 (**We start by noting that there is a duality between iADDI-a and iMULT-b.*)
-lemma iADDI_MULT_dual1: "iADDI_a \<phi> \<Longrightarrow> iMULT_b \<phi>\<^sup>d" unfolding iADDI_a_def iMULT_b_def by (metis compl_def dual_def iDM_a iDM_b Ra_dual1)
+lemma iADDI_MULT_dual1: "iADDI_a \<phi> \<Longrightarrow> iMULT_b \<phi>\<^sup>d"
+  unfolding iADDI_a_def iMULT_b_def 
+  using iDM_a iDM_b  
+  using Ra_dual1
+  by (metis compl_def dual_def)
+
+
+
+
+
+
+
+
+
+
+
+
 lemma iADDI_MULT_dual2: "iMULT_b \<phi> \<Longrightarrow> iADDI_a \<phi>\<^sup>d" unfolding iADDI_a_def iMULT_b_def by (metis compl_def dual_def iDM_b Ra_dual3)
 
 (**MULT-a and iMULT-a are equivalent.*)
