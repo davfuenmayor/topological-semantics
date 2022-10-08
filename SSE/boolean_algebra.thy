@@ -30,11 +30,10 @@ domain/universe of `points'. We conveniently introduce the (parametric) type-ali
 as shorthand for @{type "'p\<Rightarrow>bool"}. Hence, the elements of our algebra are objects of type @{type "'p \<sigma>"},
 and thus correspond to (characteristic functions of) sets of `points'. Observe that the type parameter
 'p can itself correspond to a 'set type', and so elements of our algebras can have type @{type "('p \<sigma>)\<sigma>"}.
-Set-valued functions are thus functions that have sets (of points) as their codomain,
-they are basically anything with a (parametric) type @{type "'i\<Rightarrow>'p \<sigma>"} (aliased @{type "('i,'p)\<pi>"}.*)
+Set-valued (set-domain) functions are thus functions that have sets (of points) as their codomain (domain),
+they are basically anything with a (parametric) type @{type "'i\<Rightarrow>'p \<sigma>"} (@{type "'p \<sigma>\<Rightarrow>'i"}).*)
 
 type_synonym 'p \<sigma> = \<open>'p \<Rightarrow> bool\<close> (*type for (characteristic functions of) sets (of points)*)
-type_synonym ('i,'p)\<pi> = \<open>'i \<Rightarrow> 'p \<sigma>\<close> (*type for set-valued functions*)
 
 (**In the sequel, we will (try to) enforce the following naming convention:
 
@@ -42,7 +41,7 @@ type_synonym ('i,'p)\<pi> = \<open>'i \<Rightarrow> 'p \<sigma>\<close> (*type f
 We will employ lower-case letters (p, q, x, w, etc.) to denote variables playing the role of 'points'.
 In some contexts, the letters S and D will be employed to denote sets/domains of sets (of 'points').
 
-(ii) Greek letters denote arbitrary set-valued functions (type @{type "'i\<Rightarrow>'p \<sigma>"} aliased @{type "('i,'p)\<pi>"}).
+(ii) Greek letters denote arbitrary set-valued functions (type @{type "'i\<Rightarrow>'p \<sigma>"} aliased @{type "('i \<Rightarrow> 'p \<sigma>)"}).
 We employ the letters @{text "\<phi>"}, @{text "\<psi>"} and @{text "\<eta>"} to denote arbitrary unary operations
 (with type @{type "'p \<sigma> \<Rightarrow> 'p \<sigma>"}); and the letters @{text "\<xi>"} and @{text "\<delta>"} to denote 
 arbitrary binary operations (with type @{type "'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> 'p \<sigma>"}).
@@ -123,6 +122,7 @@ lemma BA_cp: "A \<^bold>\<preceq> B \<longleftrightarrow> \<^bold>\<midarrow>B \
 lemma BA_deMorgan1: "\<^bold>\<midarrow>(A \<^bold>\<or> B) \<^bold>\<approx> (\<^bold>\<midarrow>A \<^bold>\<and> \<^bold>\<midarrow>B)" unfolding conn order by simp
 lemma BA_deMorgan2: "\<^bold>\<midarrow>(A \<^bold>\<and> B) \<^bold>\<approx> (\<^bold>\<midarrow>A \<^bold>\<or> \<^bold>\<midarrow>B)" unfolding conn order by simp
 lemma BA_dn: "\<^bold>\<midarrow>\<^bold>\<midarrow>A \<^bold>\<approx> A" unfolding conn order by simp
+lemma BA_cmpl_equ: "(\<^bold>\<midarrow>A \<^bold>\<approx> B) = (A \<^bold>\<approx> \<^bold>\<midarrow>B)" unfolding conn order by blast
 
 
 (**We conveniently introduce these properties of sets of sets (of points).*)
@@ -135,77 +135,6 @@ definition upwards_closed::"('p \<sigma>)\<sigma> \<Rightarrow> bool"
   where "upwards_closed S \<equiv> \<forall>X Y. S X \<and> X \<^bold>\<preceq> Y \<longrightarrow> S Y"
 definition downwards_closed::"('p \<sigma>)\<sigma> \<Rightarrow> bool" 
 where "downwards_closed S \<equiv> \<forall>X Y. S X \<and> Y \<^bold>\<preceq> X \<longrightarrow> S Y"
-
-
-subsection \<open>Operations on set-valued functions\<close>
-
-(**We define equality for set-valued functions via set-extensionality.*)
-definition sfun_equal::"('i,'p)\<pi> \<Rightarrow> ('i,'p)\<pi> \<Rightarrow> bool" (infix "\<^bold>\<equiv>" 60) 
-  where "\<phi> \<^bold>\<equiv> \<psi> \<equiv> \<forall>X. \<phi> X \<^bold>\<approx> \<psi> X"
-
-(**We conveniently define some (2nd-order) Boolean operations on set-valued functions*)
-(**The 'meet' and 'join' of two set-valued functions: *)
-definition sfun_meet::"('i,'p)\<pi> \<Rightarrow> ('i,'p)\<pi> \<Rightarrow> ('i,'p)\<pi>" (infixr "\<^bold>\<sqinter>" 62) 
-  where "\<phi> \<^bold>\<sqinter> \<psi> \<equiv> \<lambda>X. \<phi> X \<^bold>\<and> \<psi> X"
-definition sfun_join::"('i,'p)\<pi> \<Rightarrow> ('i,'p)\<pi> \<Rightarrow> ('i,'p)\<pi>" (infixr "\<^bold>\<squnion>" 61) 
-  where "\<phi> \<^bold>\<squnion> \<psi> \<equiv> \<lambda>X. \<phi> X \<^bold>\<or> \<psi> X"
-(**The 'complement' of a set-valued function: *)
-definition sfun_compl::"('i,'p)\<pi> \<Rightarrow> ('i,'p)\<pi>" ("(_\<^sup>c)") 
-  where "\<phi>\<^sup>c \<equiv> \<lambda>X. \<^bold>\<midarrow>(\<phi> X)"
-
-(*Unary operations (on sets) are a particularly important kind of set-valued functions.
-We conveniently define further (2nd-order) operations specially for them.*)
-
-(*The 'dual' and the 'dual-complement' of an unary operation:*)
-definition op_dual::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> ('p \<sigma> \<Rightarrow> 'p \<sigma>)" ("(_\<^sup>d)") 
-  where "\<phi>\<^sup>d \<equiv> \<lambda>X. \<^bold>\<midarrow>(\<phi>(\<^bold>\<midarrow>X))"
-definition op_dualcompl::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> ('p \<sigma> \<Rightarrow> 'p \<sigma>)" ("(_\<^sup>d\<^sup>c)") 
-  where "\<phi>\<^sup>d\<^sup>c \<equiv> \<lambda>X. \<phi>(\<^bold>\<midarrow>X)"
-
-(**The operations to be denoted by (+) and (-) already exist. We just introduce convenient notation.*)
-definition id::"'p \<sigma> \<Rightarrow> 'p \<sigma>" ("+") where "+A \<equiv> A" (*introduces (+) notation for identity operation*)
-notation compl ("-") (*introduces notation to refer to the set-complement operation as (-)*)
-
-named_theorems op_conn (*to group together definitions for 2nd-order relation and operations*)
-declare sfun_equal_def[op_conn] sfun_compl_def[op_conn] sfun_join_def[op_conn] sfun_meet_def[op_conn]
-        op_dual_def[op_conn] op_dualcompl_def[op_conn] id_def[op_conn]
-
-(**We now prove some lemmas (some of them might help provers in their hard work).*)
-lemma sfun_equal_ext: "(\<phi> \<^bold>\<equiv> \<psi>) = (\<phi> = \<psi>)" using sfun_equal_def setequ_ext by auto  
-lemma dual_compl_char1: "\<phi>\<^sup>d\<^sup>c \<^bold>\<equiv> (\<phi>\<^sup>d)\<^sup>c" unfolding op_conn conn order by simp
-lemma dual_compl_char2: "\<phi>\<^sup>d\<^sup>c \<^bold>\<equiv> (\<phi>\<^sup>c)\<^sup>d" unfolding op_conn conn order by simp
-lemma sfun_compl_invol: "\<phi>\<^sup>c\<^sup>c \<^bold>\<equiv> \<phi>" unfolding op_conn conn order by simp
-lemma dual_invol: "\<phi>\<^sup>d\<^sup>d \<^bold>\<equiv> \<phi>" unfolding op_conn conn order by simp
-lemma dualcompl_invol: "(\<phi>\<^sup>d\<^sup>c)\<^sup>d\<^sup>c \<^bold>\<equiv> \<phi>" unfolding op_conn conn order by simp
-
-lemma "(+)\<^sup>d \<^bold>\<equiv> (+)" by (simp add: BA_dn id_def op_dual_def sfun_equal_def)
-lemma "(+)\<^sup>c \<^bold>\<equiv> (-)" by (simp add: id_def sfun_compl_def sfun_equal_def setequ_ext)
-lemma "(\<phi> \<^bold>\<squnion> \<psi>)\<^sup>d \<^bold>\<equiv> (\<phi>\<^sup>d) \<^bold>\<sqinter> (\<psi>\<^sup>d)" by (simp add: BA_deMorgan1 op_dual_def sfun_equal_def sfun_join_def sfun_meet_def)
-lemma "(\<phi> \<^bold>\<squnion> \<psi>)\<^sup>c \<^bold>\<equiv> (\<phi>\<^sup>c) \<^bold>\<sqinter> (\<psi>\<^sup>c)" by (simp add: BA_deMorgan1 sfun_compl_def sfun_equal_def sfun_join_def sfun_meet_def)
-lemma "(\<phi> \<^bold>\<sqinter> \<psi>)\<^sup>d \<^bold>\<equiv> (\<phi>\<^sup>d) \<^bold>\<squnion> (\<psi>\<^sup>d)" by (simp add: BA_deMorgan2 op_dual_def sfun_equal_def sfun_join_def sfun_meet_def)
-lemma "(\<phi> \<^bold>\<sqinter> \<psi>)\<^sup>c \<^bold>\<equiv> (\<phi>\<^sup>c) \<^bold>\<squnion> (\<psi>\<^sup>c)" by (simp add: BA_deMorgan2 sfun_compl_def sfun_equal_def sfun_join_def sfun_meet_def)
-
-(**The notion of a fixed-point is fundamental. We speak of sets being fixed-points of operations.
-We define a function that given an operation returns the set of all its fixed-points.*)
-definition fixpoints::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> ('p \<sigma>)\<sigma>" ("fp") 
-  where "fp \<phi> \<equiv> \<lambda>X. \<phi> X \<^bold>\<approx> X"
-(**We can 'operationalize' the function above by defining a (2nd-order) 'fixed-point operator':*)
-definition fixpoint_op::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> ('p \<sigma> \<Rightarrow> 'p \<sigma>)" ("(_\<^sup>f\<^sup>p)") 
-  where "\<phi>\<^sup>f\<^sup>p \<equiv> \<lambda>X. (\<phi> X) \<^bold>\<leftrightarrow> X"
-
-declare fixpoints_def[op_conn] fixpoint_op_def[op_conn]
-
-(**The fixed-points function and the fixed-point operator are essentially related.*)
-lemma fp_rel: "(fp \<phi>) A \<longleftrightarrow> (\<phi>\<^sup>f\<^sup>p A) \<^bold>\<approx> \<^bold>\<top>" unfolding op_conn order conn by simp
-lemma fp_d_rel:  "(fp \<phi>\<^sup>d) A \<longleftrightarrow> \<phi>\<^sup>f\<^sup>p(\<^bold>\<midarrow>A) \<^bold>\<approx> \<^bold>\<top>" unfolding op_conn order conn by blast
-lemma fp_c_rel: "(fp \<phi>\<^sup>c) A \<longleftrightarrow> \<phi>\<^sup>f\<^sup>p A \<^bold>\<approx> \<^bold>\<bottom>" unfolding op_conn order conn by blast
-lemma fp_dc_rel: "(fp \<phi>\<^sup>d\<^sup>c) A \<longleftrightarrow> \<phi>\<^sup>f\<^sup>p(\<^bold>\<midarrow>A) \<^bold>\<approx> \<^bold>\<bottom>" unfolding op_conn order conn by simp
-
-lemma ofp_invol: "(\<phi>\<^sup>f\<^sup>p)\<^sup>f\<^sup>p \<^bold>\<equiv> \<phi>" unfolding op_conn order conn by blast
-lemma ofp_comm_compl: "(\<phi>\<^sup>c)\<^sup>f\<^sup>p \<^bold>\<equiv> (\<phi>\<^sup>f\<^sup>p)\<^sup>c" unfolding op_conn order conn by blast
-lemma ofp_comm_dc1: "(\<phi>\<^sup>d)\<^sup>f\<^sup>p \<^bold>\<equiv> (\<phi>\<^sup>f\<^sup>p)\<^sup>d\<^sup>c" unfolding op_conn order conn by blast
-lemma ofp_comm_dc2:"(\<phi>\<^sup>d\<^sup>c)\<^sup>f\<^sup>p \<^bold>\<equiv> (\<phi>\<^sup>f\<^sup>p)\<^sup>d" unfolding op_conn order conn by simp
-lemma ofp_decomp: "\<phi>\<^sup>f\<^sup>p \<^bold>\<equiv> (\<phi> \<^bold>\<sqinter> (+)) \<^bold>\<squnion> (\<phi>\<^sup>c \<^bold>\<sqinter> (-))" unfolding op_conn order conn by blast
 
 
 subsection \<open>Atomicity and primitive equality\<close>
