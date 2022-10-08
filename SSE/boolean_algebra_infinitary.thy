@@ -1,170 +1,123 @@
-theory boolean_algebra_quantification
-  imports boolean_algebra
+theory boolean_algebra_infinitary
+  imports boolean_algebra function_algebra
 begin
-hide_const(open) List.list.Nil no_notation List.list.Nil ("[]")  (*We have no use for lists... *)
-hide_const(open) Relation.converse no_notation Relation.converse ("(_\<inverse>)" [1000] 999) (*..nor for relations in this work*)
-nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format=3] (*default Nitpick settings*)
 
+subsection \<open>Encoding infinitary Boolean operations\<close>
 
-subsection \<open>Obtaining a complete Boolean Algebra\<close>
-
-(**Our aim is to obtain a complete Boolean algebra which we can use to interpret
-quantified formulas (in the spirit of Boolean-valued models for set theory).*)
+(**Our aim is to encode complete Boolean algebras (of sets) which we can later be used to
+interpret quantified formulas (somewhat in the spirit of Boolean-valued models for set theory).*)
 
 (**We start by defining infinite meet (infimum) and infinite join (supremum) operations,*)
-definition infimum:: "(\<sigma>\<Rightarrow>bool)\<Rightarrow>\<sigma>" ("\<^bold>\<And>_") where "\<^bold>\<And>S \<equiv> \<lambda>w. \<forall>X. S X \<longrightarrow> X w"
-definition supremum::"(\<sigma>\<Rightarrow>bool)\<Rightarrow>\<sigma>" ("\<^bold>\<Or>_") where "\<^bold>\<Or>S \<equiv> \<lambda>w. \<exists>X. S X  \<and>  X w"
+definition infimum:: "('p \<sigma>)\<sigma> \<Rightarrow> 'p \<sigma>" ("\<^bold>\<And>_") 
+  where "\<^bold>\<And>S \<equiv> \<lambda>w. \<forall>X. S X \<longrightarrow> X w"
+definition supremum::"('p \<sigma>)\<sigma> \<Rightarrow> 'p \<sigma>" ("\<^bold>\<Or>_") 
+  where "\<^bold>\<Or>S \<equiv> \<lambda>w. \<exists>X. S X  \<and>  X w"
 
-(**and show that the corresponding lattice is complete.*)
-abbreviation "upper_bound U S \<equiv> \<forall>X. (S X) \<longrightarrow> X \<^bold>\<preceq> U"
-abbreviation "lower_bound L S \<equiv> \<forall>X. (S X) \<longrightarrow> L \<^bold>\<preceq> X"
-abbreviation "is_supremum U S \<equiv> upper_bound U S \<and> (\<forall>X. upper_bound X S \<longrightarrow> U \<^bold>\<preceq> X)"
-abbreviation "is_infimum  L S \<equiv> lower_bound L S \<and> (\<forall>X. lower_bound X S \<longrightarrow> X \<^bold>\<preceq> L)"
+(*add infimum and supremum to definition set of algebra connectives*)
+declare infimum_def[conn] supremum_def[conn]
 
-lemma sup_char: "is_supremum \<^bold>\<Or>S S" unfolding supremum_def by auto
-lemma sup_ext: "\<forall>S. \<exists>X. is_supremum X S" by (metis supremum_def)
-lemma inf_char: "is_infimum \<^bold>\<And>S S" unfolding infimum_def by auto
-lemma inf_ext: "\<forall>S. \<exists>X. is_infimum X S" by (metis infimum_def)
+(**Infimum and supremum satisfy an infinite variant of the De Morgan laws*)
+lemma iDM_a: "\<^bold>\<midarrow>(\<^bold>\<And>S) \<^bold>\<approx> \<^bold>\<Or>(S\<^sup>-)" unfolding order conn op_conn by force
+lemma iDM_b:" \<^bold>\<midarrow>(\<^bold>\<Or>S) \<^bold>\<approx> \<^bold>\<And>(S\<^sup>-)" unfolding order conn op_conn by force
 
-(**We can check that being closed under supremum/infimum entails being closed under join/meet.*)
-abbreviation "meet_closed S \<equiv>  \<forall>X Y. (S X \<and> S Y) \<longrightarrow> S(X \<^bold>\<and> Y)"
-abbreviation "join_closed S \<equiv>  \<forall>X Y. (S X \<and> S Y) \<longrightarrow> S(X \<^bold>\<or> Y)"
+(**We show that the our encoded Boolean algebras are lattice-complete.*)
 
+(**The functions below return the set of upper-/lower-bounds of a set of sets S wrt. domain D*)
+definition upper_bounds::"('p \<sigma>)\<sigma> \<Rightarrow> ('p \<sigma>)\<sigma> \<Rightarrow> ('p \<sigma>)\<sigma>" ("ub\<^sup>_")
+  where "ub\<^sup>D S \<equiv> \<lambda>U. D U \<and> (\<forall>X. S X \<longrightarrow> X \<^bold>\<preceq> U)" 
+definition lower_bounds::"('p \<sigma>)\<sigma> \<Rightarrow> ('p \<sigma>)\<sigma> \<Rightarrow> ('p \<sigma>)\<sigma>" ("lb\<^sup>_")
+  where "lb\<^sup>D S \<equiv> \<lambda>L. D L \<and> (\<forall>X. S X \<longrightarrow> L \<^bold>\<preceq> X)"
+
+(**Similarly, the functions below return the set of least/greatest upper-/lower-bounds for S wrt. D*)
+definition lub::"('p \<sigma>)\<sigma> \<Rightarrow> ('p \<sigma>)\<sigma> \<Rightarrow> ('p \<sigma>)\<sigma>" ("lub\<^sup>_") 
+  where "lub\<^sup>D S \<equiv> \<lambda>U. ub\<^sup>D S U \<and> (\<forall>X. ub\<^sup>D S X \<longrightarrow> U \<^bold>\<preceq> X)"
+definition glb::"('p \<sigma>)\<sigma> \<Rightarrow> ('p \<sigma>)\<sigma> \<Rightarrow> ('p \<sigma>)\<sigma>" ("glb\<^sup>_")
+  where "glb\<^sup>D S \<equiv> \<lambda>L. lb\<^sup>D S L \<and> (\<forall>X. lb\<^sup>D S X \<longrightarrow> X \<^bold>\<preceq> L)"
+
+(**Note that the term \<^bold>\<top> below denotes the top element in the algebra of sets of sets (i.e. the powerset)*)
+lemma sup_lub: "let D=\<^bold>\<top> in lub\<^sup>D S \<^bold>\<Or>S" unfolding lub_def upper_bounds_def conn order by auto
+lemma sup_exist_unique: "let D=\<^bold>\<top> in \<forall>S. \<exists>!X. lub\<^sup>D S X" by (metis lub_def setequ_char setequ_ext sup_lub)
+lemma inf_glb: "let D=\<^bold>\<top> in glb\<^sup>D S \<^bold>\<And>S" unfolding glb_def lower_bounds_def conn order by auto
+lemma inf_exist_unique: "let D=\<^bold>\<top> in \<forall>S. \<exists>!X. glb\<^sup>D S X" by (metis glb_def inf_glb setequ_char setequ_ext)
+
+abbreviation "isEmpty S \<equiv> \<forall>x. \<not>S x"
 abbreviation "nonEmpty S \<equiv> \<exists>x. S x"
-abbreviation "contains S D \<equiv>  \<forall>X. D X \<longrightarrow> S X"
-abbreviation "infimum_closed S  \<equiv> \<forall>D. nonEmpty D \<and> contains S D \<longrightarrow> S(\<^bold>\<And>D)"
-abbreviation "supremum_closed S \<equiv> \<forall>D. nonEmpty D \<and> contains S D \<longrightarrow> S(\<^bold>\<Or>D)"
 
-lemma inf_meet_closed: "\<forall>S. infimum_closed S \<longrightarrow> meet_closed S" proof -
-  { fix S
-    { assume inf_closed: "infimum_closed S"
+lemma "isEmpty S \<Longrightarrow> \<^bold>\<And>S \<^bold>\<approx> \<^bold>\<top>" unfolding order conn by simp
+lemma "isEmpty S \<Longrightarrow> \<^bold>\<Or>S \<^bold>\<approx> \<^bold>\<bottom>" unfolding order conn by simp
+
+(**The property of being closed under arbitrary (resp. nonempty) supremum/infimum.*)
+definition infimum_closed :: "('p \<sigma>)\<sigma> \<Rightarrow> bool"
+  where "infimum_closed S  \<equiv> \<forall>D. D \<^bold>\<preceq> S \<longrightarrow> S(\<^bold>\<And>D)" (*observe that D can be empty*)
+definition supremum_closed :: "('p \<sigma>)\<sigma> \<Rightarrow> bool" 
+  where "supremum_closed S \<equiv> \<forall>D. D \<^bold>\<preceq> S \<longrightarrow> S(\<^bold>\<Or>D)" (*observe that D can be empty*)
+definition infimum_closed' :: "('p \<sigma>)\<sigma> \<Rightarrow> bool" 
+  where"infimum_closed' S  \<equiv> \<forall>D. nonEmpty D \<and> D \<^bold>\<preceq> S \<longrightarrow> S(\<^bold>\<And>D)"
+definition supremum_closed' :: "('p \<sigma>)\<sigma> \<Rightarrow> bool" 
+  where "supremum_closed' S \<equiv> \<forall>D. nonEmpty D \<and> D \<^bold>\<preceq> S \<longrightarrow> S(\<^bold>\<Or>D)"
+
+(**Note that arbitrary infimum- (resp. supremum-) closed sets include the top (resp. bottom) element.*)
+lemma "infimum_closed S \<Longrightarrow> S \<^bold>\<top>" unfolding infimum_closed_def conn order by force
+lemma "supremum_closed S \<Longrightarrow> S \<^bold>\<bottom>" unfolding supremum_closed_def conn order by force
+(**However, the above does not hold for non-empty infimum- (resp. supremum-) closed sets.*)
+lemma "infimum_closed' S \<Longrightarrow> S \<^bold>\<top>" nitpick oops
+lemma "supremum_closed' S \<Longrightarrow> S \<^bold>\<bottom>" nitpick oops
+
+(**We have in fact the following characterizations for the notions above:*)
+lemma inf_closed_char: "infimum_closed S = (infimum_closed' S \<and> S \<^bold>\<top>)" 
+  unfolding infimum_closed'_def infimum_closed_def by (metis bottom_def infimum_closed_def infimum_def setequ_char setequ_ext subset_def top_def)
+lemma sup_closed_char: "supremum_closed S = (supremum_closed' S \<and> S \<^bold>\<bottom>)"
+  unfolding supremum_closed'_def supremum_closed_def by (metis (no_types, opaque_lifting) L14 L9 bottom_def setequ_ext subset_def supremum_def)
+
+lemma inf_sup_closed_dc: "infimum_closed S = supremum_closed S\<^sup>-" by (smt (verit) BA_dn iDM_a iDM_b infimum_closed_def setequ_ext sfun_dualcompl_def subset_def supremum_closed_def)
+lemma inf_sup_closed_dc': "infimum_closed' S = supremum_closed' S\<^sup>-" by (smt (verit, best) dualcompl_invol iDM_b infimum_closed'_def setequ_ext sfun_dualcompl_def subset_def supremum_closed'_def)
+
+(**We check some further properties:*)
+lemma fp_inf_sup_closed_dual: "infimum_closed (fp \<phi>) \<Longrightarrow> supremum_closed (fp \<phi>\<^sup>d)" 
+  by (simp add: fp_dual inf_sup_closed_dc)
+lemma fp_inf_sup_closed_dual': "infimum_closed' (fp \<phi>) \<Longrightarrow> supremum_closed' (fp \<phi>\<^sup>d)" 
+  by (simp add: fp_dual inf_sup_closed_dc')
+lemma fp_sup_inf_closed_dual: "supremum_closed (fp \<phi>) \<Longrightarrow> infimum_closed (fp \<phi>\<^sup>d)" 
+  by (simp add: dualcompl_invol fp_dual inf_sup_closed_dc)
+lemma fp_sup_inf_closed_dual': "supremum_closed' (fp \<phi>) \<Longrightarrow> infimum_closed' (fp \<phi>\<^sup>d)"
+  by (simp add: dualcompl_invol fp_dual inf_sup_closed_dc')
+
+(**We verify that being infimum-closed' (resp. supremum-closed') entails being meet-closed (resp. join-closed).*)
+lemma inf_meet_closed: "\<forall>S. infimum_closed' S \<longrightarrow> meet_closed S" proof -
+  { fix S::"'w \<sigma> \<Rightarrow> bool"
+    { assume inf_closed: "infimum_closed' S"
       hence "meet_closed S" proof -
-        { fix X::"\<sigma>" and Y::"\<sigma>"
+        { fix X::"'w \<sigma>" and Y::"'w \<sigma>"
           let ?D="\<lambda>Z. Z=X \<or> Z=Y"
           { assume "S X \<and> S Y"
-            hence "contains S ?D" by simp
+            hence "?D \<^bold>\<preceq> S" using subset_def by blast
             moreover have "nonEmpty ?D" by auto
-            ultimately have "S(\<^bold>\<And>?D)" using inf_closed by simp
+            ultimately have "S(\<^bold>\<And>?D)" using inf_closed infimum_closed'_def by (smt (z3))
             hence "S(\<lambda>w. \<forall>Z. (Z=X \<or> Z=Y) \<longrightarrow> Z w)" unfolding infimum_def by simp
             moreover have "(\<lambda>w. \<forall>Z. (Z=X \<or> Z=Y) \<longrightarrow> Z w) = (\<lambda>w. X w \<and> Y w)" by auto
             ultimately have "S(\<lambda>w. X w \<and> Y w)" by simp
           } hence "(S X \<and> S Y) \<longrightarrow> S(X \<^bold>\<and> Y)" unfolding conn by (rule impI)
-        } thus ?thesis by simp  qed
-    } hence "infimum_closed S \<longrightarrow> meet_closed S" by simp
+        } thus ?thesis unfolding meet_closed_def by simp  qed
+    } hence "infimum_closed' S \<longrightarrow> meet_closed S" by simp
   } thus ?thesis by (rule allI)
 qed
-lemma sup_join_closed: "\<forall>P. supremum_closed P \<longrightarrow> join_closed P" proof -
-  { fix S
-    { assume sup_closed: "supremum_closed S"
+lemma sup_join_closed: "\<forall>P. supremum_closed' P \<longrightarrow> join_closed P" proof -
+  { fix S::"'w \<sigma> \<Rightarrow> bool"
+    { assume sup_closed: "supremum_closed' S"
       hence "join_closed S" proof -
-        { fix X::"\<sigma>" and Y::"\<sigma>"
+        { fix X::"'w \<sigma>" and Y::"'w \<sigma>"
           let ?D="\<lambda>Z. Z=X \<or> Z=Y"
           { assume "S X \<and> S Y"
-            hence "contains S ?D" by simp
+            hence "?D \<^bold>\<preceq> S" using subset_def by blast
             moreover have "nonEmpty ?D" by auto
-            ultimately have "S(\<^bold>\<Or>?D)" using sup_closed by simp
+            ultimately have "S(\<^bold>\<Or>?D)" using sup_closed supremum_closed'_def by (smt (z3))
             hence "S(\<lambda>w. \<exists>Z. (Z=X \<or> Z=Y) \<and> Z w)" unfolding supremum_def by simp
             moreover have "(\<lambda>w. \<exists>Z. (Z=X \<or> Z=Y) \<and> Z w) = (\<lambda>w. X w \<or> Y w)" by auto
             ultimately have "S(\<lambda>w. X w \<or> Y w)" by simp
           } hence "(S X \<and> S Y) \<longrightarrow> S(X \<^bold>\<or> Y)" unfolding conn by (rule impI)
-        } thus ?thesis by simp qed
-    } hence "supremum_closed S \<longrightarrow> join_closed S" by simp
+        } thus ?thesis unfolding join_closed_def by simp qed
+    } hence "supremum_closed' S \<longrightarrow> join_closed S" by simp
   } thus ?thesis by (rule allI)
 qed
-
-
-subsection \<open>Adding quantifiers (restricted and unrestricted)\<close>
-
-(**We can harness HOL to define quantification over individuals of arbitrary type (using polymorphism).
-These (unrestricted) quantifiers take a propositional function and give a proposition.*)  
-abbreviation mforall::"('t\<Rightarrow>\<sigma>)\<Rightarrow>\<sigma>" ("\<^bold>\<forall>_" [55]56) where "\<^bold>\<forall>\<pi> \<equiv> \<lambda>w. \<forall>X. (\<pi> X) w"
-abbreviation mexists::"('t\<Rightarrow>\<sigma>)\<Rightarrow>\<sigma>" ("\<^bold>\<exists>_" [55]56) where "\<^bold>\<exists>\<pi> \<equiv> \<lambda>w. \<exists>X. (\<pi> X) w"
-(**To improve readability, we introduce for them an useful binder notation.*)
-abbreviation mforallB (binder"\<^bold>\<forall>"[55]56) where "\<^bold>\<forall>X. \<pi> X \<equiv> \<^bold>\<forall>\<pi>"
-abbreviation mexistsB (binder"\<^bold>\<exists>"[55]56) where "\<^bold>\<exists>X. \<pi> X \<equiv> \<^bold>\<exists>\<pi>"
-
-(*TODO: is it possible to also add binder notation to the ones below?*)
-(**Moreover, we define restricted quantifiers which take a 'functional domain' as additional parameter.
-The latter is a propositional function that maps each element 'e' to the proposition 'e exists'.*)
-abbreviation mforall_restr::"('t\<Rightarrow>\<sigma>)\<Rightarrow>('t\<Rightarrow>\<sigma>)\<Rightarrow>\<sigma>" ("\<^bold>\<forall>\<^sup>R(_)_") where "\<^bold>\<forall>\<^sup>R(\<delta>)\<pi> \<equiv> \<lambda>w.\<forall>X. (\<delta> X) w \<longrightarrow> (\<pi> X) w" 
-abbreviation mexists_restr::"('t\<Rightarrow>\<sigma>)\<Rightarrow>('t\<Rightarrow>\<sigma>)\<Rightarrow>\<sigma>" ("\<^bold>\<exists>\<^sup>R(_)_") where "\<^bold>\<exists>\<^sup>R(\<delta>)\<pi> \<equiv> \<lambda>w.\<exists>X. (\<delta> X) w  \<and>  (\<pi> X) w"
-
-
-subsection \<open>Relating quantifiers with further operators\<close>
-
-(**The following 'type-lifting' function is useful for converting sets into 'rigid' propositional functions.*)
-abbreviation lift_conv::"('t\<Rightarrow>bool)\<Rightarrow>('t\<Rightarrow>\<sigma>)" ("\<lparr>_\<rparr>") where "\<lparr>S\<rparr> \<equiv> \<lambda>X. \<lambda>w. S X"
-
-(**We introduce an useful operator: the range of a propositional function (resp. restricted over a domain),*)
-definition pfunRange::"('t\<Rightarrow>\<sigma>)\<Rightarrow>(\<sigma>\<Rightarrow>bool)" ("Ra(_)") where "Ra(\<pi>) \<equiv> \<lambda>Y. \<exists>x. (\<pi> x) = Y"
-definition pfunRange_restr::"('t\<Rightarrow>\<sigma>)\<Rightarrow>('t\<Rightarrow>bool)\<Rightarrow>(\<sigma>\<Rightarrow>bool)" ("Ra[_|_]") where "Ra[\<pi>|D] \<equiv> \<lambda>Y. \<exists>x. (D x) \<and> (\<pi> x) = Y"
-
-(**and check that taking infinite joins/meets (suprema/infima) over the range of a propositional function
-can be equivalently codified by using quantifiers. This is a quite useful simplifying relationship.*)
-lemma Ra_all: "\<^bold>\<And>Ra(\<pi>) = \<^bold>\<forall>\<pi>" by (metis (full_types) infimum_def pfunRange_def)
-lemma Ra_ex:  "\<^bold>\<Or>Ra(\<pi>) = \<^bold>\<exists>\<pi>" by (metis (full_types) pfunRange_def supremum_def)
-lemma Ra_restr_all: "\<^bold>\<And>Ra[\<pi>|D] = \<^bold>\<forall>\<^sup>R\<lparr>D\<rparr>\<pi>" by (metis (full_types) pfunRange_restr_def infimum_def)
-lemma Ra_restr_ex:  "\<^bold>\<Or>Ra[\<pi>|D] = \<^bold>\<exists>\<^sup>R\<lparr>D\<rparr>\<pi>" by (metis pfunRange_restr_def supremum_def)
-
-(**We further introduce the positive (negative) restriction of a propositional function wrt. a domain,*)
-abbreviation pfunRestr_pos::"('t\<Rightarrow>\<sigma>)\<Rightarrow>('t\<Rightarrow>\<sigma>)\<Rightarrow>('t\<Rightarrow>\<sigma>)" ("[_|_]\<^sup>P") where "[\<pi>|\<delta>]\<^sup>P \<equiv> \<lambda>X. \<lambda>w. (\<delta> X) w \<longrightarrow> (\<pi> X) w"
-abbreviation pfunRestr_neg::"('t\<Rightarrow>\<sigma>)\<Rightarrow>('t\<Rightarrow>\<sigma>)\<Rightarrow>('t\<Rightarrow>\<sigma>)" ("[_|_]\<^sup>N") where "[\<pi>|\<delta>]\<^sup>N \<equiv> \<lambda>X. \<lambda>w. (\<delta> X) w  \<and>  (\<pi> X) w"
-
-(**and check that some additional simplifying relationships obtain.*)
-lemma all_restr: "\<^bold>\<forall>\<^sup>R(\<delta>)\<pi> = \<^bold>\<forall>[\<pi>|\<delta>]\<^sup>P" by simp
-lemma ex_restr:  "\<^bold>\<exists>\<^sup>R(\<delta>)\<pi> = \<^bold>\<exists>[\<pi>|\<delta>]\<^sup>N" by simp
-lemma Ra_all_restr: "\<^bold>\<And>Ra[\<pi>|D] = \<^bold>\<forall>[\<pi>|\<lparr>D\<rparr>]\<^sup>P" using Ra_restr_all by blast
-lemma Ra_ex_restr:  "\<^bold>\<Or>Ra[\<pi>|D] = \<^bold>\<exists>[\<pi>|\<lparr>D\<rparr>]\<^sup>N" by (simp add: Ra_restr_ex)
-
-(**Observe that using these operators has the advantage of allowing for binder notation,*)
-lemma "\<^bold>\<forall>X. [\<pi>|\<delta>]\<^sup>P X = \<^bold>\<forall>[\<pi>|\<delta>]\<^sup>P" by simp
-lemma "\<^bold>\<exists>X. [\<pi>|\<delta>]\<^sup>N X = \<^bold>\<exists>[\<pi>|\<delta>]\<^sup>N" by simp
-
-(**noting that extra care should be taken when working with complements or negations;
-always remember to switch P/N (positive/negative restriction) accordingly.*)
-lemma "\<^bold>\<forall>\<^sup>R(\<delta>)\<pi>  = \<^bold>\<forall>X.  [\<pi>|\<delta>]\<^sup>P X" by simp
-lemma "\<^bold>\<forall>\<^sup>R(\<delta>)\<pi>\<^sup>c = \<^bold>\<forall>X. \<^bold>\<midarrow>[\<pi>|\<delta>]\<^sup>N X" by (simp add: compl_def)
-lemma "\<^bold>\<exists>\<^sup>R(\<delta>)\<pi>  = \<^bold>\<exists>X.  [\<pi>|\<delta>]\<^sup>N X" by simp
-lemma "\<^bold>\<exists>\<^sup>R(\<delta>)\<pi>\<^sup>c = \<^bold>\<exists>X. \<^bold>\<midarrow>[\<pi>|\<delta>]\<^sup>P X" by (simp add: compl_def)
-
-(**The previous definitions allow us to nicely characterize the interaction
-between function composition and (restricted) quantification:*)
-lemma Ra_all_comp1: "\<^bold>\<forall>(\<pi>\<circ>\<gamma>) = \<^bold>\<forall>[\<pi>|\<lparr>Ra \<gamma>\<rparr>]\<^sup>P" by (metis comp_apply pfunRange_def)
-lemma Ra_all_comp2: "\<^bold>\<forall>(\<pi>\<circ>\<gamma>) = \<^bold>\<forall>\<^sup>R\<lparr>Ra \<gamma>\<rparr> \<pi>" by (metis comp_apply pfunRange_def)
-lemma Ra_ex_comp1:  "\<^bold>\<exists>(\<pi>\<circ>\<gamma>) = \<^bold>\<exists>[\<pi>|\<lparr>Ra \<gamma>\<rparr>]\<^sup>N" by (metis comp_apply pfunRange_def)
-lemma Ra_ex_comp2:  "\<^bold>\<exists>(\<pi>\<circ>\<gamma>) = \<^bold>\<exists>\<^sup>R\<lparr>Ra \<gamma>\<rparr> \<pi>" by (metis comp_apply pfunRange_def)
-
-(**This useful operator returns for a given domain of propositions the domain of their complements:*)
-definition dom_compl::"(\<sigma>\<Rightarrow>bool)\<Rightarrow>(\<sigma>\<Rightarrow>bool)" ("(_\<inverse>)") where "D\<inverse> \<equiv> \<lambda>X. \<exists>Y. (D Y) \<and> (X = \<^bold>\<midarrow>Y)"
-lemma dom_compl_def2: "D\<inverse> = (\<lambda>X. D(\<^bold>\<midarrow>X))" unfolding dom_compl_def by (metis comp_symm fun_upd_same)
-lemma dom_compl_invol: "D = (D\<inverse>)\<inverse>" unfolding dom_compl_def by (metis comp_symm fun_upd_same)
-
-(**We can now check an infinite variant of the De Morgan laws,*)
-lemma iDM_a: "\<^bold>\<midarrow>(\<^bold>\<And>S) = \<^bold>\<Or>S\<inverse>" unfolding dom_compl_def2 infimum_def supremum_def using compl_def by force
-lemma iDM_b:" \<^bold>\<midarrow>(\<^bold>\<Or>S) = \<^bold>\<And>S\<inverse>" unfolding dom_compl_def2 infimum_def supremum_def using compl_def by force
-
-(**and some useful dualities regarding the range of propositional functions (restricted wrt. a domain).*)
-lemma Ra_compl: "Ra[\<pi>\<^sup>c|D]  = Ra[\<pi>|D]\<inverse>" unfolding pfunRange_restr_def dom_compl_def by auto
-lemma Ra_dual1: "Ra[\<pi>\<^sup>d|D]  = Ra[\<pi>|D\<inverse>]\<inverse>" unfolding pfunRange_restr_def dom_compl_def using dual_def by auto
-lemma Ra_dual2: "Ra[\<pi>\<^sup>d|D]  = Ra[\<pi>\<^sup>c|D\<inverse>]" unfolding pfunRange_restr_def dom_compl_def using dual_def by auto
-lemma Ra_dual3: "Ra[\<pi>\<^sup>d|D]\<inverse> = Ra[\<pi>|D\<inverse>]" unfolding pfunRange_restr_def dom_compl_def using dual_def comp_symm by metis
-lemma Ra_dual4: "Ra[\<pi>\<^sup>d|D\<inverse>] = Ra[\<pi>|D]\<inverse>" using Ra_dual3 dual_symm by metis
-
-(**Finally, we check some facts concerning duality for quantifiers.*)
-lemma "\<^bold>\<exists>\<pi>\<^sup>c = \<^bold>\<midarrow>(\<^bold>\<forall>\<pi>)" using compl_def by auto
-lemma "\<^bold>\<forall>\<pi>\<^sup>c = \<^bold>\<midarrow>(\<^bold>\<exists>\<pi>)" using compl_def by auto
-lemma "\<^bold>\<exists>X. \<^bold>\<midarrow>\<pi> X = \<^bold>\<midarrow>(\<^bold>\<forall>X. \<pi> X)" using compl_def by auto
-lemma "\<^bold>\<forall>X. \<^bold>\<midarrow>\<pi> X = \<^bold>\<midarrow>(\<^bold>\<exists>X. \<pi> X)" using compl_def by auto
-
-lemma "\<^bold>\<exists>\<^sup>R(\<delta>)\<pi>\<^sup>c = \<^bold>\<midarrow>(\<^bold>\<forall>\<^sup>R(\<delta>)\<pi>)" using compl_def by auto
-lemma "\<^bold>\<forall>\<^sup>R(\<delta>)\<pi>\<^sup>c = \<^bold>\<midarrow>(\<^bold>\<exists>\<^sup>R(\<delta>)\<pi>)" using compl_def by auto
-lemma "\<^bold>\<exists>X. \<^bold>\<midarrow>[\<pi>|\<delta>]\<^sup>P X = \<^bold>\<midarrow>(\<^bold>\<forall>X. [\<pi>|\<delta>]\<^sup>P X)" using compl_def by auto
-lemma "\<^bold>\<forall>X. \<^bold>\<midarrow>[\<pi>|\<delta>]\<^sup>P X = \<^bold>\<midarrow>(\<^bold>\<exists>X. [\<pi>|\<delta>]\<^sup>P X)" using compl_def by auto
-lemma "\<^bold>\<exists>X. \<^bold>\<midarrow>[\<pi>|\<delta>]\<^sup>N X = \<^bold>\<midarrow>(\<^bold>\<forall>X. [\<pi>|\<delta>]\<^sup>N X)" using compl_def by auto
-lemma "\<^bold>\<forall>X. \<^bold>\<midarrow>[\<pi>|\<delta>]\<^sup>N X = \<^bold>\<midarrow>(\<^bold>\<exists>X. [\<pi>|\<delta>]\<^sup>N X)" using compl_def by auto
-
-(**Warning: Do not switch P and N when passing to the dual form.*)
-lemma "\<^bold>\<forall>X. [\<pi>|\<delta>]\<^sup>P X = \<^bold>\<midarrow>(\<^bold>\<exists>X. \<^bold>\<midarrow>[\<pi>|\<delta>]\<^sup>N X)" nitpick oops (**wrong: counterexample*)
-lemma "\<^bold>\<forall>X. [\<pi>|\<delta>]\<^sup>P X = \<^bold>\<midarrow>(\<^bold>\<exists>X. \<^bold>\<midarrow>[\<pi>|\<delta>]\<^sup>P X)" using compl_def by auto (**correct*)
 
 end
