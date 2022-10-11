@@ -1,19 +1,6 @@
 theory boolean_algebra
-  imports Main
+  imports misc
 begin
-(*----------- Technicalities--------*)
-declare[[smt_timeout=30]]
-declare[[show_types]]
-(* declare[[syntax_ambiguity_warning=false]] *)
-sledgehammer_params[isar_proof=false]
-nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format=3, atoms=a b c d] (*default Nitpick settings*)
-(*we hide some Isabelle/HOL notation from the libraries (which we don't use) to avoid overloading*)
-hide_const(open) List.list.Nil no_notation List.list.Nil ("[]")  (*We have no use for lists... *)
-hide_const(open) Relation.converse no_notation Relation.converse ("(_\<inverse>)" [1000] 999) (*..nor for relations in this work*)
-hide_const(open) Fun.comp no_notation Fun.comp (infixl "\<circ>" 55) (*we redefine function composition below*)
-hide_const(open) Groups.plus_class.plus no_notation Groups.plus_class.plus (infixl "+" 65) (*we don't use this*)
-hide_const(open) Groups.minus_class.minus no_notation Groups.minus_class.minus (infixl "-" 65) (*we don't use this*)
-(*---------------------------------*)
 
 section \<open>Shallow semantical embedding of (a logic of) Boolean algebras\<close>
 
@@ -115,7 +102,8 @@ lemma L12: "A \<^bold>\<preceq> B \<and> C \<^bold>\<preceq> D \<longrightarrow>
 lemma L13: "A \<^bold>\<and> \<^bold>\<top> \<^bold>\<approx> A" unfolding conn order by simp
 lemma L14: "A \<^bold>\<or> \<^bold>\<bottom> \<^bold>\<approx> A" unfolding conn order by simp
 
-(**These properties below hold in particular for Boolean algebras.*)
+(**These properties below hold in particular also for Boolean algebras.*)
+lemma BA_impl: "A \<^bold>\<preceq> B \<longleftrightarrow> A \<^bold>\<rightarrow> B \<^bold>\<approx> \<^bold>\<top>" unfolding conn order by simp
 lemma BA_distr1: "(A \<^bold>\<and> (B \<^bold>\<or> C)) \<^bold>\<approx> ((A \<^bold>\<and> B) \<^bold>\<or> (A \<^bold>\<and> C))" unfolding setequ_char conn order by simp
 lemma BA_distr2: "(A \<^bold>\<or> (B \<^bold>\<and> C)) \<^bold>\<approx> ((A \<^bold>\<or> B) \<^bold>\<and> (A \<^bold>\<or> C))" unfolding conn order by blast
 lemma BA_cp: "A \<^bold>\<preceq> B \<longleftrightarrow> \<^bold>\<midarrow>B \<^bold>\<preceq> \<^bold>\<midarrow>A" unfolding conn order by blast 
