@@ -1,5 +1,5 @@
-theory conditions_fixedpoint_simple
-  imports conditions_negative
+theory conditions_fp
+  imports conditions_complement
 begin
 
 (**In the world of fixed-points these two properties play an essential role: *)

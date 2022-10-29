@@ -1,5 +1,5 @@
-theory conditions_fixedpoint_infinitary
-  imports conditions_fixedpoint_simple conditions_positive_infinitary conditions_negative_infinitary
+theory conditions_fp_infinitary
+  imports conditions_fp conditions_kuratowski_infinitary conditions_complement_infinitary
 begin                        
 
 (**We define and interrelate infinitary variants for some previously introduced

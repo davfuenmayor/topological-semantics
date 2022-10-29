@@ -1,5 +1,5 @@
 theory conditions_more
-  imports conditions_positive
+  imports conditions_kuratowski
 begin
 
 

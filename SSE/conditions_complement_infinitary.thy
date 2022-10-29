@@ -1,5 +1,5 @@
-theory conditions_negative_infinitary
-  imports conditions_negative boolean_algebra_infinitary
+theory conditions_complement_infinitary
+  imports conditions_complement boolean_algebra_infinitary
 begin
 
 (**We define and interrelate infinitary variants for some previously introduced

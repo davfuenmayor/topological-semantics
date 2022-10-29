@@ -1,5 +1,5 @@
 theory quantifiers_example
-  imports quantifiers conditions_fixedpoint_infinitary
+  imports quantifiers conditions_fp_infinitary
 begin
 
 subsection \<open>Examples on using quantifiers (restricted and unrestricted)\<close>

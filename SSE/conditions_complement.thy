@@ -1,5 +1,5 @@
-theory conditions_negative
-  imports conditions_positive
+theory conditions_complement
+  imports conditions_kuratowski
 begin
 
 (** We define and interrelate some useful axiomatic conditions on unary operations (operators) 
