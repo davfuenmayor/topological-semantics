@@ -36,4 +36,6 @@ definition range::"('a \<Rightarrow> 'b) \<Rightarrow> ('b \<Rightarrow> bool)" 
 lemma range_char1: "\<lbrakk>\<phi> _\<rbrakk> = \<lbrakk>\<phi> (\<lambda>x. True)\<rbrakk>" by (simp add: image_def range_def)
 lemma range_char2: "\<lbrakk>\<phi> _\<rbrakk> = (\<lambda>X. \<exists>S. \<lbrakk>\<phi> S\<rbrakk> X)" unfolding range_def image_def by blast
 
+lemma image_comp: "\<lbrakk>(f \<circ> g) S\<rbrakk> = \<lbrakk>f \<lbrakk>g S\<rbrakk>\<rbrakk>" unfolding fun_comp_def image_def by metis
+
 end

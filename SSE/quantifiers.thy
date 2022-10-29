@@ -55,6 +55,11 @@ lemma "\<^bold>\<Sigma>\<phi> = \<^bold>\<Sigma>[\<^bold>\<top>]\<phi>" by (simp
 lemma mforall_const_char: "\<^bold>\<Pi>[D]\<phi> = \<^bold>\<And>\<lbrakk>\<phi> D\<rbrakk>" unfolding image_def infimum_def mforall_const_def by metis
 lemma mexists_const_char: "\<^bold>\<Sigma>[D]\<phi> = \<^bold>\<Or>\<lbrakk>\<phi> D\<rbrakk>" unfolding image_def supremum_def mexists_const_def by metis
 
+(**Constant-domain quantifiers also  allow us to nicely characterize the interaction between
+ function composition and (restricted) quantification:*)
+lemma mforall_comp: "\<^bold>\<Pi>(\<phi>\<circ>\<psi>) = \<^bold>\<Pi>[\<lbrakk>\<psi> _\<rbrakk>] \<phi>" unfolding fun_comp_def mforall_const_def mforall_def range_def by metis
+lemma mexists_comp: "\<^bold>\<Sigma>(\<phi>\<circ>\<psi>) = \<^bold>\<Sigma>[\<lbrakk>\<psi> _\<rbrakk>] \<phi>" unfolding fun_comp_def mexists_const_def mexists_def range_def by metis
+
 
 (**Varying domains: we can also restrict quantifiers by taking a 'functional domain' as additional parameter.
 The latter is a set-valued mapping each element 'i to a set of points (e.g. where it 'exists').*)
@@ -72,40 +77,29 @@ lemma "\<^bold>\<Sigma>[D]\<phi> = \<^bold>\<Sigma>{D\<up>}\<phi>" by (simp add:
 'type-lifting' function useful for converting sets into 'rigid' propositional functions*)
 
 (**Restricted quantifiers are dual to each other in the expected way*)
-lemma "\<^bold>\<Pi>[D]\<phi> = \<^bold>\<midarrow>(\<^bold>\<Sigma>[D]\<phi>\<^sup>c)" by (metis BA_dn iDM_a im_compl mexists_const_char mforall_const_char setequ_ext)
+lemma "\<^bold>\<Pi>[D]\<phi> = \<^bold>\<midarrow>(\<^bold>\<Sigma>[D]\<phi>\<^sup>c)" by (metis iDM_b im_prop2 mexists_const_char mforall_const_char setequ_ext)
 lemma "\<^bold>\<Pi>{\<psi>}\<phi> = \<^bold>\<midarrow>(\<^bold>\<Sigma>{\<psi>}\<phi>\<^sup>c)" by (simp add: compl_def mexists_var_def mforall_var_def svfun_compl_def)
 
-lemma "\<^bold>\<Pi>{\<psi>}\<phi> = \<^bold>\<Pi>(\<psi> \<sqsupset> \<phi>)" by (simp add: impl_def mforall_def mforall_var_def svfun_impl_def)
-lemma "\<^bold>\<Sigma>{\<psi>}\<phi> = \<^bold>\<Sigma>(\<psi> \<sqinter> \<phi>)" by (simp add: meet_def mexists_def mexists_var_def svfun_meet_def)
+
+(**We can use 2nd-order connectives on set-valued functions to encode restricted quantifiers as unrestricted*)
+lemma "\<^bold>\<Pi>{\<psi>}\<phi> = \<^bold>\<Pi>(\<psi> \<^bold>\<sqsupset> \<phi>)" by (simp add: impl_def mforall_def mforall_var_def svfun_impl_def)
+lemma "\<^bold>\<Sigma>{\<psi>}\<phi> = \<^bold>\<Sigma>(\<psi> \<^bold>\<sqinter> \<phi>)" by (simp add: meet_def mexists_def mexists_var_def svfun_meet_def)
 
 (**Observe that using these operators has the advantage of allowing for binder notation,*)
-lemma "\<^bold>\<Pi>{\<psi>}\<phi> = (\<^bold>\<forall>X. (\<psi> \<sqsupset> \<phi>) X)" by (simp add: impl_def mforall_def mforall_var_def svfun_impl_def)
-lemma "\<^bold>\<Sigma>{\<psi>}\<phi> = (\<^bold>\<exists>X. (\<psi> \<sqinter> \<phi>) X)" by (simp add: meet_def mexists_def mexists_var_def svfun_meet_def)
+lemma "\<^bold>\<Pi>{\<psi>}\<phi> = (\<^bold>\<forall>X. (\<psi> \<^bold>\<sqsupset> \<phi>) X)" by (simp add: impl_def mforall_def mforall_var_def svfun_impl_def)
+lemma "\<^bold>\<Sigma>{\<psi>}\<phi> = (\<^bold>\<exists>X. (\<psi> \<^bold>\<sqinter> \<phi>) X)" by (simp add: meet_def mexists_def mexists_var_def svfun_meet_def)
 
 (**So to sumarize: different sorts of restricted quantification can be emulated 
   by employing 2nd-order operations to adequately relativise predicates: *)
 
-lemma "\<^bold>\<Pi>[D]\<phi> = (\<^bold>\<forall>X. (D\<up> \<sqsupset> \<phi>) X)" by (simp add: impl_def mforall_const_def mforall_def svfun_impl_def)
-
-(**The previous definitions allow us to nicely characterize the interaction
-between function composition and (restricted) quantification:*)
-lemma mforall_comp: "\<^bold>\<Pi>(\<phi>\<circ>\<psi>) = \<^bold>\<Pi>[\<lbrakk>\<psi> _\<rbrakk>] \<phi>" unfolding fun_comp_def mforall_const_def mforall_def range_def by metis
-lemma mexists_comp: "\<^bold>\<Sigma>(\<phi>\<circ>\<psi>) = \<^bold>\<Sigma>[\<lbrakk>\<psi> _\<rbrakk>] \<phi>" unfolding fun_comp_def mexists_const_def mexists_def range_def by metis
+lemma "\<^bold>\<Pi>[D]\<phi> = (\<^bold>\<forall>X. (D\<up> \<^bold>\<sqsupset> \<phi>) X)" by (simp add: impl_def mforall_const_def mforall_def svfun_impl_def)
+lemma "\<^bold>\<Pi>{\<^bold>\<top>'}\<phi> = (\<^bold>\<forall>X. (\<^bold>\<top>' \<^bold>\<sqsupset> \<phi>) X)" by (simp add: impl_def mforall_def mforall_var_def svfun_impl_def)
+lemma "\<^bold>\<Pi>\<phi> = \<^bold>\<Pi>{\<^bold>\<top>'}\<phi>" by (simp add: mforall_def mforall_var_def svfun_top_def top_def)
+lemma "(\<^bold>\<forall>X. \<phi> X) = \<^bold>\<Pi>{\<^bold>\<top>'}\<phi>" by (simp add: mforall_def mforall_var_def svfun_top_def top_def)
 
 named_theorems quant (*to group together definitions related to quantification*)
 declare mforall_def[quant] mexists_def[quant]
         mforall_const_def[quant] mexists_const_def[quant]
         mforall_var_def[quant] mexists_var_def[quant]
-
-(**First-order quantification example*)
-lemma "(\<forall>x. A x \<longrightarrow> (\<exists>y. B x y)) \<longleftrightarrow> (\<forall>x. \<exists>y. A x \<longrightarrow> B x y)" by simp
-lemma "(\<^bold>\<forall>x. A x  \<^bold>\<rightarrow> (\<^bold>\<exists>y. B x y))  \<^bold>\<approx> (\<^bold>\<forall>x. \<^bold>\<exists>y. A x  \<^bold>\<rightarrow>  B x y)" by (simp add: impl_def mexists_def setequ_def)
-
-(**Propositional quantification example*)
-lemma "\<forall>A. (\<exists>B. (A \<longleftrightarrow> \<not>B))" by blast
-lemma "\<^bold>\<forall>A. (\<^bold>\<exists>B. (A  \<^bold>\<leftrightarrow> \<^bold>\<midarrow>B)) \<^bold>\<approx> \<^bold>\<top>" unfolding mforall_def mexists_def by (smt (verit) compl_def dimpl_def setequ_def top_def)
-
-(**TODO: Higher-order quantification example*)
-
 
 end

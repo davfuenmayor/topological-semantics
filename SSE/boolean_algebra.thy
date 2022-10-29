@@ -40,17 +40,17 @@ intended to act as so-called 'topological operators' in the given context.
 subsection \<open>Encoding Boolean operations\<close>
 
 (**Standard inclusion-based order structure on sets.*)
-definition subset::"'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> bool" (infixr "\<^bold>\<preceq>" 45) 
-  where "A \<^bold>\<preceq> B \<equiv> \<forall>p. A p \<longrightarrow> B p"
-definition setequ::"'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> bool" (infixr "\<^bold>\<approx>" 45) 
-  where "A \<^bold>\<approx> B \<equiv> \<forall>p. A p \<longleftrightarrow> B p"
+definition subset::"'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> bool" (infixr "\<preceq>" 45) 
+  where "A \<preceq> B \<equiv> \<forall>p. A p \<longrightarrow> B p"
+definition setequ::"'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> bool" (infixr "\<approx>" 45) 
+  where "A \<approx> B \<equiv> \<forall>p. A p \<longleftrightarrow> B p"
 
 named_theorems order (*to group together order-related definitions*)
 declare setequ_def[order] subset_def[order]
 
 (**These (trivial) lemmas are intended to help automated tools with equational reasoning.*)
-lemma setequ_char: "(A \<^bold>\<approx> B) = (A \<^bold>\<preceq> B \<and> B \<^bold>\<preceq> A)" unfolding order by blast
-lemma setequ_ext: "(A \<^bold>\<approx> B) = (A = B)" unfolding order by blast
+lemma setequ_char: "(A \<approx> B) = (A \<preceq> B \<and> B \<preceq> A)" unfolding order by blast
+lemma setequ_ext: "(A \<approx> B) = (A = B)" unfolding order by blast
 
 (**We now encode connectives for (distributive and complemented) bounded lattices, mostly 
 by reusing their counterpart meta-logical HOL connectives,*)
@@ -70,9 +70,11 @@ definition impl::"'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> 'p \<sigma
   where "A \<^bold>\<rightarrow> B \<equiv> \<lambda>p. (A p) \<longrightarrow> (B p)" (** (set-)implication*)
 definition diff::"'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> 'p \<sigma>" (infixr "\<^bold>\<leftharpoonup>" 51) 
   where "A \<^bold>\<leftharpoonup> B \<equiv> \<lambda>p. (A p) \<and> \<not>(B p)" (** (set-)difference*)
-definition dimpl::"'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> 'p \<sigma>" (infixr "\<^bold>\<leftrightarrow>" 51) 
+definition dimpl::"'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> 'p \<sigma>" (infixr "\<^bold>\<leftrightarrow>" 51)
+(* definition dimpl (infixr "\<^bold>\<leftrightarrow>" 51)  *)
   where "A \<^bold>\<leftrightarrow> B \<equiv> \<lambda>p. (A p) = (B p)" (** double implication*)
-definition sdiff::"'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> 'p \<sigma>" (infixr "\<^bold>\<triangle>" 51) 
+definition sdiff::"'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> 'p \<sigma>" (infixr "\<^bold>\<triangle>" 51)
+(* definition sdiff (infixr "\<^bold>\<triangle>" 51)  *)
   where "A \<^bold>\<triangle> B \<equiv> \<lambda>p. (A p) \<noteq> (B p)" (** symmetric difference (aka. xor) *)
 
 named_theorems conn (*to group together definitions for algebraic connectives*)
@@ -82,35 +84,37 @@ declare meet_def[conn] join_def[conn] top_def[conn] bottom_def[conn]
 (**Verify characterization for some connectives.*)
 lemma compl_char: "\<^bold>\<midarrow>A = A \<^bold>\<rightarrow> \<^bold>\<bottom>" unfolding conn by simp
 lemma impl_char: "A \<^bold>\<rightarrow> B = \<^bold>\<midarrow>A \<^bold>\<or> B" unfolding conn by simp
-lemma diff_char: "A \<^bold>\<leftharpoonup> B = \<^bold>\<midarrow>(A \<^bold>\<rightarrow> B)" unfolding conn by simp
 lemma dimpl_char: "A \<^bold>\<leftrightarrow> B = (A \<^bold>\<rightarrow> B) \<^bold>\<and> (B \<^bold>\<rightarrow> A)" unfolding conn by blast
-lemma sdiff_char: "A \<^bold>\<triangle> B = (A \<^bold>\<leftharpoonup> B) \<^bold>\<or> (B \<^bold>\<leftharpoonup> A)" unfolding conn by blast
+lemma diff_char1: "A \<^bold>\<leftharpoonup> B = A \<^bold>\<and> \<^bold>\<midarrow>B" unfolding conn by simp
+lemma diff_char2: "A \<^bold>\<leftharpoonup> B = \<^bold>\<midarrow>(A \<^bold>\<rightarrow> B)" unfolding conn by simp
+lemma sdiff_char1: "A \<^bold>\<triangle> B = (A \<^bold>\<leftharpoonup> B) \<^bold>\<or> (B \<^bold>\<leftharpoonup> A)" unfolding conn by blast
+lemma sdiff_char2: "A \<^bold>\<triangle> B = \<^bold>\<midarrow>(A \<^bold>\<leftrightarrow> B)" unfolding conn by simp
 
 (**We can verify that (quite trivially) this algebra satisfies some properties of lattices.*)
-lemma L1: "A \<^bold>\<approx> A \<^bold>\<or> A" unfolding conn order by simp
-lemma L2: "A \<^bold>\<approx> A \<^bold>\<and> A" unfolding conn order by simp
-lemma L3: "A \<^bold>\<preceq> A \<^bold>\<or> B" unfolding conn order by simp
-lemma L4: "A \<^bold>\<and> B \<^bold>\<preceq> A" unfolding conn order by simp
-lemma L5: "(A \<^bold>\<and> B) \<^bold>\<or> B \<^bold>\<approx> B" unfolding setequ_char conn order by simp 
-lemma L6: "A \<^bold>\<and> (A \<^bold>\<or> B) \<^bold>\<approx> A" unfolding setequ_char conn order by simp
-lemma L7: "A \<^bold>\<preceq> C \<and> B \<^bold>\<preceq> C \<longrightarrow> A \<^bold>\<or> B \<^bold>\<preceq> C" unfolding conn order by simp 
-lemma L8: "C \<^bold>\<preceq> A \<and> C \<^bold>\<preceq> B \<longrightarrow> C \<^bold>\<preceq> A \<^bold>\<and> B" unfolding conn order by simp
-lemma L9: "A \<^bold>\<preceq> B \<longleftrightarrow> (A \<^bold>\<or> B) \<^bold>\<approx> B" unfolding setequ_char conn order by simp
-lemma L10: "B \<^bold>\<preceq> A \<longleftrightarrow> (A \<^bold>\<and> B) \<^bold>\<approx> B" unfolding setequ_char conn order by simp
-lemma L11: "A \<^bold>\<preceq> B \<and> C \<^bold>\<preceq> D \<longrightarrow> A \<^bold>\<or> C \<^bold>\<preceq> B \<^bold>\<or> D" unfolding conn order by simp
-lemma L12: "A \<^bold>\<preceq> B \<and> C \<^bold>\<preceq> D \<longrightarrow> A \<^bold>\<and> C \<^bold>\<preceq> B \<^bold>\<and> D" unfolding conn order by simp
-lemma L13: "A \<^bold>\<and> \<^bold>\<top> \<^bold>\<approx> A" unfolding conn order by simp
-lemma L14: "A \<^bold>\<or> \<^bold>\<bottom> \<^bold>\<approx> A" unfolding conn order by simp
+lemma L1: "A \<approx> A \<^bold>\<or> A" unfolding conn order by simp
+lemma L2: "A \<approx> A \<^bold>\<and> A" unfolding conn order by simp
+lemma L3: "A \<preceq> A \<^bold>\<or> B" unfolding conn order by simp
+lemma L4: "A \<^bold>\<and> B \<preceq> A" unfolding conn order by simp
+lemma L5: "(A \<^bold>\<and> B) \<^bold>\<or> B \<approx> B" unfolding setequ_char conn order by simp 
+lemma L6: "A \<^bold>\<and> (A \<^bold>\<or> B) \<approx> A" unfolding setequ_char conn order by simp
+lemma L7: "A \<preceq> C \<and> B \<preceq> C \<longrightarrow> A \<^bold>\<or> B \<preceq> C" unfolding conn order by simp 
+lemma L8: "C \<preceq> A \<and> C \<preceq> B \<longrightarrow> C \<preceq> A \<^bold>\<and> B" unfolding conn order by simp
+lemma L9: "A \<preceq> B \<longleftrightarrow> (A \<^bold>\<or> B) \<approx> B" unfolding setequ_char conn order by simp
+lemma L10: "B \<preceq> A \<longleftrightarrow> (A \<^bold>\<and> B) \<approx> B" unfolding setequ_char conn order by simp
+lemma L11: "A \<preceq> B \<and> C \<preceq> D \<longrightarrow> A \<^bold>\<or> C \<preceq> B \<^bold>\<or> D" unfolding conn order by simp
+lemma L12: "A \<preceq> B \<and> C \<preceq> D \<longrightarrow> A \<^bold>\<and> C \<preceq> B \<^bold>\<and> D" unfolding conn order by simp
+lemma L13: "A \<^bold>\<and> \<^bold>\<top> \<approx> A" unfolding conn order by simp
+lemma L14: "A \<^bold>\<or> \<^bold>\<bottom> \<approx> A" unfolding conn order by simp
 
 (**These properties below hold in particular also for Boolean algebras.*)
-lemma BA_impl: "A \<^bold>\<preceq> B \<longleftrightarrow> A \<^bold>\<rightarrow> B \<^bold>\<approx> \<^bold>\<top>" unfolding conn order by simp
-lemma BA_distr1: "(A \<^bold>\<and> (B \<^bold>\<or> C)) \<^bold>\<approx> ((A \<^bold>\<and> B) \<^bold>\<or> (A \<^bold>\<and> C))" unfolding setequ_char conn order by simp
-lemma BA_distr2: "(A \<^bold>\<or> (B \<^bold>\<and> C)) \<^bold>\<approx> ((A \<^bold>\<or> B) \<^bold>\<and> (A \<^bold>\<or> C))" unfolding conn order by blast
-lemma BA_cp: "A \<^bold>\<preceq> B \<longleftrightarrow> \<^bold>\<midarrow>B \<^bold>\<preceq> \<^bold>\<midarrow>A" unfolding conn order by blast 
-lemma BA_deMorgan1: "\<^bold>\<midarrow>(A \<^bold>\<or> B) \<^bold>\<approx> (\<^bold>\<midarrow>A \<^bold>\<and> \<^bold>\<midarrow>B)" unfolding conn order by simp
-lemma BA_deMorgan2: "\<^bold>\<midarrow>(A \<^bold>\<and> B) \<^bold>\<approx> (\<^bold>\<midarrow>A \<^bold>\<or> \<^bold>\<midarrow>B)" unfolding conn order by simp
-lemma BA_dn: "\<^bold>\<midarrow>\<^bold>\<midarrow>A \<^bold>\<approx> A" unfolding conn order by simp
-lemma BA_cmpl_equ: "(\<^bold>\<midarrow>A \<^bold>\<approx> B) = (A \<^bold>\<approx> \<^bold>\<midarrow>B)" unfolding conn order by blast
+lemma BA_impl: "A \<preceq> B \<longleftrightarrow> A \<^bold>\<rightarrow> B \<approx> \<^bold>\<top>" unfolding conn order by simp
+lemma BA_distr1: "(A \<^bold>\<and> (B \<^bold>\<or> C)) \<approx> ((A \<^bold>\<and> B) \<^bold>\<or> (A \<^bold>\<and> C))" unfolding setequ_char conn order by simp
+lemma BA_distr2: "(A \<^bold>\<or> (B \<^bold>\<and> C)) \<approx> ((A \<^bold>\<or> B) \<^bold>\<and> (A \<^bold>\<or> C))" unfolding conn order by blast
+lemma BA_cp: "A \<preceq> B \<longleftrightarrow> \<^bold>\<midarrow>B \<preceq> \<^bold>\<midarrow>A" unfolding conn order by blast 
+lemma BA_deMorgan1: "\<^bold>\<midarrow>(A \<^bold>\<or> B) \<approx> (\<^bold>\<midarrow>A \<^bold>\<and> \<^bold>\<midarrow>B)" unfolding conn order by simp
+lemma BA_deMorgan2: "\<^bold>\<midarrow>(A \<^bold>\<and> B) \<approx> (\<^bold>\<midarrow>A \<^bold>\<or> \<^bold>\<midarrow>B)" unfolding conn order by simp
+lemma BA_dn: "\<^bold>\<midarrow>\<^bold>\<midarrow>A \<approx> A" unfolding conn order by simp
+lemma BA_cmpl_equ: "(\<^bold>\<midarrow>A \<approx> B) = (A \<approx> \<^bold>\<midarrow>B)" unfolding conn order by blast
 
 
 (**We conveniently introduce these properties of sets of sets (of points).*)
@@ -120,9 +124,9 @@ definition join_closed::"('p \<sigma>)\<sigma> \<Rightarrow> bool"
   where "join_closed S \<equiv>  \<forall>X Y. (S X \<and> S Y) \<longrightarrow> S(X \<^bold>\<or> Y)"
 
 definition upwards_closed::"('p \<sigma>)\<sigma> \<Rightarrow> bool"
-  where "upwards_closed S \<equiv> \<forall>X Y. S X \<and> X \<^bold>\<preceq> Y \<longrightarrow> S Y"
+  where "upwards_closed S \<equiv> \<forall>X Y. S X \<and> X \<preceq> Y \<longrightarrow> S Y"
 definition downwards_closed::"('p \<sigma>)\<sigma> \<Rightarrow> bool" 
-where "downwards_closed S \<equiv> \<forall>X Y. S X \<and> Y \<^bold>\<preceq> X \<longrightarrow> S Y"
+where "downwards_closed S \<equiv> \<forall>X Y. S X \<and> Y \<preceq> X \<longrightarrow> S Y"
 
 
 subsection \<open>Atomicity and primitive equality\<close>
@@ -130,26 +134,26 @@ subsection \<open>Atomicity and primitive equality\<close>
 (**We can verify indeed that the algebra is atomic (in three different ways) by relying on the
 presence of primitive equality in HOL.*)
 
-lemma atomic1: "\<forall>w. \<exists>Q. Q w \<and> (\<forall>P. P w \<longrightarrow> Q \<^bold>\<preceq> P)" unfolding order using the_sym_eq_trivial by metis
+lemma atomic1: "\<forall>w. \<exists>Q. Q w \<and> (\<forall>P. P w \<longrightarrow> Q \<preceq> P)" unfolding order using the_sym_eq_trivial by metis
 
-definition "atom A \<equiv> \<not>(A \<^bold>\<approx> \<^bold>\<bottom>) \<and> (\<forall>P. A \<^bold>\<preceq> P \<or> A \<^bold>\<preceq> \<^bold>\<midarrow>P)"
+definition "atom A \<equiv> \<not>(A \<approx> \<^bold>\<bottom>) \<and> (\<forall>P. A \<preceq> P \<or> A \<preceq> \<^bold>\<midarrow>P)"
 
 lemma atomic2: "\<forall>w. \<exists>Q. Q w \<and> atom Q" unfolding atom_def order conn using the_sym_eq_trivial by metis
-lemma atomic3: "\<forall>P. \<not>(P \<^bold>\<approx> \<^bold>\<bottom>) \<longrightarrow> (\<exists>Q. atom Q \<and> Q \<^bold>\<preceq> P)" unfolding atom_def order conn by fastforce
+lemma atomic3: "\<forall>P. \<not>(P \<approx> \<^bold>\<bottom>) \<longrightarrow> (\<exists>Q. atom Q \<and> Q \<preceq> P)" unfolding atom_def order conn by fastforce
 
 (*and now with interactive proof*)
-lemma "\<forall>P. \<not>(P \<^bold>\<approx> \<^bold>\<bottom>) \<longrightarrow> (\<exists>Q. atom Q \<and> Q \<^bold>\<preceq> P)"
+lemma "\<forall>P. \<not>(P \<approx> \<^bold>\<bottom>) \<longrightarrow> (\<exists>Q. atom Q \<and> Q \<preceq> P)"
 proof -
   { fix P
-    { assume "\<not>(P \<^bold>\<approx> \<^bold>\<bottom>)"
+    { assume "\<not>(P \<approx> \<^bold>\<bottom>)"
       hence "\<exists>v. P v" unfolding conn order by simp
       then obtain w where 1:"P w" by (rule exE)
       let ?Q="\<lambda>v. v = w" (*using HOL primitive equality*)
       have 2: "atom ?Q" unfolding atom_def unfolding conn order by simp
       have "\<forall>v. ?Q v \<longrightarrow> P v" using 1 by simp
-      hence 3: "?Q \<^bold>\<preceq> P" unfolding order by simp
-      from 2 3 have "\<exists>Q. atom Q \<and> Q \<^bold>\<preceq> P" by blast
-    } hence "\<not>(P \<^bold>\<approx> \<^bold>\<bottom>) \<longrightarrow> (\<exists>Q. atom Q \<and> Q \<^bold>\<preceq> P)" by (rule impI)
+      hence 3: "?Q \<preceq> P" unfolding order by simp
+      from 2 3 have "\<exists>Q. atom Q \<and> Q \<preceq> P" by blast
+    } hence "\<not>(P \<approx> \<^bold>\<bottom>) \<longrightarrow> (\<exists>Q. atom Q \<and> Q \<preceq> P)" by (rule impI)
   } thus ?thesis by (rule allI)
 qed
 
