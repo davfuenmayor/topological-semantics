@@ -6,9 +6,9 @@ begin
 lemma EXPN_fp: "EXPN \<phi> = EXPN \<phi>\<^sup>f\<^sup>p" by (simp add: EXPN_def dimpl_def op_fixpoint_def subset_def)
 lemma CNTR_fp: "CNTR \<phi> = CNTR \<phi>\<^sup>c\<^sup>f\<^sup>p" by (simp add: EXPN_CNTR_dual2 EXPN_def compl_def dimpl_def op_dual_def op_fixpoint_def subset_def svfun_compl_def)
 
-definition wMONO::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("wMONO") 
+definition wMONO::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("wMONO") 
   where "wMONO \<phi> \<equiv> \<forall>A B. A \<^bold>\<preceq> B \<longrightarrow> (\<phi> A) \<^bold>\<preceq> B \<^bold>\<or> (\<phi> B)"
-definition wMONOd::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("wMONOd")
+definition wMONOd::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("wMONOd")
   where "wMONOd \<phi> \<equiv> \<forall>A B. A \<^bold>\<preceq> B \<longrightarrow> A \<^bold>\<and> (\<phi> A) \<^bold>\<preceq> (\<phi> B)"
 
 declare wMONO_def[cond] wMONOd_def[cond]
@@ -26,9 +26,9 @@ lemma g8: "CNTR \<phi> \<Longrightarrow> EXPN \<phi> \<Longrightarrow> (\<forall
 lemma "EXPN \<phi> \<Longrightarrow> wMONO \<phi> \<Longrightarrow> (\<forall>A. \<phi> A \<^bold>\<approx> A)" nitpick oops
 lemma "CNTR \<phi> \<Longrightarrow> wMONOd \<phi> \<Longrightarrow> (\<forall>A. \<phi> A \<^bold>\<approx> A)" nitpick oops
 
-definition fpMONO::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("fpMONO")
+definition fpMONO::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("fpMONO")
   where "fpMONO \<phi> \<equiv> \<forall>A B. A \<^bold>\<preceq> B \<longrightarrow> (\<phi> B) \<^bold>\<preceq> B \<^bold>\<or> (\<phi> A)"
-definition fpMONOd::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("fpMONOd")
+definition fpMONOd::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("fpMONOd")
   where "fpMONOd \<phi> \<equiv> \<forall>A B. A \<^bold>\<preceq> B \<longrightarrow> A \<^bold>\<and> (\<phi> B) \<^bold>\<preceq> \<phi> A"
   (* where "fpMONO \<phi> \<equiv> \<forall>A B. A \<^bold>\<preceq> B \<longrightarrow> A \<^bold>\<and> (\<phi> B) \<^bold>\<preceq> B \<^bold>\<and> (\<phi> A)" *)
 declare fpMONO_def[cond] fpMONOd_def[cond]
@@ -67,12 +67,12 @@ lemma p1': "fpMONOd \<phi> = fpMONO \<phi>\<^sup>d" by (simp add: dual_invol p1)
 lemma p2: "wMONO \<phi> = fpMONO \<phi>\<^sup>f\<^sup>p" unfolding cond op_fixpoint_def  conn order by auto
 lemma p3: "wMONOd \<phi> = fpMONOd \<phi>\<^sup>c\<^sup>f\<^sup>p" by (metis dual_compl_char2 dual_invol g1 ofp_comm_compl ofp_comm_dc1 p1' p2)
 
-definition XYZ::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("XYZ")
+definition XYZ::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("XYZ")
   (* where "XYZ \<phi>   \<equiv> \<forall>A B. (A \<^bold>\<and> B) \<^bold>\<and> \<phi>(A \<^bold>\<or> B) \<^bold>\<approx> (A \<^bold>\<and> B) \<^bold>\<and> ((\<phi> A) \<^bold>\<and> (\<phi> B))"  *)
   (* where "XYZ \<phi>   \<equiv> \<forall>A B. (A \<^bold>\<or> B) \<^bold>\<and> \<phi>(A \<^bold>\<or> B) \<^bold>\<approx> (A \<^bold>\<or> B) \<^bold>\<and> ((\<phi> A) \<^bold>\<and> (\<phi> B))"  *)
   where "XYZ \<phi>   \<equiv> \<forall>A B. (A \<^bold>\<or> B) \<^bold>\<or> \<phi>(A \<^bold>\<or> B) \<^bold>\<approx> (A \<^bold>\<or> B) \<^bold>\<or> ((\<phi> A) \<^bold>\<and> (\<phi> B))" 
 
-definition XYZd::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("XYZd")
+definition XYZd::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("XYZd")
   where "XYZd \<phi>   \<equiv> \<forall>A B. (A \<^bold>\<and> B) \<^bold>\<and> \<phi>(A \<^bold>\<or> B) \<^bold>\<approx> (A \<^bold>\<and> B) \<^bold>\<and> ((\<phi> A) \<^bold>\<and> (\<phi> B))"
 
 lemma "XYZ \<phi> \<Longrightarrow> fpMONO \<phi>"  by (smt (verit, ccfv_threshold) L9 XYZ_def fpMONO_def join_def meet_def setequ_ext subset_def)
@@ -106,7 +106,7 @@ lemma "XYZ \<phi>\<^sup>f\<^sup>p \<longrightarrow> MONO \<phi>" nitpick oops
 lemma "EXPN \<phi> \<Longrightarrow> ADDI \<phi> \<longrightarrow> ADDI\<^sup>a \<phi>\<^sup>f\<^sup>p" nitpick oops
 lemma "EXPN \<phi> \<Longrightarrow> ADDI \<phi> \<longrightarrow> MULT\<^sup>b \<phi>\<^sup>f\<^sup>p" nitpick oops
 
-definition ABC::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("ABC")
+definition ABC::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("ABC")
   where "ABC \<phi>   \<equiv> \<forall>A B. \<phi>(A \<^bold>\<or> B) \<^bold>\<approx> (A \<^bold>\<or> \<phi> B) \<^bold>\<and> ((\<phi> A) \<^bold>\<or> B)" 
 
 lemma "ADDI \<phi> \<longrightarrow> ABC \<phi>\<^sup>f\<^sup>p" nitpick oops

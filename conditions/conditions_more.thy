@@ -8,14 +8,14 @@ lemma MONO_cons: "MONO \<phi> \<Longrightarrow> \<forall>A B C. A \<^bold>\<prec
 
 
 (**Properties regarding distribution over implication/difference.*)
-definition DISTR_impl_inc::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("DISTR\<^sub>\<rightarrow>\<^sup>i")
+definition DISTR_impl_inc::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("DISTR\<^sub>\<rightarrow>\<^sup>i")
   where "DISTR\<^sub>\<rightarrow>\<^sup>i \<phi> \<equiv> \<forall>A B. \<phi> (A \<^bold>\<rightarrow> B) \<^bold>\<preceq> (\<phi> A) \<^bold>\<rightarrow> (\<phi> B)" 
-definition DISTR_impl_dec::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("DISTR\<^sub>\<rightarrow>\<^sup>d")
+definition DISTR_impl_dec::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("DISTR\<^sub>\<rightarrow>\<^sup>d")
   where "DISTR\<^sub>\<rightarrow>\<^sup>d \<phi> \<equiv> \<forall>A B. (\<phi> A) \<^bold>\<rightarrow> (\<phi> B) \<^bold>\<preceq> \<phi> (A \<^bold>\<rightarrow> B)"
 
-definition DISTR_diff_inc::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("DISTR\<^sub>\<leftharpoonup>\<^sup>i")
+definition DISTR_diff_inc::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("DISTR\<^sub>\<leftharpoonup>\<^sup>i")
   where "DISTR\<^sub>\<leftharpoonup>\<^sup>i \<phi> \<equiv> \<forall>A B. \<phi> (A \<^bold>\<leftharpoonup> B) \<^bold>\<preceq> (\<phi> A) \<^bold>\<leftharpoonup> (\<phi> B)" 
-definition DISTR_diff_dec::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("DISTR\<^sub>\<leftharpoonup>\<^sup>d")
+definition DISTR_diff_dec::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("DISTR\<^sub>\<leftharpoonup>\<^sup>d")
   where "DISTR\<^sub>\<leftharpoonup>\<^sup>d \<phi> \<equiv> \<forall>A B. (\<phi> A) \<^bold>\<leftharpoonup> (\<phi> B) \<^bold>\<preceq> \<phi> (A \<^bold>\<leftharpoonup> B)" 
 
 declare DISTR_impl_inc_def[cond] DISTR_impl_dec_def[cond]

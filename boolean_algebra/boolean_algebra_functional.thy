@@ -8,19 +8,19 @@ subsection \<open>Algebraic connectives on set-valued functions\<close>
   We conveniently define some (2nd-order) Boolean operations on them.*)
 
 (**The 'meet' and 'join' of two set-valued functions: *)
-definition svfun_meet::"('i \<Rightarrow> 'p \<sigma>) \<Rightarrow> ('i \<Rightarrow> 'p \<sigma>) \<Rightarrow> ('i \<Rightarrow> 'p \<sigma>)" (infixr "\<^bold>\<sqinter>" 62) 
+definition svfun_meet::"('i \<Rightarrow> 'w \<sigma>) \<Rightarrow> ('i \<Rightarrow> 'w \<sigma>) \<Rightarrow> ('i \<Rightarrow> 'w \<sigma>)" (infixr "\<^bold>\<sqinter>" 62) 
   where "\<phi> \<^bold>\<sqinter> \<psi> \<equiv> \<lambda>x. (\<phi> x) \<^bold>\<and> (\<psi> x)"
-definition svfun_join::"('i \<Rightarrow> 'p \<sigma>) \<Rightarrow> ('i \<Rightarrow> 'p \<sigma>) \<Rightarrow> ('i \<Rightarrow> 'p \<sigma>)" (infixr "\<^bold>\<squnion>" 61) 
+definition svfun_join::"('i \<Rightarrow> 'w \<sigma>) \<Rightarrow> ('i \<Rightarrow> 'w \<sigma>) \<Rightarrow> ('i \<Rightarrow> 'w \<sigma>)" (infixr "\<^bold>\<squnion>" 61) 
   where "\<phi> \<^bold>\<squnion> \<psi> \<equiv> \<lambda>x. (\<phi> x) \<^bold>\<or> (\<psi> x)"
 (**analogously, we can define an 'implication' and a 'complement'*)
-definition svfun_impl::"('i \<Rightarrow> 'p \<sigma>) \<Rightarrow> ('i \<Rightarrow> 'p \<sigma>) \<Rightarrow> ('i \<Rightarrow> 'p \<sigma>)" (infixr "\<^bold>\<sqsupset>" 61) 
+definition svfun_impl::"('i \<Rightarrow> 'w \<sigma>) \<Rightarrow> ('i \<Rightarrow> 'w \<sigma>) \<Rightarrow> ('i \<Rightarrow> 'w \<sigma>)" (infixr "\<^bold>\<sqsupset>" 61) 
   where "\<psi> \<^bold>\<sqsupset> \<phi> \<equiv> \<lambda>x. (\<psi> x) \<^bold>\<rightarrow> (\<phi> x)"
-definition svfun_compl::"('i \<Rightarrow> 'p \<sigma>) \<Rightarrow> ('i \<Rightarrow> 'p \<sigma>)" ("(_\<^sup>c)") 
+definition svfun_compl::"('i \<Rightarrow> 'w \<sigma>) \<Rightarrow> ('i \<Rightarrow> 'w \<sigma>)" ("(_\<^sup>c)") 
   where "\<phi>\<^sup>c \<equiv> \<lambda>x. \<^bold>\<midarrow>(\<phi> x)"
 (**There are two natural 0-ary connectives (aka. constants) *)
-definition svfun_top::"'i \<Rightarrow> 'p \<sigma>" ("\<^bold>\<top>''") 
+definition svfun_top::"'i \<Rightarrow> 'w \<sigma>" ("\<^bold>\<top>''") 
   where "\<^bold>\<top>' \<equiv> \<lambda>x. \<^bold>\<top>"
-definition svfun_bot::"'i \<Rightarrow> 'p \<sigma>" ("\<^bold>\<bottom>''") 
+definition svfun_bot::"'i \<Rightarrow> 'w \<sigma>" ("\<^bold>\<bottom>''") 
   where "\<^bold>\<bottom>' \<equiv> \<lambda>x. \<^bold>\<bottom>"
 
 named_theorems conn2 (*to group together definitions for 2nd-order algebraic connectives*)
@@ -28,9 +28,9 @@ declare svfun_meet_def[conn2] svfun_join_def[conn2] svfun_impl_def[conn2]
         svfun_compl_def[conn2] svfun_top_def[conn2] svfun_bot_def[conn2]
 
 (**And, of course, set-valued functions are naturally ordered in the expected way*)
-definition svfun_sub::"('i \<Rightarrow> 'p \<sigma>) \<Rightarrow> ('i \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" (infixr "\<sqsubseteq>" 55) 
+definition svfun_sub::"('i \<Rightarrow> 'w \<sigma>) \<Rightarrow> ('i \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" (infixr "\<sqsubseteq>" 55) 
   where "\<psi> \<sqsubseteq> \<phi> \<equiv> \<forall>x. (\<psi> x) \<preceq> (\<phi> x)"
-definition svfun_equ::"('i \<Rightarrow> 'p \<sigma>) \<Rightarrow> ('i \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" (infixr "\<cong>" 55) 
+definition svfun_equ::"('i \<Rightarrow> 'w \<sigma>) \<Rightarrow> ('i \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" (infixr "\<cong>" 55) 
   where "\<psi> \<cong> \<phi> \<equiv> \<forall>x. (\<psi> x) \<approx> (\<phi> x)"
 
 named_theorems order2 (*to group together definitions for 2nd-order algebraic connectives*)
@@ -51,7 +51,7 @@ lemma svfun_deMorgan2: "(\<psi> \<^bold>\<squnion> \<phi>)\<^sup>c = (\<psi>\<^s
 subsection \<open>Further algebraic connectives on operators\<close>
 
 (**Dual to set-valued functions we can have set-domain functions. For them we can define the 'dual-complement'*)
-definition sdfun_dcompl::"('p \<sigma> \<Rightarrow> 'i) \<Rightarrow> ('p \<sigma> \<Rightarrow> 'i)" ("(_\<^sup>-)") 
+definition sdfun_dcompl::"('w \<sigma> \<Rightarrow> 'i) \<Rightarrow> ('w \<sigma> \<Rightarrow> 'i)" ("(_\<^sup>-)") 
   where "\<phi>\<^sup>- \<equiv> \<lambda>X. \<phi>(\<^bold>\<midarrow>X)"
 lemma sdfun_dcompl_char: "\<phi>\<^sup>- = (\<lambda>X. \<exists>Y. (\<phi> Y) \<and> (X = \<^bold>\<midarrow>Y))" by (metis BA_dn setequ_ext sdfun_dcompl_def)
 
@@ -59,14 +59,14 @@ lemma sdfun_dcompl_char: "\<phi>\<^sup>- = (\<lambda>X. \<exists>Y. (\<phi> Y) \
 Thus our algebra of operators inherits the connectives defined above plus some idiosyncratic ones. *)
 
 (**We conveniently define the 'dual' of an operator*)
-definition op_dual::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> ('p \<sigma> \<Rightarrow> 'p \<sigma>)" ("(_\<^sup>d)") 
+definition op_dual::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> ('w \<sigma> \<Rightarrow> 'w \<sigma>)" ("(_\<^sup>d)") 
   where "\<phi>\<^sup>d \<equiv> \<lambda>X. \<^bold>\<midarrow>(\<phi>(\<^bold>\<midarrow>X))"
 
 (**The following two 0-ary connectives (i.e operator 'constants') exist already (but somehow implicitly).
   We just make them explicit by introducing some convenient notation.*)
-definition id_op::"'p \<sigma> \<Rightarrow> 'p \<sigma>" ("\<^bold>e") 
+definition id_op::"'w \<sigma> \<Rightarrow> 'w \<sigma>" ("\<^bold>e") 
   where "\<^bold>e \<equiv> \<lambda>X. X" (*introduces notation to refer to 'identity' operator*)
-definition compl_op::"'p \<sigma> \<Rightarrow> 'p \<sigma>" ("\<^bold>n") 
+definition compl_op::"'w \<sigma> \<Rightarrow> 'w \<sigma>" ("\<^bold>n") 
   where "\<^bold>n \<equiv> \<lambda>X. \<^bold>\<midarrow>X" (*to refer to 'complement' operator*)
 
 declare sdfun_dcompl_def[conn2] op_dual_def[conn2] id_op_def[conn2] compl_op_def[conn2]
@@ -90,10 +90,10 @@ lemma op_prop9: "\<^bold>\<bottom>' = \<^bold>n \<^bold>\<sqinter> \<^bold>e" un
 
 (**The notion of a fixed-point is fundamental. We speak of sets being fixed-points of operators.
 We define a function that given an operator returns the set of all its fixed-points.*)
-definition fixpoints::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> ('p \<sigma>)\<sigma>" ("fp") 
+definition fixpoints::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> ('w \<sigma>)\<sigma>" ("fp") 
   where "fp \<phi> \<equiv> \<lambda>X. (\<phi> X) \<approx> X"
 (**We can in fact 'operationalize' the function above thus obtaining a (2nd-order) 'fixed-point' connective*)
-definition op_fixpoint::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> ('p \<sigma> \<Rightarrow> 'p \<sigma>)" ("(_\<^sup>f\<^sup>p)")
+definition op_fixpoint::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> ('w \<sigma> \<Rightarrow> 'w \<sigma>)" ("(_\<^sup>f\<^sup>p)")
 (* definition op_fixpoint ("(_\<^sup>f\<^sup>p)")  *)
   where "\<phi>\<^sup>f\<^sup>p \<equiv> \<lambda>X. (\<phi> X) \<^bold>\<leftrightarrow> X"
 

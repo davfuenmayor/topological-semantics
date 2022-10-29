@@ -1,5 +1,5 @@
 theory LFIs
-  imports "../topological-semantics/negation_conditions"
+  imports "negation_conditions"
 begin
 nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format=3] (*default Nitpick settings*)
 

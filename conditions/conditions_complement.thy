@@ -3,12 +3,12 @@ theory conditions_complement
 begin
 
 (** We define and interrelate some useful axiomatic conditions on unary operations (operators) 
-having a 'p-parametric type @{type "'p \<sigma> \<Rightarrow> 'p \<sigma>"}.
+having a 'w-parametric type @{type "'w \<sigma> \<Rightarrow> 'w \<sigma>"}.
 Boolean algebras extended with such operators give us different sorts of topological Boolean algebras.*)
 
 
 (**Anti-tonicity (ANTI).*)
-definition ANTI::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("ANTI")
+definition ANTI::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("ANTI")
   where "ANTI \<phi> \<equiv> \<forall>A B. A \<preceq> B \<longrightarrow> \<phi> B \<preceq> \<phi> A"
 
 declare ANTI_def[cond]
@@ -19,10 +19,10 @@ lemma ANTI_dual: "ANTI \<phi> = ANTI \<phi>\<^sup>d" by (smt (verit) BA_cp ANTI_
 lemma ANTI_MONO: "ANTI \<phi> = MONO \<phi>\<^sup>c" by (metis ANTI_def BA_cp MONO_def svfun_compl_def)
 
 
-(**anti-Expansive/extensive (EXPN) and its dual contractive (CNTR).*)
-definition nEXPN::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("nEXPN")
+(**anti-expansive/extensive (nEXPN) and its dual anti-contractive (nCNTR).*)
+definition nEXPN::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nEXPN")
   where "nEXPN \<phi>  \<equiv> \<forall>A. \<phi> A \<preceq> \<^bold>\<midarrow>A"
-definition nCNTR::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("nCNTR")
+definition nCNTR::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nCNTR")
   where "nCNTR \<phi> \<equiv> \<forall>A. \<^bold>\<midarrow>A \<preceq> \<phi> A"
 
 declare nEXPN_def[cond] nCNTR_def[cond]
@@ -36,9 +36,9 @@ lemma nEXPN_CNTR_compl: "nEXPN \<phi> = EXPN \<phi>\<^sup>c" by (metis BA_cp EXP
 lemma nCNTR_EXPN_compl: "nCNTR \<phi> = CNTR \<phi>\<^sup>c" by (metis EXPN_CNTR_dual1 dual_compl_char1 dual_compl_char2 dual_invol nEXPN_CNTR_compl nEXPN_nCNTR_dual2)
 
 (**anti-Normality (nNORM) and its dual (nDNRM).*)
-definition nNORM::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("nNORM")
+definition nNORM::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nNORM")
   where "nNORM \<phi>  \<equiv> (\<phi> \<^bold>\<bottom>) \<approx> \<^bold>\<top>"
-definition nDNRM::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("nDNRM")
+definition nDNRM::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nDNRM")
   where "nDNRM \<phi> \<equiv> (\<phi> \<^bold>\<top>) \<approx> \<^bold>\<bottom>" 
 
 declare nNORM_def[cond] nDNRM_def[cond]
@@ -57,11 +57,11 @@ lemma nCNTR_impl_nNORM: "nCNTR \<phi> \<longrightarrow> nNORM \<phi>" by (simp a
 
 
 (**anti-Idempotence (nIDEM).*)
-definition nIDEM::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("nIDEM") 
+definition nIDEM::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nIDEM") 
   where "nIDEM \<phi>  \<equiv> \<forall>A. (\<phi> A) \<approx> \<phi>(\<^bold>\<midarrow>(\<phi> A))"
-definition nIDEM_a::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("nIDEM\<^sup>a") 
+definition nIDEM_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nIDEM\<^sup>a") 
   where "nIDEM_a \<phi> \<equiv> \<forall>A. \<phi>(\<^bold>\<midarrow>(\<phi> A)) \<preceq> (\<phi> A)"
-definition nIDEM_b::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("nIDEM\<^sup>b") 
+definition nIDEM_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nIDEM\<^sup>b") 
   where "nIDEM_b \<phi> \<equiv> \<forall>A. (\<phi> A) \<preceq> \<phi>(\<^bold>\<midarrow>(\<phi> A))"
 
 declare nIDEM_def[cond] nIDEM_a_def[cond] nIDEM_b_def[cond]
@@ -84,19 +84,19 @@ lemma nCNTR_impl_nIDEM_b: "nCNTR \<phi> \<longrightarrow> nIDEM\<^sup>b \<phi>" 
 
 
 (**anti-Distribution over joins or anti-additivity (nADDI) and its dual...*)
-definition nADDI::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("nADDI")
+definition nADDI::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nADDI")
   where "nADDI \<phi>   \<equiv> \<forall>A B. (\<phi> A) \<^bold>\<and> (\<phi> B) \<approx> \<phi>(A \<^bold>\<or> B)" 
-definition nADDI_a::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("nADDI\<^sup>a")
+definition nADDI_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nADDI\<^sup>a")
   where "nADDI\<^sup>a \<phi> \<equiv> \<forall>A B.  (\<phi> A) \<^bold>\<and> (\<phi> B) \<preceq> \<phi>(A \<^bold>\<or> B)" 
-definition nADDI_b::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("nADDI\<^sup>b")
+definition nADDI_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nADDI\<^sup>b")
   where "nADDI\<^sup>b \<phi> \<equiv> \<forall>A B. \<phi>(A \<^bold>\<or> B) \<preceq> (\<phi> A) \<^bold>\<and> (\<phi> B)"
 
 (**... anti-distribution over meets or anti-multiplicativity (nMULT).*)
-definition nMULT::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("nMULT") 
+definition nMULT::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nMULT") 
   where "nMULT \<phi>   \<equiv> \<forall>A B. (\<phi> A) \<^bold>\<or> (\<phi> B) \<approx> \<phi>(A \<^bold>\<and> B)" 
-definition nMULT_a::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("nMULT\<^sup>a")
+definition nMULT_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nMULT\<^sup>a")
   where "nMULT\<^sup>a \<phi> \<equiv> \<forall>A B. (\<phi> A) \<^bold>\<or> (\<phi> B) \<preceq> \<phi>(A \<^bold>\<and> B)"
-definition nMULT_b::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("nMULT\<^sup>b")
+definition nMULT_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nMULT\<^sup>b")
   where "nMULT\<^sup>b \<phi> \<equiv> \<forall>A B. \<phi>(A \<^bold>\<and> B) \<preceq> (\<phi> A) \<^bold>\<or> (\<phi> B)" 
 
 declare nADDI_def[cond] nADDI_a_def[cond] nADDI_b_def[cond]

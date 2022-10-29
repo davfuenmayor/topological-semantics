@@ -1,6 +1,43 @@
 theory boolean_algebra
-  imports misc
+  imports Main
 begin
+(*----------- Technicalities--------*)
+declare[[smt_timeout=30]]
+declare[[show_types]]
+(* declare[[syntax_ambiguity_warning=false]] *)
+sledgehammer_params[isar_proof=false]
+nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format=3, atoms=a b c d] (*default Nitpick settings*)
+(*we hide some Isabelle/HOL notation from the libraries (which we don't use) to avoid overloading*)
+hide_const(open) List.list.Nil no_notation List.list.Nil ("[]")  (*We have no use for lists... *)
+hide_const(open) Relation.converse no_notation Relation.converse ("(_\<inverse>)" [1000] 999) (*..nor for relations in this work*)
+hide_const(open) Fun.comp no_notation Fun.comp (infixl "\<circ>" 55) (*we redefine function composition below*)
+hide_const(open) Groups.plus_class.plus no_notation Groups.plus_class.plus (infixl "+" 65) (*we don't use this*)
+hide_const(open) Groups.times_class.times no_notation Groups.times_class.times (infixl "*" 70) (*we don't use this*)
+hide_const(open) Groups.minus_class.minus no_notation Groups.minus_class.minus (infixl "-" 65) (*we don't use this*)
+hide_const(open) Groups.uminus_class.uminus no_notation Groups.uminus_class.uminus ("- _" [81] 80) (*we don't use this*)
+(*---------------------------------*)
+
+abbreviation "isEmpty S \<equiv> \<forall>x. \<not>S x"
+abbreviation "nonEmpty S \<equiv> \<exists>x. S x"
+
+(**Function composition.*)
+definition fun_comp :: "('b \<Rightarrow> 'c) \<Rightarrow> ( 'a \<Rightarrow> 'b) \<Rightarrow> 'a \<Rightarrow> 'c" (infixl "\<circ>" 75) 
+  where "\<phi> \<circ> \<psi> \<equiv> \<lambda>x. \<phi> (\<psi> x)"
+
+(**Inverse projection maps a unary function to a 'projected' binary function wrt. its 1st argument.*)
+abbreviation inv_proj::\<open>('a \<Rightarrow> 'c) \<Rightarrow> ('a \<Rightarrow> 'b \<Rightarrow> 'c)\<close> ("(_)\<up>")
+  where "D\<up> \<equiv> \<lambda>A B. D A"
+
+(**Image of a mapping  @{text "\<phi>"}, with range as an special case.*)
+definition image::"('a \<Rightarrow> 'b) \<Rightarrow> ('a \<Rightarrow> bool) \<Rightarrow> ('b \<Rightarrow> bool)" ("\<lbrakk>_ _\<rbrakk>") 
+  where "\<lbrakk>\<phi> S\<rbrakk> \<equiv> \<lambda>y. \<exists>x. (S x) \<and> (\<phi> x) = y"
+definition range::"('a \<Rightarrow> 'b) \<Rightarrow> ('b \<Rightarrow> bool)" ("\<lbrakk>_'_\<rbrakk>") 
+  where "\<lbrakk>\<phi> _\<rbrakk> \<equiv> \<lambda>Y. \<exists>x. (\<phi> x) = Y"
+lemma range_char1: "\<lbrakk>\<phi> _\<rbrakk> = \<lbrakk>\<phi> (\<lambda>x. True)\<rbrakk>" by (simp add: image_def range_def)
+lemma range_char2: "\<lbrakk>\<phi> _\<rbrakk> = (\<lambda>X. \<exists>S. \<lbrakk>\<phi> S\<rbrakk> X)" unfolding range_def image_def by blast
+
+lemma image_comp: "\<lbrakk>(f \<circ> g) S\<rbrakk> = \<lbrakk>f \<lbrakk>g S\<rbrakk>\<rbrakk>" unfolding fun_comp_def image_def by metis
+
 
 section \<open>Shallow semantical embedding of (a logic of) Boolean algebras\<close>
 
@@ -12,26 +49,26 @@ However, this is only one possibility, since points can themselves be taken as s
 and thus as 'propositions'. In such a case the elements of our Boolean algebras might correspond
 to 'theories' (i.e. sets of 'propositions').*)
 
-(**We utilize a particular naming convention: The type parameter @{type "'p"} is employed for the
-domain/universe of `points'. We conveniently introduce the (parametric) type-alias @{type "'p \<sigma>"} 
-as shorthand for @{type "'p\<Rightarrow>bool"}. Hence, the elements of our algebra are objects of type @{type "'p \<sigma>"},
+(**We utilize a particular naming convention: The type parameter @{type "'w"} is employed for the
+domain/universe of `points'. We conveniently introduce the (parametric) type-alias @{type "'w \<sigma>"} 
+as shorthand for @{type "'w\<Rightarrow>bool"}. Hence, the elements of our algebra are objects of type @{type "'w \<sigma>"},
 and thus correspond to (characteristic functions of) sets of `points'. Observe that the type parameter
-'p can itself correspond to a 'set type', and so elements of our algebras can have type @{type "('p \<sigma>)\<sigma>"}.
+'w can itself correspond to a 'set type', and so elements of our algebras can have type @{type "('w \<sigma>)\<sigma>"}.
 Set-valued (set-domain) functions are thus functions that have sets (of points) as their codomain (domain),
-they are basically anything with a (parametric) type @{type "'i\<Rightarrow>'p \<sigma>"} (@{type "'p \<sigma>\<Rightarrow>'i"}).*)
+they are basically anything with a (parametric) type @{type "'i\<Rightarrow>'w \<sigma>"} (@{type "'w \<sigma>\<Rightarrow>'i"}).*)
 
-type_synonym 'p \<sigma> = \<open>'p \<Rightarrow> bool\<close> (*type for (characteristic functions of) sets (of points)*)
+type_synonym 'w \<sigma> = \<open>'w \<Rightarrow> bool\<close> (*type for (characteristic functions of) sets (of points)*)
 
 (**In the sequel, we will (try to) enforce the following naming convention:
 
-(i) Upper-case latin letters (A, B, D, M, P, S, X, etc.) denote arbitrary sets (type @{type "'p \<sigma>"}).
+(i) Upper-case latin letters (A, B, D, M, P, S, X, etc.) denote arbitrary sets (type @{type "'w \<sigma>"}).
 We will employ lower-case letters (p, q, x, w, etc.) to denote variables playing the role of 'points'.
 In some contexts, the letters S and D will be employed to denote sets/domains of sets (of 'points').
 
-(ii) Greek letters denote arbitrary set-valued functions (type @{type "'i\<Rightarrow>'p \<sigma>"} aliased @{type "('i \<Rightarrow> 'p \<sigma>)"}).
+(ii) Greek letters denote arbitrary set-valued functions (type @{type "'i\<Rightarrow>'w \<sigma>"} aliased @{type "('i \<Rightarrow> 'w \<sigma>)"}).
 We employ the letters @{text "\<phi>"}, @{text "\<psi>"} and @{text "\<eta>"} to denote arbitrary unary operations
-(with type @{type "'p \<sigma> \<Rightarrow> 'p \<sigma>"}); and the letters @{text "\<xi>"} and @{text "\<delta>"} to denote 
-arbitrary binary operations (with type @{type "'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> 'p \<sigma>"}).
+(with type @{type "'w \<sigma> \<Rightarrow> 'w \<sigma>"}); and the letters @{text "\<xi>"} and @{text "\<delta>"} to denote 
+arbitrary binary operations (with type @{type "'w \<sigma> \<Rightarrow> 'w \<sigma> \<Rightarrow> 'w \<sigma>"}).
 
 (iii) Upper-case calligraphic letters (\<B>, \<I>, \<C>, \<P>, etc.) are reserved for unary operations that are
 intended to act as so-called 'topological operators' in the given context.
@@ -40,9 +77,9 @@ intended to act as so-called 'topological operators' in the given context.
 subsection \<open>Encoding Boolean operations\<close>
 
 (**Standard inclusion-based order structure on sets.*)
-definition subset::"'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> bool" (infixr "\<preceq>" 45) 
+definition subset::"'w \<sigma> \<Rightarrow> 'w \<sigma> \<Rightarrow> bool" (infixr "\<preceq>" 45) 
   where "A \<preceq> B \<equiv> \<forall>p. A p \<longrightarrow> B p"
-definition setequ::"'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> bool" (infixr "\<approx>" 45) 
+definition setequ::"'w \<sigma> \<Rightarrow> 'w \<sigma> \<Rightarrow> bool" (infixr "\<approx>" 45) 
   where "A \<approx> B \<equiv> \<forall>p. A p \<longleftrightarrow> B p"
 
 named_theorems order (*to group together order-related definitions*)
@@ -54,26 +91,26 @@ lemma setequ_ext: "(A \<approx> B) = (A = B)" unfolding order by blast
 
 (**We now encode connectives for (distributive and complemented) bounded lattices, mostly 
 by reusing their counterpart meta-logical HOL connectives,*)
-definition meet::"'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> 'p \<sigma>" (infixr "\<^bold>\<and>" 54) 
+definition meet::"'w \<sigma> \<Rightarrow> 'w \<sigma> \<Rightarrow> 'w \<sigma>" (infixr "\<^bold>\<and>" 54) 
   where "A \<^bold>\<and> B \<equiv> \<lambda>p. (A p) \<and> (B p)" (**intersection*)
-definition join::"'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> 'p \<sigma>" (infixr "\<^bold>\<or>" 53) 
+definition join::"'w \<sigma> \<Rightarrow> 'w \<sigma> \<Rightarrow> 'w \<sigma>" (infixr "\<^bold>\<or>" 53) 
   where "A \<^bold>\<or> B \<equiv> \<lambda>p. (A p) \<or> (B p)" (**union*)
-definition top::"'p \<sigma>" ("\<^bold>\<top>")    
+definition top::"'w \<sigma>" ("\<^bold>\<top>")    
   where "\<^bold>\<top> \<equiv> \<lambda>w. True"   (**universe*)
-definition bottom::"'p \<sigma>" ("\<^bold>\<bottom>") 
+definition bottom::"'w \<sigma>" ("\<^bold>\<bottom>") 
   where "\<^bold>\<bottom> \<equiv> \<lambda>w. False"  (**empty-set*)
 
 (**and introduce further operations to obtain a Boolean algebra (of sets).*)
-definition compl::"'p \<sigma> \<Rightarrow> 'p \<sigma>" ("\<^bold>\<midarrow>_"[57]58)
+definition compl::"'w \<sigma> \<Rightarrow> 'w \<sigma>" ("\<^bold>\<midarrow>_"[57]58)
   where "\<^bold>\<midarrow>A  \<equiv> \<lambda>p. \<not>(A p)" (** (set-)complement*)
-definition impl::"'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> 'p \<sigma>" (infixr "\<^bold>\<rightarrow>" 51)
+definition impl::"'w \<sigma> \<Rightarrow> 'w \<sigma> \<Rightarrow> 'w \<sigma>" (infixr "\<^bold>\<rightarrow>" 51)
   where "A \<^bold>\<rightarrow> B \<equiv> \<lambda>p. (A p) \<longrightarrow> (B p)" (** (set-)implication*)
-definition diff::"'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> 'p \<sigma>" (infixr "\<^bold>\<leftharpoonup>" 51) 
+definition diff::"'w \<sigma> \<Rightarrow> 'w \<sigma> \<Rightarrow> 'w \<sigma>" (infixr "\<^bold>\<leftharpoonup>" 51) 
   where "A \<^bold>\<leftharpoonup> B \<equiv> \<lambda>p. (A p) \<and> \<not>(B p)" (** (set-)difference*)
-definition dimpl::"'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> 'p \<sigma>" (infixr "\<^bold>\<leftrightarrow>" 51)
+definition dimpl::"'w \<sigma> \<Rightarrow> 'w \<sigma> \<Rightarrow> 'w \<sigma>" (infixr "\<^bold>\<leftrightarrow>" 51)
 (* definition dimpl (infixr "\<^bold>\<leftrightarrow>" 51)  *)
   where "A \<^bold>\<leftrightarrow> B \<equiv> \<lambda>p. (A p) = (B p)" (** double implication*)
-definition sdiff::"'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> 'p \<sigma>" (infixr "\<^bold>\<triangle>" 51)
+definition sdiff::"'w \<sigma> \<Rightarrow> 'w \<sigma> \<Rightarrow> 'w \<sigma>" (infixr "\<^bold>\<triangle>" 51)
 (* definition sdiff (infixr "\<^bold>\<triangle>" 51)  *)
   where "A \<^bold>\<triangle> B \<equiv> \<lambda>p. (A p) \<noteq> (B p)" (** symmetric difference (aka. xor) *)
 
@@ -118,14 +155,14 @@ lemma BA_cmpl_equ: "(\<^bold>\<midarrow>A \<approx> B) = (A \<approx> \<^bold>\<
 
 
 (**We conveniently introduce these properties of sets of sets (of points).*)
-definition meet_closed::"('p \<sigma>)\<sigma> \<Rightarrow> bool"
+definition meet_closed::"('w \<sigma>)\<sigma> \<Rightarrow> bool"
   where "meet_closed S \<equiv>  \<forall>X Y. (S X \<and> S Y) \<longrightarrow> S(X \<^bold>\<and> Y)"
-definition join_closed::"('p \<sigma>)\<sigma> \<Rightarrow> bool"
+definition join_closed::"('w \<sigma>)\<sigma> \<Rightarrow> bool"
   where "join_closed S \<equiv>  \<forall>X Y. (S X \<and> S Y) \<longrightarrow> S(X \<^bold>\<or> Y)"
 
-definition upwards_closed::"('p \<sigma>)\<sigma> \<Rightarrow> bool"
+definition upwards_closed::"('w \<sigma>)\<sigma> \<Rightarrow> bool"
   where "upwards_closed S \<equiv> \<forall>X Y. S X \<and> X \<preceq> Y \<longrightarrow> S Y"
-definition downwards_closed::"('p \<sigma>)\<sigma> \<Rightarrow> bool" 
+definition downwards_closed::"('w \<sigma>)\<sigma> \<Rightarrow> bool" 
 where "downwards_closed S \<equiv> \<forall>X Y. S X \<and> Y \<preceq> X \<longrightarrow> S Y"
 
 

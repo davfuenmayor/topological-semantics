@@ -1,5 +1,5 @@
 theory quantifiers_example
-  imports quantifiers conditions_fp_infinitary
+  imports quantifiers "../conditions/conditions_fp_infinitary"
 begin
 
 subsection \<open>Examples on using quantifiers (restricted and unrestricted)\<close>
@@ -17,15 +17,17 @@ lemma "\<^bold>\<exists>x. Drunk x \<^bold>\<rightarrow> (\<^bold>\<forall>y. Dr
   by (simp add: impl_def mexists_def mforall_def setequ_def top_def)
 
 (**Example in non-classical logics*) (*TODO: finish and move to own context*)
-typedecl w
-consts \<C>::"(w \<sigma>) \<Rightarrow> (w \<sigma>)"
+typedecl w 
+type_synonym \<sigma> = "(w \<sigma>)"
+
+consts \<C>::"\<sigma> \<Rightarrow> \<sigma>"
 abbreviation "\<I> \<equiv> \<C>\<^sup>d"
 abbreviation "CLOSURE \<phi> \<equiv> ADDI \<phi> \<and> EXPN \<phi> \<and> NORM \<phi> \<and> IDEM \<phi>"
 abbreviation "INTERIOR \<phi> \<equiv> MULT \<phi> \<and> CNTR \<phi> \<and> DNRM \<phi> \<and> IDEM \<phi>"
 
-definition mforallInt::"(w \<sigma>\<Rightarrow>w \<sigma>)\<Rightarrow>w \<sigma>" ("\<^bold>\<Pi>\<^sup>I_") 
+definition mforallInt::"(\<sigma> \<Rightarrow> \<sigma>) \<Rightarrow> \<sigma>" ("\<^bold>\<Pi>\<^sup>I_") 
   where "\<^bold>\<Pi>\<^sup>I\<phi> \<equiv> \<^bold>\<Pi>[fp \<I>]\<phi>"
-definition mexistsInt::"(w \<sigma>\<Rightarrow>w \<sigma>)\<Rightarrow>w \<sigma>" ("\<^bold>\<Sigma>\<^sup>I_") 
+definition mexistsInt::"(\<sigma> \<Rightarrow> \<sigma>) \<Rightarrow> \<sigma>" ("\<^bold>\<Sigma>\<^sup>I_") 
   where "\<^bold>\<Sigma>\<^sup>I\<phi> \<equiv> \<^bold>\<Sigma>[fp \<I>]\<phi>"
 
 (**To improve readability, we introduce for them standard binder notation.*)
@@ -63,7 +65,7 @@ lemma CBarcan1: "MONO \<phi> \<Longrightarrow> \<forall>\<pi>.  \<phi>(\<^bold>\
 lemma CBarcan2: "MONO \<phi> \<Longrightarrow> \<forall>\<pi>. (\<^bold>\<exists>x. \<phi>(\<pi> x)) \<preceq> \<phi>(\<^bold>\<exists>x. \<pi> x)" by (smt (verit) MONO_def mexists_def subset_def)
 
 (**However, the Barcan formula requires a stronger assumption (of an infinitary character).*)
-lemma Barcan1: "iMULT\<^sup>b \<phi> \<Longrightarrow> \<forall>\<pi>. (\<^bold>\<forall>x. \<phi>(\<pi> x)) \<preceq> \<phi>(\<^bold>\<forall>x. \<pi> x)" unfolding iMULT_b_def by (smt (verit) infimum_def mforall_char misc.image_def range_char1 subset_def)
+lemma Barcan1: "iMULT\<^sup>b \<phi> \<Longrightarrow> \<forall>\<pi>. (\<^bold>\<forall>x. \<phi>(\<pi> x)) \<preceq> \<phi>(\<^bold>\<forall>x. \<pi> x)" unfolding iMULT_b_def by (smt (verit) infimum_def mforall_char image_def range_char1 subset_def)
 (*proof  assume imultb: "iMULT_b \<phi>"
   { fix \<pi>::"'a\<Rightarrow>\<sigma>"
     from imultb have "(\<^bold>\<And>Ra(\<phi>\<circ>\<pi>)) \<^bold>\<preceq> \<phi>(\<^bold>\<And>Ra(\<pi>))" unfolding iMULT_b_def by (smt comp_apply infimum_def pfunRange_def pfunRange_restr_def)
@@ -86,16 +88,16 @@ qed
 
 (* lemma iDM: "inADDI\<^sup>b \<eta> \<Longrightarrow> \<forall>\<pi>. \<eta>(\<^bold>\<exists>x. \<pi> x) \<preceq> (\<^bold>\<forall>x. \<eta>(\<pi> x))" by (smt (verit, best) ANTI_def ANTI_inADDIb mexists_def mforall_def subset_def) *)
 lemma "ANTI \<eta> \<Longrightarrow> \<eta>(\<^bold>\<exists>x. \<pi> x) \<preceq> (\<^bold>\<forall>x. \<eta>(\<pi> x))" by (smt (verit, ccfv_SIG) ANTI_def mexists_def mforall_def subset_def)
-lemma "inADDI\<^sup>a \<eta> \<Longrightarrow>(\<^bold>\<forall>x. \<eta>(\<pi> x)) \<preceq> \<eta>(\<^bold>\<exists>x. \<pi> x)" by (smt (verit, best) inADDI_a_def infimum_def mexists_char mforall_char misc.image_def range_char1 subset_def)
+lemma "inADDI\<^sup>a \<eta> \<Longrightarrow>(\<^bold>\<forall>x. \<eta>(\<pi> x)) \<preceq> \<eta>(\<^bold>\<exists>x. \<pi> x)" by (smt (verit, best) inADDI_a_def infimum_def mexists_char mforall_char image_def range_char1 subset_def)
 
 (*CBF*)
 lemma "MONO \<phi> \<Longrightarrow> \<forall>\<pi>.  \<phi>(\<^bold>\<Pi> \<pi>) \<preceq> \<^bold>\<Pi>(\<phi> \<circ> \<pi>)" by (metis MONO_iMULTa iMULT_a_def mforall_char mforall_comp mforall_const_char)
-lemma "MONO \<phi> \<Longrightarrow> \<forall>\<pi>.  \<phi>(\<^bold>\<Pi>[D] \<pi>) \<preceq> \<^bold>\<Pi>[D](\<phi> \<circ> \<pi>)"  by (smt (verit) MONO_iMULTa fun_comp_def iMULT_a_def mforall_const_char mforall_const_def misc.image_def subset_def)
+lemma "MONO \<phi> \<Longrightarrow> \<forall>\<pi>.  \<phi>(\<^bold>\<Pi>[D] \<pi>) \<preceq> \<^bold>\<Pi>[D](\<phi> \<circ> \<pi>)"  by (smt (verit) MONO_iMULTa fun_comp_def iMULT_a_def mforall_const_char mforall_const_def image_def subset_def)
 lemma "CNTR \<phi> \<Longrightarrow> iMULT \<phi> \<Longrightarrow> IDEM \<phi> \<Longrightarrow>  \<forall>\<pi>.  \<phi>(\<^bold>\<Pi>{\<psi>} \<pi>) \<preceq> \<^bold>\<Pi>{\<psi>}(\<phi> \<circ> \<pi>)" nitpick oops
 
 (*BF*)
 lemma "iMULT\<^sup>b \<phi> \<Longrightarrow> \<forall>\<pi>. \<^bold>\<Pi>(\<phi> \<circ> \<pi>) \<preceq> \<phi>(\<^bold>\<Pi> \<pi>)" by (metis iMULT_b_def mforall_char mforall_comp mforall_const_char)
-lemma "iMULT\<^sup>b \<phi> \<Longrightarrow> \<forall>\<pi>. \<^bold>\<Pi>[D](\<phi> \<circ> \<pi>) \<preceq> \<phi>(\<^bold>\<Pi>[D] \<pi>)" by (smt (verit) fun_comp_def iMULT_b_def infimum_def mforall_const_char misc.image_def subset_def)
+lemma "iMULT\<^sup>b \<phi> \<Longrightarrow> \<forall>\<pi>. \<^bold>\<Pi>[D](\<phi> \<circ> \<pi>) \<preceq> \<phi>(\<^bold>\<Pi>[D] \<pi>)" by (smt (verit) fun_comp_def iMULT_b_def infimum_def mforall_const_char image_def subset_def)
 lemma "iADDI \<phi> \<Longrightarrow> iMULT \<phi> \<Longrightarrow> \<forall>\<pi>. \<^bold>\<Pi>{\<psi>}(\<phi> \<circ> \<pi>) \<preceq> \<phi>(\<^bold>\<Pi>{\<psi>} \<pi>)" nitpick oops
 
 end

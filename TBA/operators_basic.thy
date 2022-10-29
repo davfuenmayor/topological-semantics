@@ -1,5 +1,5 @@
 theory operators_basic
-  imports "../SSE/operation_positive_quantification"
+  imports "../conditions/conditions_kuratowski_infinitary"
 begin
 nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format=3] (*default Nitpick settings*)
 

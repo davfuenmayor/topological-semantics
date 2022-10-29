@@ -6,18 +6,19 @@ begin
  axiomatic conditions on operators.*)
 
 (**anti-distribution over infinite joins (suprema) or infinite anti-additivity (inADDI).*)
-definition inADDI::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("inADDI")
-  where "inADDI \<phi>  \<equiv> \<forall>S. \<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk> \<approx> \<phi>(\<^bold>\<Or>S)" 
-definition inADDI_a::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("inADDI\<^sup>a")
+definition inADDI::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("inADDI")
+  where "inADDI \<phi>  \<equiv> \<forall>S. \<phi>(\<^bold>\<Or>S) \<approx> \<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk>" 
+definition inADDI_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("inADDI\<^sup>a")
   where "inADDI\<^sup>a \<phi> \<equiv> \<forall>S. \<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk> \<preceq> \<phi>(\<^bold>\<Or>S)  " 
-definition inADDI_b::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("inADDI\<^sup>b")
+definition inADDI_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("inADDI\<^sup>b")
   where "inADDI\<^sup>b \<phi> \<equiv> \<forall>S. \<phi>(\<^bold>\<Or>S) \<preceq> \<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk>"
-(**anti-Distribution over infinite meets (infima) or infinite anti-multiplicativity (inMULT).*)
-definition inMULT::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("inMULT")
-  where "inMULT \<phi>  \<equiv> \<forall>S. \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk> \<approx> \<phi>(\<^bold>\<And>S)" 
-definition inMULT_a::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("inMULT\<^sup>a")
+
+(**anti-distribution over infinite meets (infima) or infinite anti-multiplicativity (inMULT).*)
+definition inMULT::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("inMULT")
+  where "inMULT \<phi>  \<equiv> \<forall>S. \<phi>(\<^bold>\<And>S) \<approx> \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>" 
+definition inMULT_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("inMULT\<^sup>a")
   where "inMULT\<^sup>a \<phi> \<equiv> \<forall>S. \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk> \<preceq> \<phi>(\<^bold>\<And>S)"
-definition inMULT_b::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("inMULT\<^sup>b")
+definition inMULT_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("inMULT\<^sup>b")
   where "inMULT\<^sup>b \<phi> \<equiv> \<forall>S. \<phi>(\<^bold>\<And>S) \<preceq> \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>"
 
 declare inADDI_def[cond] inADDI_a_def[cond] inADDI_b_def[cond]
@@ -79,7 +80,7 @@ lemma inADDI_inMULT_dual1: "inADDI \<phi> = inMULT \<phi>\<^sup>d" using inADDI_
 lemma inADDI_inMULT_dual2: "inMULT \<phi> = inADDI \<phi>\<^sup>d" by (simp add: dual_invol inADDI_inMULT_dual1)
 
 (**In fact, infinite anti-additivity (anti-multiplicativity) entails (dual) anti-normality:*)
-lemma inADDI_nNORM: "inADDI \<phi> \<longrightarrow> nNORM \<phi>" by (metis bottom_def inADDI_def inf_empty misc.image_def nNORM_def setequ_ext sup_empty)
+lemma inADDI_nNORM: "inADDI \<phi> \<longrightarrow> nNORM \<phi>" by (metis bottom_def inADDI_def inf_empty image_def nNORM_def setequ_ext sup_empty)
 lemma inMULT_nDNRM: "inMULT \<phi> \<longrightarrow> nDNRM \<phi>" by (simp add: inADDI_inMULT_dual2 inADDI_nNORM nNOR_dual2)
 
 end

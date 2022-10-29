@@ -1,5 +1,5 @@
 theory negation_properties
-  imports boolean_algebra
+  imports "../boolean_algebra/boolean_algebra"
 begin
 nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format=3] (*default Nitpick settings*)
 

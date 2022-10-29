@@ -1,5 +1,5 @@
 theory negation_properties_infinitary
-  imports negation_properties boolean_algebra_infinitary
+  imports negation_properties "../boolean_algebra/boolean_algebra_infinitary"
 begin
 nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format=3] (*default Nitpick settings*)
 

@@ -1,5 +1,5 @@
 theory subminimal_logics
-  imports "../topological-semantics/negation_conditions" "../topological-semantics/strict_implication"
+  imports "negation_conditions" "strict_implication"
 begin
 nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format=3] (*default Nitpick settings*)
 

@@ -1,5 +1,5 @@
 theory LFUs
-  imports "../topological-semantics/derivative_algebra" "../SSE/operation_negative"
+  imports "../TBA/derivative_algebra" "../conditions/conditions_complement"
 begin
 nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format=3] (*default Nitpick settings*)
 

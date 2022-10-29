@@ -1,5 +1,5 @@
 theory quantifiers
-  imports boolean_algebra_infinitary
+  imports "../boolean_algebra/boolean_algebra_infinitary"
 begin
 
 subsection \<open>Encoding quantifiers (restricted and unrestricted)\<close>
@@ -11,16 +11,16 @@ notation HOL.All ("\<Pi>_") notation HOL.Ex ("\<Sigma>_")
 lemma "(\<forall>x. \<phi>) = \<Pi>(\<lambda>x. \<phi>)" by simp
 lemma "(\<exists>x. \<phi>) = \<Sigma>(\<lambda>x. \<phi>)" by simp
 
-(**We can introduce their respective 'p-type-lifted variants as follows: *)
-definition mforall::"('i\<Rightarrow>'p \<sigma>)\<Rightarrow>'p \<sigma>" ("\<^bold>\<Pi>_")
+(**We can introduce their respective 'w-type-lifted variants as follows: *)
+definition mforall::"('i\<Rightarrow>'w \<sigma>)\<Rightarrow>'w \<sigma>" ("\<^bold>\<Pi>_")
   where "\<^bold>\<Pi>\<phi> \<equiv> \<lambda>w. \<forall>X. \<phi> X w"
-definition mexists::"('i\<Rightarrow>'p \<sigma>)\<Rightarrow>'p \<sigma>" ("\<^bold>\<Sigma>_") 
+definition mexists::"('i\<Rightarrow>'w \<sigma>)\<Rightarrow>'w \<sigma>" ("\<^bold>\<Sigma>_") 
   where "\<^bold>\<Sigma>\<phi> \<equiv> \<lambda>w. \<exists>X. \<phi> X w"
 
 (**To improve readability, we introduce for them standard binder notation.*)
 notation mforall (binder "\<^bold>\<forall>" [48]49)  notation mexists (binder "\<^bold>\<exists>" [48]49) 
 
-(**And thus we obtain the 'p-type-lifted variant of the standard (variable-binding) quantifiers*)
+(**And thus we obtain the 'w-type-lifted variant of the standard (variable-binding) quantifiers*)
 lemma "(\<^bold>\<forall>X. \<phi>) = \<^bold>\<Pi>(\<lambda>X. \<phi>)" by (simp add: mforall_def)
 lemma "(\<^bold>\<exists>X. \<phi>) = \<^bold>\<Sigma>(\<lambda>X. \<phi>)" by (simp add: mexists_def)
 
@@ -40,9 +40,9 @@ lemma mexistsb_char: "(\<^bold>\<exists>X. \<phi>) = \<^bold>\<Or>\<lbrakk>(\<la
 (**Restricted quantification*)
 
 (**Constant domains: first generalization of quantifiers above (e.g. free logic)*)
-definition mforall_const::"'i \<sigma> \<Rightarrow> ('i \<Rightarrow> 'p \<sigma>) \<Rightarrow> 'p \<sigma>" ("\<^bold>\<Pi>[_]_") 
+definition mforall_const::"'i \<sigma> \<Rightarrow> ('i \<Rightarrow> 'w \<sigma>) \<Rightarrow> 'w \<sigma>" ("\<^bold>\<Pi>[_]_") 
   where "\<^bold>\<Pi>[D]\<phi> \<equiv> \<lambda>w. \<forall>X. (D X) \<longrightarrow> (\<phi> X) w" 
-definition mexists_const::"'i \<sigma> \<Rightarrow> ('i \<Rightarrow> 'p \<sigma>) \<Rightarrow> 'p \<sigma>" ("\<^bold>\<Sigma>[_]_") 
+definition mexists_const::"'i \<sigma> \<Rightarrow> ('i \<Rightarrow> 'w \<sigma>) \<Rightarrow> 'w \<sigma>" ("\<^bold>\<Sigma>[_]_") 
   where "\<^bold>\<Sigma>[D]\<phi> \<equiv> \<lambda>w. \<exists>X. (D X)  \<and>  (\<phi> X) w"
 
 (**Alas! the convenient binder notation cannot be easily introduced for restricted quantifiers*)
@@ -63,9 +63,9 @@ lemma mexists_comp: "\<^bold>\<Sigma>(\<phi>\<circ>\<psi>) = \<^bold>\<Sigma>[\<
 
 (**Varying domains: we can also restrict quantifiers by taking a 'functional domain' as additional parameter.
 The latter is a set-valued mapping each element 'i to a set of points (e.g. where it 'exists').*)
-definition mforall_var::"('i \<Rightarrow> 'p \<sigma>) \<Rightarrow> ('i \<Rightarrow> 'p \<sigma>) \<Rightarrow> 'p \<sigma>" ("\<^bold>\<Pi>{_}_") 
+definition mforall_var::"('i \<Rightarrow> 'w \<sigma>) \<Rightarrow> ('i \<Rightarrow> 'w \<sigma>) \<Rightarrow> 'w \<sigma>" ("\<^bold>\<Pi>{_}_") 
   where "\<^bold>\<Pi>{\<psi>}\<phi> \<equiv> \<lambda>w. \<forall>X. (\<psi> X) w \<longrightarrow> (\<phi> X) w" 
-definition mexists_var::"('i \<Rightarrow> 'p \<sigma>) \<Rightarrow> ('i \<Rightarrow> 'p \<sigma>) \<Rightarrow> 'p \<sigma>" ("\<^bold>\<Sigma>{_}_") 
+definition mexists_var::"('i \<Rightarrow> 'w \<sigma>) \<Rightarrow> ('i \<Rightarrow> 'w \<sigma>) \<Rightarrow> 'w \<sigma>" ("\<^bold>\<Sigma>{_}_") 
   where "\<^bold>\<Sigma>{\<psi>}\<phi> \<equiv> \<lambda>w. \<exists>X. (\<psi> X) w  \<and>  (\<phi> X) w"
 
 (**Varying-domain quantification generalises its constant-domain counterpart*)

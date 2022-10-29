@@ -6,9 +6,9 @@ begin
 lemma EXPN_fp: "EXPN \<phi> = EXPN \<phi>\<^sup>f\<^sup>p" by (simp add: EXPN_def dimpl_def op_fixpoint_def subset_def)
 lemma CNTR_fp: "CNTR \<phi> = nCNTR \<phi>\<^sup>f\<^sup>p" by (metis EXPN_CNTR_dual2 EXPN_fp dual_compl_char1 nEXPN_CNTR_compl nEXPN_nCNTR_dual2 ofp_comm_dc1)
 
-definition fpMONO::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("fpMONO")
+definition fpMONO::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("fpMONO")
   where "fpMONO \<phi> \<equiv> \<forall>A B. A \<preceq> B \<longrightarrow> (\<phi> B) \<preceq> B \<^bold>\<or> (\<phi> A)"
-definition fpMONOd::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("fpMONOd")
+definition fpMONOd::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("fpMONOd")
   where "fpMONOd \<phi> \<equiv> \<forall>A B. A \<preceq> B \<longrightarrow> A \<^bold>\<and> (\<phi> B) \<preceq> \<phi> A"
 declare fpMONO_def[cond] fpMONOd_def[cond]
 
@@ -24,20 +24,20 @@ lemma weak4: "EXPN \<phi> \<Longrightarrow> fpMONOd \<phi>\<^sup>c" by (simp add
 
 lemma t5: "EXPN \<phi> \<Longrightarrow> fpMONO \<phi> \<Longrightarrow> IDEM\<^sup>b \<phi>" by (metis EXPN_def IDEM_b_def L1 fpMONO_def setequ_ext)
 
-definition XYZ::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("XYZ")
+definition XYZ::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("XYZ")
   where "XYZ \<phi>  \<equiv> \<forall>A B. (A \<^bold>\<or> B) \<^bold>\<or> \<phi>(A \<^bold>\<or> B) \<approx> (A \<^bold>\<or> B) \<^bold>\<or> ((\<phi> A) \<^bold>\<and> (\<phi> B))"
-definition XYZ_a::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("XYZ\<^sup>a")
+definition XYZ_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("XYZ\<^sup>a")
   where "XYZ\<^sup>a \<phi> \<equiv> \<forall>A B. (A \<^bold>\<or> B) \<^bold>\<or> ((\<phi> A) \<^bold>\<and> (\<phi> B)) \<preceq> (A \<^bold>\<or> B) \<^bold>\<or> \<phi>(A \<^bold>\<or> B)"
-definition XYZ_b::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("XYZ\<^sup>b")
+definition XYZ_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("XYZ\<^sup>b")
   where "XYZ\<^sup>b \<phi> \<equiv> \<forall>A B. (A \<^bold>\<or> B) \<^bold>\<or> \<phi>(A \<^bold>\<or> B) \<preceq> (A \<^bold>\<or> B) \<^bold>\<or> ((\<phi> A) \<^bold>\<and> (\<phi> B))" 
  
 declare XYZ_def[cond] XYZ_a_def[cond] XYZ_b_def[cond]
 
-definition XYZd::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("XYZd")
+definition XYZd::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("XYZd")
   where "XYZd \<phi>   \<equiv> \<forall>A B. (A \<^bold>\<and> B) \<^bold>\<and> \<phi>(A \<^bold>\<and> B) \<approx> (A \<^bold>\<and> B) \<^bold>\<and> ((\<phi> A) \<^bold>\<or> (\<phi> B))"
-definition XYZd_a::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("XYZd\<^sup>a")
+definition XYZd_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("XYZd\<^sup>a")
   where "XYZd\<^sup>a \<phi>   \<equiv> \<forall>A B. (A \<^bold>\<and> B) \<^bold>\<and> ((\<phi> A) \<^bold>\<or> (\<phi> B)) \<preceq> (A \<^bold>\<and> B) \<^bold>\<and> \<phi>(A \<^bold>\<and> B)"
-definition XYZd_b::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("XYZd\<^sup>b")
+definition XYZd_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("XYZd\<^sup>b")
   where "XYZd\<^sup>b \<phi>   \<equiv> \<forall>A B. (A \<^bold>\<and> B) \<^bold>\<and> \<phi>(A \<^bold>\<and> B) \<preceq> (A \<^bold>\<and> B) \<^bold>\<and> ((\<phi> A) \<^bold>\<or> (\<phi> B))"
 
 declare XYZd_def[cond] XYZd_a_def[cond] XYZd_b_def[cond]
@@ -66,9 +66,9 @@ lemma "NORM \<phi> = nNORM \<phi>\<^sup>f\<^sup>p" by (metis NORM_def fixpoints_
 
 
 (**fp-Idempotence (fpIDEM).*)
-definition fpIDEM::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("fpIDEM") 
+definition fpIDEM::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("fpIDEM") 
   where "fpIDEM \<phi> \<equiv> \<forall>A. (\<phi>\<^sup>- A) \<preceq> \<phi>\<^sup>-(\<phi> A)"
-definition fpIDEMd::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("fpIDEMd") 
+definition fpIDEMd::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("fpIDEMd") 
   where "fpIDEMd \<phi> \<equiv> \<forall>A. \<phi>(\<phi>\<^sup>d A) \<preceq> (\<phi> A)"
 
 declare fpIDEM_def[cond] fpIDEMd_def[cond]
@@ -80,20 +80,20 @@ lemma "MONO \<phi> \<Longrightarrow> EXPN \<phi> \<Longrightarrow> IDEM\<^sup>b 
 
 (****************************************************)
 (*
-definition XYZ2::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("XYZ2")
+definition XYZ2::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("XYZ2")
   where "XYZ2 \<phi>   \<equiv> \<forall>A B. \<phi>(A \<^bold>\<or> B) \<approx> (A \<^bold>\<or> B) \<^bold>\<or> ((\<phi> A) \<^bold>\<and> (\<phi> B))"
-definition XYZ2_a::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("XYZ2\<^sup>a")
+definition XYZ2_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("XYZ2\<^sup>a")
   where "XYZ2\<^sup>a \<phi>   \<equiv> \<forall>A B. \<phi>(A \<^bold>\<or> B) \<preceq> (A \<^bold>\<or> B) \<^bold>\<or> ((\<phi> A) \<^bold>\<and> (\<phi> B))" 
-definition XYZ2_b::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("XYZ2\<^sup>b")
+definition XYZ2_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("XYZ2\<^sup>b")
   where "XYZ2\<^sup>b \<phi>   \<equiv> \<forall>A B. (A \<^bold>\<or> B) \<^bold>\<or> ((\<phi> A) \<^bold>\<and> (\<phi> B)) \<preceq> \<phi>(A \<^bold>\<or> B)" 
 
 declare XYZ2_def[cond] XYZ2_a_def[cond] XYZ2_b_def[cond]
 
-definition XYZ2d::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("XYZ2d")
+definition XYZ2d::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("XYZ2d")
   where "XYZ2d \<phi>   \<equiv> \<forall>A B. \<phi>(A \<^bold>\<and> B) \<approx> (A \<^bold>\<and> B) \<^bold>\<and> ((\<phi> A) \<^bold>\<or> (\<phi> B))"
-definition XYZ2d_a::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("XYZ2d\<^sup>a")
+definition XYZ2d_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("XYZ2d\<^sup>a")
   where "XYZ2d\<^sup>a \<phi>   \<equiv> \<forall>A B. \<phi>(A \<^bold>\<and> B) \<preceq> (A \<^bold>\<and> B) \<^bold>\<and> ((\<phi> A) \<^bold>\<or> (\<phi> B))"
-definition XYZ2d_b::"('p \<sigma> \<Rightarrow> 'p \<sigma>) \<Rightarrow> bool" ("XYZ2d\<^sup>b")
+definition XYZ2d_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("XYZ2d\<^sup>b")
   where "XYZ2d\<^sup>b \<phi>   \<equiv> \<forall>A B. (A \<^bold>\<and> B) \<^bold>\<and> ((\<phi> A) \<^bold>\<or> (\<phi> B)) \<preceq> \<phi>(A \<^bold>\<and> B)"
 
 declare XYZ2d_def[cond] XYZ2d_a_def[cond] XYZ2d_b_def[cond]

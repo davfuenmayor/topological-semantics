@@ -1,5 +1,5 @@
 theory strict_implication
-  imports frontier_algebra
+  imports "../TBA/frontier_algebra"
 begin
 nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format=3] (*default Nitpick settings*)
 

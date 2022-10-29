@@ -1,5 +1,5 @@
 theory negation_conditions
-  imports frontier_algebra "../SSE/operation_negative_quantification"
+  imports "../TBA/frontier_algebra" "../conditions/conditions_complement_infinitary"
 begin
 nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format=3] (*default Nitpick settings*)
 
