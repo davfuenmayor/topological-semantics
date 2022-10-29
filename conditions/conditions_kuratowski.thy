@@ -1,5 +1,5 @@
 theory conditions_kuratowski
-  imports boolean_algebra_functional
+  imports "../boolean_algebra/boolean_algebra_functional"
 begin
 
 (** We define and interrelate some useful axiomatic conditions on unary operations (operators) 
