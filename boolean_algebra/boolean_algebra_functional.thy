@@ -124,9 +124,9 @@ lemma ofp_comm_dc2:"(\<phi>\<^sup>-)\<^sup>f\<^sup>p = (\<phi>\<^sup>f\<^sup>p)\
 (**The fixed-point operation commutes with the complement*)
 lemma ofp_comm_compl: "(\<phi>\<^sup>c)\<^sup>f\<^sup>p = (\<phi>\<^sup>f\<^sup>p)\<^sup>c" unfolding conn2 order conn by blast
 (**The above motivates the following alternative definition for a 'complemented-fixed-point' operation*)
-lemma ofp_fixpoint_compl_def: "\<phi>\<^sup>c\<^sup>f\<^sup>p = (\<lambda>X. (\<phi> X) \<^bold>\<triangle> X)" by (metis ofp_comm_compl op_fixpoint_def sdiff_char2 svfun_compl_def)
+lemma ofp_fixpoint_compl_def: "\<phi>\<^sup>f\<^sup>p\<^sup>c = (\<lambda>X. (\<phi> X) \<^bold>\<triangle> X)" unfolding conn2 conn by simp
 (**Analogously, the complemented fixed-point connective is also definable in terms of the others*)
-lemma op_fixpoint_compl_char: "\<phi>\<^sup>c\<^sup>f\<^sup>p = (\<phi> \<^bold>\<squnion> \<^bold>e) \<^bold>\<sqinter> (\<phi>\<^sup>c \<^bold>\<squnion> \<^bold>n)" unfolding conn2 conn by blast
+lemma op_fixpoint_compl_char: "\<phi>\<^sup>f\<^sup>p\<^sup>c = (\<phi> \<^bold>\<squnion> \<^bold>e) \<^bold>\<sqinter> (\<phi>\<^sup>c \<^bold>\<squnion> \<^bold>n)" unfolding conn2 conn by blast
 
 (**In fact, function composition can be seen as an additional binary connective for operators.
   We show below some interesting relationships that hold: *)

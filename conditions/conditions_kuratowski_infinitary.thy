@@ -93,14 +93,14 @@ lemma fp_inf_closed_cond3: "MONO \<phi> \<and> EXPN \<phi> \<longrightarrow> inf
 (**OTOH, the converse conjectures have (finite) countermodels. They need additional assumptions.*)
 lemma "infimum_closed (fp \<phi>) \<longrightarrow> iMULT \<phi>" nitpick oops (*countermodel found: needs further assumptions*)
 lemma "supremum_closed (fp \<phi>) \<longrightarrow> iADDI \<phi>" nitpick oops (*countermodel found: needs further assumptions*)
-lemma fp_inf_closed_iMULT: "MONO \<phi> \<Longrightarrow> CNTR \<phi> \<Longrightarrow> IDEM\<^sup>a \<phi> \<Longrightarrow> infimum_closed (fp \<phi>) \<longrightarrow> iMULT \<phi>"
+lemma fp_inf_closed_iMULT: "MONO \<phi> \<Longrightarrow> CNTR \<phi> \<Longrightarrow> IDEM\<^sup>b \<phi> \<Longrightarrow> infimum_closed (fp \<phi>) \<longrightarrow> iMULT \<phi>"
 proof -
-assume mono: "MONO \<phi>" and cntr: "CNTR \<phi>" and idem:"IDEM\<^sup>a \<phi>" {
+assume mono: "MONO \<phi>" and cntr: "CNTR \<phi>" and idem:"IDEM\<^sup>b \<phi>" {
   assume ic:"infimum_closed (fp \<phi>)" {
     fix S
     from ic have "\<forall>D. D \<preceq> (fp \<phi>) \<longrightarrow> (fp \<phi>)(\<^bold>\<And>D)" unfolding infimum_closed_def by simp
     hence "let D=\<lbrakk>\<phi> S\<rbrakk> in (\<forall>X. D X \<longrightarrow> (X \<approx> \<phi> X)) \<longrightarrow> \<^bold>\<And>D \<approx> \<phi> \<^bold>\<And>D" by (simp add: fixpoints_def setequ_ext subset_def) 
-    moreover from idem have "(\<forall>X. \<lbrakk>\<phi> S\<rbrakk> X \<longrightarrow> (X \<approx> \<phi> X))" by (metis (mono_tags, lifting) CNTR_def IDEM_a_def cntr image_def setequ_char)
+    moreover from idem have "(\<forall>X. \<lbrakk>\<phi> S\<rbrakk> X \<longrightarrow> (X \<approx> \<phi> X))" by (metis (mono_tags, lifting) CNTR_def IDEM_b_def cntr image_def setequ_char)
     ultimately have aux: "\<^bold>\<And>(\<lbrakk>\<phi> S\<rbrakk>) \<approx> \<phi>(\<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk>)" by meson
     from cntr have "\<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk> \<preceq> \<^bold>\<And>S" by (smt (verit, best) CNTR_def image_def infimum_def subset_def)
     hence "\<phi>(\<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk>) \<preceq> \<phi>(\<^bold>\<And>S)" using mono by (simp add: MONO_def) 
@@ -108,22 +108,22 @@ assume mono: "MONO \<phi>" and cntr: "CNTR \<phi>" and idem:"IDEM\<^sup>a \<phi>
   } hence "infimum_closed (fp \<phi>) \<longrightarrow> iMULT \<phi>" by (simp add: MONO_iMULTa iMULT_b_def iMULT_char mono)
 } thus ?thesis by simp 
 qed
-lemma fp_sup_closed_iADDI: "MONO \<phi> \<Longrightarrow> EXPN \<phi> \<Longrightarrow> IDEM\<^sup>b \<phi> \<Longrightarrow> supremum_closed (fp \<phi>) \<longrightarrow> iADDI \<phi>"
-  by (metis EXPN_CNTR_dual1 IDEM_dual2 MONO_dual dual_invol fp_inf_closed_iMULT fp_inf_sup_closed_dual iADDI_iMULT_dual1)
+lemma fp_sup_closed_iADDI: "MONO \<phi> \<Longrightarrow> EXPN \<phi> \<Longrightarrow> IDEM\<^sup>a \<phi> \<Longrightarrow> supremum_closed (fp \<phi>) \<longrightarrow> iADDI \<phi>" by (metis EXPN_CNTR_dual1 IDEM_dual2 MONO_dual dual_invol fp_inf_closed_iMULT fp_inf_sup_closed_dual iADDI_iMULT_dual1)
 (*
 proof -
-assume mono: "MONO \<phi>" and expn: "EXPN \<phi>" and idem:"IDEM\<^sup>b \<phi>" {
+assume mono: "MONO \<phi>" and expn: "EXPN \<phi>" and idem:"IDEM\<^sup>a \<phi>" {
   assume sc:"supremum_closed (fp \<phi>)" {
     fix S
-    from sc have "\<forall>D. D \<^bold>\<preceq> (fp \<phi>) \<longrightarrow> (fp \<phi>)(\<^bold>\<Or>D)" unfolding supremum_closed_def by simp
-    hence "let D=\<lbrakk>\<phi> S\<rbrakk> in (\<forall>X. D X \<longrightarrow> (X \<^bold>\<approx> \<phi> X)) \<longrightarrow> \<^bold>\<Or>D \<^bold>\<approx> \<phi> \<^bold>\<Or>D" by (simp add: fixpoints_def setequ_ext subset_def)
-    moreover have "(\<forall>X. \<lbrakk>\<phi> S\<rbrakk> X \<longrightarrow> (X \<^bold>\<approx> \<phi> X))" by (metis (mono_tags, lifting) EXPN_def IDEM_b_def expn idem image_def setequ_char)
-    ultimately have aux: "\<^bold>\<Or>(\<lbrakk>\<phi> S\<rbrakk>) \<^bold>\<approx> \<phi>(\<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>)" by meson
-    have "\<^bold>\<Or>S \<^bold>\<preceq> \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>" by (metis EXPN_CNTR_dual1 EXPN_def IDEM_dual2 MONO_dual expn fp_inf_closed_iMULT fp_sup_inf_closed_dual iADDI_def iADDI_iMULT_dual1 idem mono sc setequ_ext)
-    hence "\<phi>(\<^bold>\<Or>S) \<^bold>\<preceq> \<phi>(\<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>)" using mono by (simp add: MONO_def) 
-    from this aux have "\<phi>(\<^bold>\<Or>S) \<^bold>\<preceq> \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>" by (metis setequ_ext)
+    from sc have "\<forall>D. D \<preceq> (fp \<phi>) \<longrightarrow> (fp \<phi>)(\<^bold>\<Or>D)" unfolding supremum_closed_def by simp
+    hence "let D=\<lbrakk>\<phi> S\<rbrakk> in (\<forall>X. D X \<longrightarrow> (X \<approx> \<phi> X)) \<longrightarrow> \<^bold>\<Or>D \<approx> \<phi> \<^bold>\<Or>D" by (simp add: fixpoints_def setequ_ext subset_def)
+    moreover have "(\<forall>X. \<lbrakk>\<phi> S\<rbrakk> X \<longrightarrow> (X \<approx> \<phi> X))" by (metis (mono_tags, lifting) EXPN_def IDEM_a_def expn idem image_def setequ_char)
+    ultimately have aux: "\<^bold>\<Or>(\<lbrakk>\<phi> S\<rbrakk>) \<approx> \<phi>(\<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>)" by meson
+    have "\<^bold>\<Or>S \<preceq> \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>" by (metis EXPN_CNTR_dual1 EXPN_def IDEM_dual1 MONO_dual dual_invol expn fp_inf_closed_iMULT fp_inf_sup_closed_dual iADDI_def iADDI_iMULT_dual1 idem mono sc setequ_ext)
+    hence "\<phi>(\<^bold>\<Or>S) \<preceq> \<phi>(\<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>)" using mono by (simp add: MONO_def) 
+    from this aux have "\<phi>(\<^bold>\<Or>S) \<preceq> \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>" by (metis setequ_ext)
   } hence "supremum_closed (fp \<phi>) \<longrightarrow> iADDI \<phi>" by (simp add: MONO_ADDIb iADDI_a_def iADDI_char iADDIb_equ mono)
 } thus ?thesis by simp
 qed
 *)
+
 end

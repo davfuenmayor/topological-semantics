@@ -50,11 +50,11 @@ lemma CNTR_impl_NORM: "CNTR \<phi> \<longrightarrow> NORM \<phi>" by (simp add: 
 
 (**Idempotence (IDEM).*)
 definition IDEM::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("IDEM") 
-  where "IDEM \<phi>  \<equiv> \<forall>A. (\<phi> A) \<approx> \<phi>(\<phi> A)"
+  where "IDEM \<phi>  \<equiv> \<forall>A. \<phi>(\<phi> A) \<approx> (\<phi> A)"
 definition IDEM_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("IDEM\<^sup>a") 
-  where "IDEM\<^sup>a \<phi> \<equiv> \<forall>A. (\<phi> A) \<preceq> \<phi>(\<phi> A)"
+  where "IDEM\<^sup>a \<phi> \<equiv> \<forall>A. \<phi>(\<phi> A) \<preceq> (\<phi> A)"
 definition IDEM_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("IDEM\<^sup>b") 
-  where "IDEM\<^sup>b \<phi> \<equiv> \<forall>A. \<phi>(\<phi> A) \<preceq> (\<phi> A)"
+  where "IDEM\<^sup>b \<phi> \<equiv> \<forall>A.  (\<phi> A) \<preceq> \<phi>(\<phi> A)"
 
 declare IDEM_def[cond] IDEM_a_def[cond] IDEM_b_def[cond]
 
@@ -66,9 +66,9 @@ lemma IDEM_char: "IDEM \<phi> = (IDEM\<^sup>a \<phi> \<and> IDEM\<^sup>b \<phi>)
 lemma IDEM_dual: "IDEM \<phi> = IDEM \<phi>\<^sup>d" using IDEM_char IDEM_dual1 IDEM_dual2 by blast
 
 
-(**EXPN (CNTR) entail IDEM-a (IDEM-b).*)
-lemma EXPN_impl_IDEM_a: "EXPN \<phi> \<longrightarrow> IDEM\<^sup>a \<phi>" by (simp add: EXPN_def IDEM_a_def)
-lemma CNTR_impl_IDEM_b: "CNTR \<phi> \<longrightarrow> IDEM\<^sup>b \<phi>" by (simp add: CNTR_def IDEM_b_def)
+(**EXPN (CNTR) entail IDEM-b (IDEM-a).*)
+lemma EXPN_impl_IDEM_b: "EXPN \<phi> \<longrightarrow> IDEM\<^sup>b \<phi>" by (simp add: EXPN_def IDEM_b_def)
+lemma CNTR_impl_IDEM_a: "CNTR \<phi> \<longrightarrow> IDEM\<^sup>a \<phi>" by (simp add: CNTR_def IDEM_a_def)
 
 (**Moreover, IDEM has some other interesting characterizations. For instance, *)
 (**as having the property of collapsing the range and the set of fixed-points of an operator*)
@@ -120,12 +120,12 @@ lemma ADDI_MULT_dual2: "MULT \<phi> = ADDI \<phi>\<^sup>d" by (simp add: ADDI_MU
 (**MULT implies meet-closedness of the set of fixed-points (the converse requires additional assumptions)*)
 lemma MULT_meetclosed: "MULT \<phi> \<Longrightarrow> meet_closed (fp \<phi>)" by (simp add: MULT_def fixpoints_def meet_closed_def setequ_ext)
 lemma "meet_closed (fp \<phi>) \<Longrightarrow> MULT \<phi>" nitpick oops (*countermodel found: needs further assumptions*)
-lemma meetclosed_MULT: "MONO \<phi> \<Longrightarrow> CNTR \<phi> \<Longrightarrow> IDEM\<^sup>a \<phi> \<Longrightarrow> meet_closed (fp \<phi>) \<Longrightarrow> MULT \<phi>" by (smt (z3) CNTR_def IDEM_a_def MONO_MULTa MONO_def MULT_a_def MULT_def fixpoints_def meet_closed_def meet_def setequ_char setequ_ext subset_def)
+lemma meetclosed_MULT: "MONO \<phi> \<Longrightarrow> CNTR \<phi> \<Longrightarrow> IDEM\<^sup>b \<phi> \<Longrightarrow> meet_closed (fp \<phi>) \<Longrightarrow> MULT \<phi>" by (smt (z3) CNTR_def IDEM_b_def MONO_MULTa MONO_def MULT_a_def MULT_def fixpoints_def meet_closed_def meet_def setequ_char setequ_ext subset_def)
 
 (**ADDI implies join-closedness of the set of fixed-points (the converse requires additional assumptions)*)
 lemma ADDI_joinclosed: "ADDI \<phi> \<Longrightarrow> join_closed (fp \<phi>)" by (simp add: ADDI_def fixpoints_def join_closed_def setequ_ext)
 lemma "join_closed (fp \<phi>) \<Longrightarrow> ADDI \<phi>" nitpick oops (*countermodel found: needs further assumptions*)
-lemma joinclosed_ADDI: "MONO \<phi> \<Longrightarrow> EXPN \<phi> \<Longrightarrow> IDEM\<^sup>b \<phi> \<Longrightarrow> join_closed (fp \<phi>) \<Longrightarrow> ADDI \<phi>" by (smt (verit, ccfv_threshold) ADDI_MULT_dual1 BA_deMorgan2 EXPN_CNTR_dual1 IDEM_dual2 MONO_dual fp_dual join_closed_def meet_closed_def meetclosed_MULT sdfun_dcompl_def setequ_ext)
+lemma joinclosed_ADDI: "MONO \<phi> \<Longrightarrow> EXPN \<phi> \<Longrightarrow> IDEM\<^sup>a \<phi> \<Longrightarrow> join_closed (fp \<phi>) \<Longrightarrow> ADDI \<phi>" by (smt (verit, ccfv_threshold) ADDI_MULT_dual1 BA_deMorgan2 EXPN_CNTR_dual1 IDEM_dual1 MONO_dual fp_dual join_closed_def meet_closed_def meetclosed_MULT sdfun_dcompl_def setequ_ext)
 
 (**Assuming MONO, we have that EXPN (CNTR) implies meet-closed (join-closed) for the set of fixed-points.*)
 lemma EXPN_meetclosed: "MONO \<phi> \<Longrightarrow> EXPN \<phi> \<Longrightarrow> meet_closed (fp \<phi>)" by (smt (verit) EXPN_def MONO_MULTa MULT_a_def fixpoints_def meet_closed_def setequ_char setequ_ext)

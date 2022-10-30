@@ -1,37 +1,65 @@
 theory conditions_fp_infinitary
-  imports conditions_fp conditions_kuratowski_infinitary conditions_complement_infinitary
+  imports conditions_fp conditions_complement_infinitary
 begin                        
 
 (**We define and interrelate infinitary variants for some previously introduced
  axiomatic conditions on operators.*)
-definition iXYZ::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("iXYZ")
-  where "iXYZ \<phi>   \<equiv> \<forall>S. \<^bold>\<Or>S \<^bold>\<or> \<phi>(\<^bold>\<Or>S) \<approx> \<^bold>\<Or>S \<^bold>\<or> \<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk>"
-definition iXYZ_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("iXYZ\<^sup>a")
-  where "iXYZ\<^sup>a \<phi>  \<equiv> \<forall>S. \<^bold>\<Or>S \<^bold>\<or> \<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk> \<preceq> \<^bold>\<Or>S \<^bold>\<or> \<phi>(\<^bold>\<Or>S)"  
-definition iXYZ_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("iXYZ\<^sup>b")
-  where "iXYZ\<^sup>b \<phi>  \<equiv> \<forall>S. \<^bold>\<Or>S \<^bold>\<or> \<phi>(\<^bold>\<Or>S) \<preceq> \<^bold>\<Or>S \<^bold>\<or> \<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk>" 
 
-declare iXYZ_def[cond] iXYZ_a_def[cond] iXYZ_b_def[cond]
+definition iADDIr::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("iADDIr")
+  where "iADDIr \<phi>  \<equiv> \<forall>S. let U=\<^bold>\<Or>S in (\<phi>(\<^bold>\<Or>S) \<approx>\<^sup>U \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>)"
+definition iADDIr_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("iADDIr\<^sup>a")
+  where "iADDIr\<^sup>a \<phi> \<equiv> \<forall>S. let U=\<^bold>\<Or>S in (\<phi>(\<^bold>\<Or>S) \<preceq>\<^sup>U \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>)" 
+definition iADDIr_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("iADDIr\<^sup>b")
+  where "iADDIr\<^sup>b \<phi> \<equiv> \<forall>S. let U=\<^bold>\<Or>S in (\<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk> \<preceq>\<^sup>U \<phi>(\<^bold>\<Or>S))" 
 
-definition iXYZd::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("iXYZd")
-  where "iXYZd \<phi>  \<equiv> \<forall>S. \<^bold>\<And>S \<^bold>\<and> \<phi>(\<^bold>\<And>S) \<approx> \<^bold>\<And>S \<^bold>\<and> \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>"
-definition iXYZd_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("iXYZd\<^sup>a")
-  where "iXYZd\<^sup>a \<phi> \<equiv> \<forall>S. \<^bold>\<And>S \<^bold>\<and> \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk> \<preceq> \<^bold>\<And>S \<^bold>\<and> \<phi>(\<^bold>\<And>S)"
-definition iXYZd_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("iXYZd\<^sup>b")
-  where "iXYZd\<^sup>b \<phi> \<equiv> \<forall>S. \<^bold>\<And>S \<^bold>\<and> \<phi>(\<^bold>\<And>S) \<preceq> \<^bold>\<And>S \<^bold>\<and> \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>"
+definition inADDIr::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("inADDIr")
+  where "inADDIr \<phi>  \<equiv> \<forall>S. let U=\<^bold>\<Or>S in (\<phi>(\<^bold>\<Or>S) \<approx>\<^sup>U \<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk>)"
+definition inADDIr_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("inADDIr\<^sup>a")
+  where "inADDIr\<^sup>a \<phi> \<equiv> \<forall>S. let U=\<^bold>\<Or>S in (\<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk> \<preceq>\<^sup>U \<phi>(\<^bold>\<Or>S))"  
+definition inADDIr_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("inADDIr\<^sup>b")
+  where "inADDIr\<^sup>b \<phi> \<equiv> \<forall>S. let U=\<^bold>\<Or>S in (\<phi>(\<^bold>\<Or>S) \<preceq>\<^sup>U \<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk>)" 
 
-declare iXYZd_def[cond] iXYZd_a_def[cond] iXYZd_b_def[cond]
+declare iADDIr_def[cond] iADDIr_a_def[cond] iADDIr_b_def[cond]
+        inADDIr_def[cond] inADDIr_a_def[cond] inADDIr_b_def[cond]
 
-lemma iXYZ_duala: "iXYZ\<^sup>a \<phi> \<longrightarrow> iXYZd\<^sup>b \<phi>\<^sup>d" unfolding cond 
-  by (metis BA_cmpl_equ BA_cp BA_deMorgan2 L5 iDM_a iDM_b im_prop3 op_dual_def setequ_ext)
+definition iMULTr::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("iMULTr")
+  where "iMULTr \<phi>  \<equiv> \<forall>S. let U=\<^bold>\<And>S in (\<phi>(\<^bold>\<And>S) \<approx>\<^sub>U \<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk>)"
+definition iMULTr_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("iMULTr\<^sup>a")
+  where "iMULTr\<^sup>a \<phi> \<equiv> \<forall>S. let U=\<^bold>\<And>S in (\<phi>(\<^bold>\<And>S) \<preceq>\<^sub>U \<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk>)"
+definition iMULTr_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("iMULTr\<^sup>b")
+  where "iMULTr\<^sup>b \<phi> \<equiv> \<forall>S. let U=\<^bold>\<And>S in (\<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk> \<preceq>\<^sub>U \<phi>(\<^bold>\<And>S))"
 
-lemma iXYZ_dualb: "iXYZd\<^sup>b \<phi> \<longrightarrow> iXYZ\<^sup>a \<phi>\<^sup>d" unfolding cond 
-  by (metis BA_cp BA_deMorgan1 BA_dn iDM_a iDM_b im_prop3 op_dual_def setequ_ext)
+definition inMULTr::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("inMULTr")
+  where "inMULTr \<phi>  \<equiv> \<forall>S. let U=\<^bold>\<And>S in (\<phi>(\<^bold>\<And>S) \<approx>\<^sub>U \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>)"
+definition inMULTr_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("inMULTr\<^sup>a")
+  where "inMULTr\<^sup>a \<phi> \<equiv> \<forall>S. let U=\<^bold>\<And>S in (\<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk> \<preceq>\<^sub>U \<phi>(\<^bold>\<And>S))"
+definition inMULTr_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("inMULTr\<^sup>b")
+  where "inMULTr\<^sup>b \<phi> \<equiv> \<forall>S. let U=\<^bold>\<And>S in (\<phi>(\<^bold>\<And>S) \<preceq>\<^sub>U \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>)"
 
-lemma iconv1:  "iADDI\<^sup>a \<phi> \<longrightarrow> iXYZ\<^sup>a \<phi>\<^sup>f\<^sup>p" unfolding cond by (smt (z3) dimpl_def infimum_def join_def image_def op_fixpoint_def subset_def supremum_def)
-lemma iconv2: "EXPN \<phi> \<Longrightarrow> iXYZ\<^sup>a \<phi>\<^sup>f\<^sup>p \<longrightarrow> iADDI\<^sup>a \<phi>" unfolding cond image_def conn2 conn order by (smt (verit))
+declare iMULTr_def[cond] iMULTr_a_def[cond] iMULTr_b_def[cond]
+        inMULTr_def[cond] inMULTr_a_def[cond] inMULTr_b_def[cond]
 
-lemma iconv3:  "iADDI\<^sup>b \<phi> \<longrightarrow> iXYZ\<^sup>b \<phi>\<^sup>f\<^sup>p" by (smt (verit, del_insts) dimpl_def iADDI_b_def iXYZ_b_def infimum_def join_def image_def op_fixpoint_def subset_def supremum_def)
-lemma iconv4: "EXPN \<phi> \<Longrightarrow> iXYZ\<^sup>b \<phi>\<^sup>f\<^sup>p \<longrightarrow> iADDI\<^sup>b \<phi>" unfolding cond by (smt (z3) dimpl_def infimum_def join_def image_def ofp_invol op_fixpoint_def subset_def supremum_def)
+lemma iADDI_MULT_dual1: "iADDIr\<^sup>a \<phi> = iMULTr\<^sup>b \<phi>\<^sup>d" unfolding cond by (smt (z3) BA_cmpl_equ BA_cp BA_deMorgan2 dual_invol iDM_a iDM_b im_prop1 op_dual_def setequ_ext subset_in_char subset_out_char)
+lemma iADDI_MULT_dual2: "iADDIr\<^sup>b \<phi> = iMULTr\<^sup>a \<phi>\<^sup>d" unfolding cond by (smt (z3) BA_cmpl_equ BA_cp BA_deMorgan2 dual_invol iDM_a iDM_b im_prop1 op_dual_def setequ_ext subset_in_char subset_out_char)
+
+lemma "iADDI\<^sup>a \<phi> \<longrightarrow> inADDIr\<^sup>a \<phi>\<^sup>f\<^sup>p" oops
+lemma "EXPN \<phi> \<longrightarrow> (iADDI\<^sup>a \<phi> = inADDIr\<^sup>a \<phi>\<^sup>f\<^sup>p)" oops
+lemma "iADDI\<^sup>a \<phi> \<longrightarrow> iADDIr\<^sup>a \<phi>\<^sup>f\<^sup>p\<^sup>c" oops
+lemma "EXPN \<phi> \<longrightarrow> (iADDI\<^sup>a \<phi> = iADDIr\<^sup>a \<phi>\<^sup>f\<^sup>p\<^sup>c)" oops
+
+lemma "iADDI\<^sup>b \<phi> \<longrightarrow> inADDIr\<^sup>b \<phi>\<^sup>f\<^sup>p" oops
+lemma "EXPN \<phi> \<longrightarrow> (iADDI\<^sup>b \<phi> = inADDIr\<^sup>b \<phi>\<^sup>f\<^sup>p)" oops
+lemma "iADDI\<^sup>b \<phi> \<longrightarrow> iADDIr\<^sup>b \<phi>\<^sup>f\<^sup>p\<^sup>c" oops
+lemma "EXPN \<phi> \<longrightarrow> (iADDI\<^sup>b \<phi> = iADDIr\<^sup>b \<phi>\<^sup>f\<^sup>p\<^sup>c)" oops
+
+lemma "iMULT\<^sup>a \<phi> \<longrightarrow> iMULTr\<^sup>a \<phi>\<^sup>f\<^sup>p" oops 
+lemma "CNTR \<phi> \<longrightarrow> (iMULT\<^sup>a \<phi> = iMULTr\<^sup>a \<phi>\<^sup>f\<^sup>p)"  oops
+lemma "iMULT\<^sup>a \<phi> \<longrightarrow> inMULTr\<^sup>a \<phi>\<^sup>f\<^sup>p\<^sup>c" oops
+lemma "CNTR \<phi> \<longrightarrow> (iMULT\<^sup>a \<phi> = inMULTr\<^sup>a \<phi>\<^sup>f\<^sup>p\<^sup>c)" oops
+
+lemma "iMULT\<^sup>b \<phi> \<longrightarrow> iMULTr\<^sup>b \<phi>\<^sup>f\<^sup>p" oops 
+lemma "CNTR \<phi> \<longrightarrow> (iMULT\<^sup>b \<phi> = iMULTr\<^sup>b \<phi>\<^sup>f\<^sup>p)"  oops
+lemma "iMULT\<^sup>b \<phi> \<longrightarrow> inMULTr\<^sup>b \<phi>\<^sup>f\<^sup>p\<^sup>c" oops
+lemma "CNTR \<phi> \<longrightarrow> (iMULT\<^sup>b \<phi> = inMULTr\<^sup>b \<phi>\<^sup>f\<^sup>p\<^sup>c)" oops
 
 end

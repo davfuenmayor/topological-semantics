@@ -181,7 +181,7 @@ lemma atomic3: "\<forall>P. \<not>(P \<approx> \<^bold>\<bottom>) \<longrightarr
 (*and now with interactive proof*)
 lemma "\<forall>P. \<not>(P \<approx> \<^bold>\<bottom>) \<longrightarrow> (\<exists>Q. atom Q \<and> Q \<preceq> P)"
 proof -
-  { fix P
+  { fix P::"'w \<sigma>"
     { assume "\<not>(P \<approx> \<^bold>\<bottom>)"
       hence "\<exists>v. P v" unfolding conn order by simp
       then obtain w where 1:"P w" by (rule exE)

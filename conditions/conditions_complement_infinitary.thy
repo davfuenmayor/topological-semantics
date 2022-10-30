@@ -1,5 +1,5 @@
 theory conditions_complement_infinitary
-  imports conditions_complement "../boolean_algebra/boolean_algebra_infinitary"
+  imports conditions_complement conditions_kuratowski_infinitary
 begin
 
 (**We define and interrelate infinitary variants for some previously introduced
@@ -78,6 +78,14 @@ lemma inADDIa_inMULTb_dual2: "inMULT\<^sup>b \<phi> = inADDI\<^sup>a \<phi>\<^su
 (**Duality between inADDI and inMULT.*)
 lemma inADDI_inMULT_dual1: "inADDI \<phi> = inMULT \<phi>\<^sup>d" using inADDI_char inADDIa_inMULTb_dual1 inMULT_char inMULTa_inADDIb_dual2 by blast
 lemma inADDI_inMULT_dual2: "inMULT \<phi> = inADDI \<phi>\<^sup>d" by (simp add: dual_invol inADDI_inMULT_dual1)
+
+(**inADDI and inMULT are the 'complements' of iADDI and iMULT respectively*)
+lemma inADDIa_compl: "iADDI\<^sup>a \<phi> = inADDI\<^sup>a \<phi>\<^sup>c" by (metis BA_cmpl_equ BA_cp iADDI_a_def iDM_a im_prop2 inADDI_a_def setequ_ext svfun_compl_def)
+lemma inADDIb_compl: "iADDI\<^sup>b \<phi> = inADDI\<^sup>b \<phi>\<^sup>c" by (simp add: ANTI_MONO ANTI_inADDIb MONO_iADDIb)
+lemma inADDI_compl: "iADDI \<phi> = inADDI \<phi>\<^sup>c" by (simp add: iADDI_char inADDI_char inADDIa_compl inADDIb_compl)
+lemma inMULTa_compl: "iMULT\<^sup>a \<phi> = inMULT\<^sup>a \<phi>\<^sup>c" by (simp add: ANTI_MONO ANTI_inMULTa MONO_iMULTa)
+lemma inMULTb_compl: "iMULT\<^sup>b \<phi> = inMULT\<^sup>b \<phi>\<^sup>c" by (metis dual_compl_char1 dual_compl_char2 iADDIa_iMULTb_dual2 inADDIa_compl inADDIa_inMULTb_dual2)
+lemma inMULT_compl: "iMULT \<phi> = inMULT \<phi>\<^sup>c" by (simp add: iMULT_char inMULT_char inMULTa_compl inMULTb_compl)
 
 (**In fact, infinite anti-additivity (anti-multiplicativity) entails (dual) anti-normality:*)
 lemma inADDI_nNORM: "inADDI \<phi> \<longrightarrow> nNORM \<phi>" by (metis bottom_def inADDI_def inf_empty image_def nNORM_def setequ_ext sup_empty)
