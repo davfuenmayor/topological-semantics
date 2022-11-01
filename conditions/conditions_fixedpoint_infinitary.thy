@@ -1,5 +1,5 @@
-theory conditions_fp_infinitary
-  imports conditions_fp conditions_complement_infinitary
+theory conditions_fixedpoint_infinitary
+  imports conditions_fixedpoint conditions_complement_infinitary
 begin                        
 
 (**We define and interrelate infinitary variants for some previously introduced
@@ -42,6 +42,7 @@ declare iMULTr_def[cond] iMULTr_a_def[cond] iMULTr_b_def[cond]
 lemma iADDI_MULT_dual1: "iADDIr\<^sup>a \<phi> = iMULTr\<^sup>b \<phi>\<^sup>d" unfolding cond by (smt (z3) BA_cmpl_equ BA_cp BA_deMorgan2 dual_invol iDM_a iDM_b im_prop1 op_dual_def setequ_ext subset_in_char subset_out_char)
 lemma iADDI_MULT_dual2: "iADDIr\<^sup>b \<phi> = iMULTr\<^sup>a \<phi>\<^sup>d" unfolding cond by (smt (z3) BA_cmpl_equ BA_cp BA_deMorgan2 dual_invol iDM_a iDM_b im_prop1 op_dual_def setequ_ext subset_in_char subset_out_char)
 
+(*TODO: fix kernel reconstruction for the following:*)
 lemma "iADDI\<^sup>a \<phi> \<longrightarrow> inADDIr\<^sup>a \<phi>\<^sup>f\<^sup>p" oops
 lemma "EXPN \<phi> \<longrightarrow> (iADDI\<^sup>a \<phi> = inADDIr\<^sup>a \<phi>\<^sup>f\<^sup>p)" oops
 lemma "iADDI\<^sup>a \<phi> \<longrightarrow> iADDIr\<^sup>a \<phi>\<^sup>f\<^sup>p\<^sup>c" oops

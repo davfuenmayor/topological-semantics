@@ -146,35 +146,10 @@ lemma im_prop5: "\<lbrakk>\<phi>\<^sup>c D\<^sup>-\<rbrakk>  = \<lbrakk>\<phi>\<
 lemma im_prop6: "\<lbrakk>\<phi>\<^sup>- D\<^sup>-\<rbrakk>  = \<lbrakk>\<phi> D\<rbrakk>" unfolding image_def sdfun_dcompl_def by (metis BA_dn setequ_ext)
 
 
-(*
 (**Observe that all results obtained by assuming fixed-point predicates extend to their associated operators.*)
 lemma "\<phi>\<^sup>f\<^sup>p(A) \<^bold>\<and> \<Gamma>(A) \<preceq> \<Delta>(A) \<longrightarrow> (fp \<phi>)(A) \<longrightarrow> \<Gamma>(A) \<preceq> \<Delta>(A)"
   by (simp add: fp_rel meet_def setequ_ext subset_def top_def)
 lemma "\<phi>\<^sup>f\<^sup>p(A) \<^bold>\<and> \<phi>\<^sup>f\<^sup>p(B) \<^bold>\<and> (\<Gamma> A B) \<preceq> (\<Delta> A B) \<longrightarrow> (fp \<phi>)(A) \<and> (fp \<phi>)(B) \<longrightarrow> (\<Gamma> A B) \<preceq> (\<Delta> A B)"
   by (simp add: fp_rel meet_def setequ_ext subset_def top_def)
-
-
-lemma "A \<^bold>\<and> \<phi>\<^sup>- A \<approx> \<^bold>\<bottom>" nitpick oops
-lemma "fp (\<phi>\<^sup>d) A \<Longrightarrow> A \<^bold>\<and> \<phi>\<^sup>- A \<approx> \<^bold>\<bottom>" nitpick oops
-lemma "(fp \<phi>)\<^sup>- A \<Longrightarrow> A \<^bold>\<and> \<phi>\<^sup>- A \<approx> \<^bold>\<bottom>" nitpick oops
-lemma "(fp \<phi>) (\<^bold>\<midarrow>A) \<Longrightarrow> A \<^bold>\<and> \<phi>\<^sup>- A \<approx> \<^bold>\<bottom>" nitpick oops
-lemma "(\<phi>\<^sup>d)\<^sup>f\<^sup>p A \<^bold>\<and> A \<^bold>\<and> \<phi>\<^sup>- A \<approx> \<^bold>\<bottom>" nitpick oops
-
-lemma "fp (\<phi>\<^sup>d) A \<Longrightarrow> A \<^bold>\<or> \<phi>\<^sup>- A \<approx> \<^bold>\<top>" nitpick oops
-
-lemma "(\<phi>\<^sup>d)\<^sup>f\<^sup>p A \<preceq> A \<^bold>\<or> \<phi>\<^sup>- A" nitpick oops
-
-lemma "\<eta>\<^sup>f\<^sup>p A \<^bold>\<or> A \<^bold>\<or> \<eta> A \<approx> \<^bold>\<top>" sledgehammer
-lemma "\<eta>\<^sup>c\<^sup>f\<^sup>p A \<preceq> A \<^bold>\<or> \<eta> A" by (simp add: join_def ofp_fixpoint_compl_def sdiff_def subset_def)
-lemma "\<eta>\<^sup>c\<^sup>f\<^sup>p A \<^bold>\<and> A \<^bold>\<and> \<eta> A \<approx> \<^bold>\<bottom>" by (simp add: bottom_def meet_def ofp_fixpoint_compl_def sdiff_def setequ_def) oops
-lemma "\<eta>\<^sup>c\<^sup>f\<^sup>p A \<^bold>\<and> A \<approx> \<^bold>\<bottom>" nitpick oops
-lemma "\<eta>\<^sup>c\<^sup>f\<^sup>p A \<^bold>\<and> \<eta> A \<approx> \<^bold>\<bottom>" nitpick oops
-
-lemma "fp (\<phi>\<^sup>d) = (fp \<phi>)\<^sup>-" by (simp add: fp_dual)
-lemma "(\<phi>\<^sup>d)\<^sup>f\<^sup>p = (\<phi>\<^sup>f\<^sup>p)\<^sup>-" by (simp add: ofp_comm_dc1)
-lemma "(\<phi>\<^sup>d)\<^sup>f\<^sup>p = (\<phi>\<^sup>-)\<^sup>c\<^sup>f\<^sup>p" by (simp add: dual_compl_char1 sfun_compl_invol)
-
-lemma "(fp \<phi>) (\<^bold>\<midarrow>A) = fp (\<phi>\<^sup>d) A" using fp_d_rel fp_rel by blast
-*)
 
 end

@@ -73,9 +73,6 @@ definition mexists_var::"('i \<Rightarrow> 'w \<sigma>) \<Rightarrow> ('i \<Righ
 lemma "\<^bold>\<Pi>[D]\<phi> = \<^bold>\<Pi>{D\<up>}\<phi>" by (simp add: mforall_const_def mforall_var_def)
 lemma "\<^bold>\<Sigma>[D]\<phi> = \<^bold>\<Sigma>{D\<up>}\<phi>" by (simp add: mexists_const_def mexists_var_def)
 
-(*TODO: Explain how in this context uparrow works as a
-'type-lifting' function useful for converting sets into 'rigid' propositional functions*)
-
 (**Restricted quantifiers are dual to each other in the expected way*)
 lemma "\<^bold>\<Pi>[D]\<phi> = \<^bold>\<midarrow>(\<^bold>\<Sigma>[D]\<phi>\<^sup>c)" by (metis iDM_b im_prop2 mexists_const_char mforall_const_char setequ_ext)
 lemma "\<^bold>\<Pi>{\<psi>}\<phi> = \<^bold>\<midarrow>(\<^bold>\<Sigma>{\<psi>}\<phi>\<^sup>c)" by (simp add: compl_def mexists_var_def mforall_var_def svfun_compl_def)

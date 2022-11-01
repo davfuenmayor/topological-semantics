@@ -146,21 +146,4 @@ lemma meetclosed_nADDI: "ANTI \<phi> \<Longrightarrow> nEXPN \<phi> \<Longrighta
 lemma nEXPN_meetclosed: "ANTI \<phi> \<Longrightarrow> nEXPN \<phi> \<Longrightarrow> meet_closed (fp \<phi>)" by (metis (full_types) L10 compl_def fixpoints_def meet_closed_def nEXPN_def setequ_ext subset_def)
 lemma nCNTR_joinclosed: "ANTI \<phi> \<Longrightarrow> nCNTR \<phi> \<Longrightarrow> join_closed (fp \<phi>)" by (smt (verit, ccfv_threshold) BA_impl L9 fixpoints_def impl_char join_closed_def nCNTR_def setequ_char setequ_ext)
 
-(*TODO:*)
-lemma "nEXPN \<phi> \<Longrightarrow> IDEM \<phi> \<Longrightarrow> \<not>nonEmpty (fp \<phi>)" nitpick oops(*TODO: explain*)
-(*
-
-(**Further assuming IDEM the above results can be stated to the whole range of an operator.*)
-lemma "ANTI \<phi> \<Longrightarrow> nEXPN \<phi> \<Longrightarrow> IDEM \<phi> \<Longrightarrow> meet_closed (\<lbrakk>\<phi> _\<rbrakk>)"  unfolding cond oops
-lemma "nCNTR \<phi> \<Longrightarrow> IDEM \<phi> \<Longrightarrow> join_closed (\<lbrakk>\<phi> _\<rbrakk>)" by (smt (verit) BA_impl IDEM_range_fp L9 fixpoints_def impl_char join_closed_def nCNTR_def setequ_char setequ_ext)
-lemma "ANTI \<phi> \<Longrightarrow> IDEM \<phi> \<Longrightarrow> join_closed (\<lbrakk>\<phi> _\<rbrakk>)" oops 
-
-lemma "ANTI \<phi> \<Longrightarrow> nCNTR \<phi> \<Longrightarrow> IDEM \<phi> \<Longrightarrow> join_closed (\<lbrakk>\<phi> _\<rbrakk>)"  unfolding cond oops
-lemma "nEXPN \<phi> \<Longrightarrow> IDEM \<phi> \<Longrightarrow> meet_closed (\<lbrakk>\<phi> _\<rbrakk>)" oops 
-lemma "ANTI \<phi> \<Longrightarrow> IDEM \<phi> \<Longrightarrow> meet_closed (\<lbrakk>\<phi> _\<rbrakk>)" oops 
-
-(**And assuming nIDEM the results are dualized*)
-lemma "ANTI \<phi> \<Longrightarrow> nEXPN \<phi> \<Longrightarrow> nIDEM \<phi> \<Longrightarrow> join_closed (\<lbrakk>\<phi> _\<rbrakk>)" unfolding cond oops
-lemma "ANTI \<phi> \<Longrightarrow> nCNTR \<phi> \<Longrightarrow> nIDEM \<phi> \<Longrightarrow> meet_closed (\<lbrakk>\<phi> _\<rbrakk>)" unfolding cond oops
-*)
 end

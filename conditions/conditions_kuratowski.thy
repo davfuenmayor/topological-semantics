@@ -131,14 +131,6 @@ lemma joinclosed_ADDI: "MONO \<phi> \<Longrightarrow> EXPN \<phi> \<Longrightarr
 lemma EXPN_meetclosed: "MONO \<phi> \<Longrightarrow> EXPN \<phi> \<Longrightarrow> meet_closed (fp \<phi>)" by (smt (verit) EXPN_def MONO_MULTa MULT_a_def fixpoints_def meet_closed_def setequ_char setequ_ext)
 lemma CNTR_joinclosed: "MONO \<phi> \<Longrightarrow> CNTR \<phi> \<Longrightarrow> join_closed (fp \<phi>)" by (smt (verit, best) ADDI_b_def CNTR_def MONO_ADDIb fixpoints_def join_closed_def setequ_char setequ_ext)
 
-(*
-lemma EXPN_joinclosed1: "EXPN \<phi> \<Longrightarrow> join_closed (fp (\<phi>\<^sup>c))" by (smt (verit) BA_impl EXPN_def L1 dualcompl_invol fixpoints_def fp_dcompl impl_char join_closed_def sdfun_dcompl_def setequ_ext)
-lemma EXPN_joinclosed2: "EXPN \<phi> \<Longrightarrow> join_closed (fp (\<phi>\<^sup>-))" by (smt (verit, ccfv_SIG) BA_impl CNTR_def EXPN_CNTR_dual1 L1 dual_compl_char2 fixpoints_def impl_char join_closed_def sdfun_dcompl_def setequ_ext sfun_compl_invol svfun_compl_def)
-lemma CNTR_meetclosed1: "CNTR \<phi> \<Longrightarrow> join_closed (fp (\<phi>\<^sup>c))" by (metis EXPN_CNTR_dual2 EXPN_joinclosed2 dual_compl_char1 dual_invol)
-lemma CNTR_meetclosed1: "CNTR \<phi> \<Longrightarrow> meet_closed (fp (\<phi>\<^sup>c))" sledgehammer
-lemma CNTR_meetclosed2: "CNTR \<phi> \<Longrightarrow> join_closed (fp (\<phi>\<^sup>-))"
-*)
-
 (**Further assuming IDEM the above results can be stated to the whole range of an operator.*)
 lemma "MONO \<phi> \<Longrightarrow> EXPN \<phi> \<Longrightarrow> IDEM \<phi> \<Longrightarrow> meet_closed (\<lbrakk>\<phi> _\<rbrakk>)" by (simp add: EXPN_meetclosed IDEM_range_fp_char)
 lemma "MONO \<phi> \<Longrightarrow> CNTR \<phi> \<Longrightarrow> IDEM \<phi> \<Longrightarrow> join_closed (\<lbrakk>\<phi> _\<rbrakk>)" by (simp add: CNTR_joinclosed IDEM_range_fp_char) 

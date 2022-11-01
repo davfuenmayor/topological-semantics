@@ -1,5 +1,5 @@
 theory quantifiers_example
-  imports quantifiers "../conditions/conditions_fp_infinitary"
+  imports quantifiers "../conditions/conditions_kuratowski_infinitary"
 begin
 
 subsection \<open>Examples on using quantifiers (restricted and unrestricted)\<close>
@@ -16,7 +16,7 @@ lemma "(\<^bold>\<forall>A. (\<^bold>\<exists>B. A  \<^bold>\<leftrightarrow> \<
 lemma "\<^bold>\<exists>x. Drunk x \<^bold>\<rightarrow> (\<^bold>\<forall>y. Drunk y) \<approx> \<^bold>\<top>"
   by (simp add: impl_def mexists_def mforall_def setequ_def top_def)
 
-(**Example in non-classical logics*) (*TODO: finish and move to own context*)
+(**Example in non-classical logics*)
 typedecl w 
 type_synonym \<sigma> = "(w \<sigma>)"
 
@@ -38,24 +38,8 @@ abbreviation intneg ("\<^bold>\<not>\<^sup>I_") where "\<^bold>\<not>\<^sup>IA \
 abbreviation parneg ("\<^bold>\<not>\<^sup>C_") where "\<^bold>\<not>\<^sup>CA \<equiv> \<C>\<^sup>- A"
 abbreviation turnstile ("\<turnstile>_") where "\<turnstile> A \<equiv> \<forall>w. A w"
 
-lemma "(\<^bold>\<forall>\<^sup>IX. (\<^bold>\<exists>B. (X  \<^bold>\<leftrightarrow> \<^bold>\<midarrow>B))) \<approx> \<^bold>\<top>" oops
-  (* by (metis L2 compl_def fixpoints_def fp_rel mexists_char mforallInt_def mforall_const_def op_fixpoint_def range_def setequ_char setequ_ext subset_def supremum_def top_def) *)
-
-lemma "(\<^bold>\<forall>\<^sup>IX. (\<^bold>\<exists>\<^sup>IB. (X  \<^bold>\<leftrightarrow> \<^bold>\<midarrow>B))) \<approx> \<^bold>\<top>" nitpick oops
-(* lemma "INTERIOR I \<Longrightarrow> (\<^bold>\<forall>\<^sup>IX. (\<^bold>\<exists>\<^sup>IB. (X  \<^bold>\<leftrightarrow> \<^bold>\<midarrow>B))) \<^bold>\<approx> \<^bold>\<top>" nitpick oops *)
+lemma "(\<^bold>\<forall>X. (\<^bold>\<exists>B. (X  \<^bold>\<leftrightarrow> \<^bold>\<midarrow>B))) \<approx> \<^bold>\<top>" by (smt (verit, del_insts) compl_def dimpl_def mexists_def mforall_def setequ_def top_def)
 lemma "(\<^bold>\<forall>\<^sup>IX. (\<^bold>\<exists>\<^sup>IB. (X  \<^bold>\<leftrightarrow> \<^bold>\<not>\<^sup>IB))) \<approx> \<^bold>\<top>" nitpick oops
-lemma "CLOSURE \<C> \<Longrightarrow> (\<^bold>\<forall>\<^sup>IX. (\<^bold>\<exists>\<^sup>IB. (X  \<^bold>\<leftrightarrow> \<^bold>\<not>\<^sup>IB))) \<approx> \<^bold>\<top>"
-  oops  (* unfolding cond   sledgehammer *)
-
-subsection \<open>Barcan formula\<close>
-
-lemma "\<turnstile> (\<^bold>\<forall>x. \<I>(P x)) \<^bold>\<rightarrow> \<I>(\<^bold>\<forall>x. P x)" nitpick oops
-lemma "\<turnstile> \<I>(\<^bold>\<forall>x. P x) \<^bold>\<rightarrow> (\<^bold>\<forall>x. \<I>(P x))" nitpick oops
-lemma "CLOSURE \<C> \<Longrightarrow> \<turnstile> (\<^bold>\<forall>x. \<I>(P x)) \<^bold>\<rightarrow> \<I>(\<^bold>\<forall>x. P x)" oops
-lemma "CLOSURE \<C> \<Longrightarrow> \<turnstile> \<I>(\<^bold>\<forall>x. P x) \<^bold>\<rightarrow> (\<^bold>\<forall>x. \<I>(P x))"  oops
-
-lemma "CLOSURE \<C> \<Longrightarrow> \<turnstile> (\<^bold>\<forall>x. \<I>(P x)) \<^bold>\<rightarrow> \<I>(\<^bold>\<forall>x. P x)" oops
-
 
 
 subsection \<open>Exploring the Barcan formula and its converse\<close>
@@ -85,10 +69,6 @@ lemma Barcan2: "iADDI\<^sup>a \<phi> \<Longrightarrow> \<forall>\<pi>. \<phi>(\<
   } thus ?thesis by simp
 qed
 *)
-
-(* lemma iDM: "inADDI\<^sup>b \<eta> \<Longrightarrow> \<forall>\<pi>. \<eta>(\<^bold>\<exists>x. \<pi> x) \<preceq> (\<^bold>\<forall>x. \<eta>(\<pi> x))" by (smt (verit, best) ANTI_def ANTI_inADDIb mexists_def mforall_def subset_def) *)
-lemma "ANTI \<eta> \<Longrightarrow> \<eta>(\<^bold>\<exists>x. \<pi> x) \<preceq> (\<^bold>\<forall>x. \<eta>(\<pi> x))" by (smt (verit, ccfv_SIG) ANTI_def mexists_def mforall_def subset_def)
-lemma "inADDI\<^sup>a \<eta> \<Longrightarrow>(\<^bold>\<forall>x. \<eta>(\<pi> x)) \<preceq> \<eta>(\<^bold>\<exists>x. \<pi> x)" by (smt (verit, best) inADDI_a_def infimum_def mexists_char mforall_char image_def range_char1 subset_def)
 
 (*CBF*)
 lemma "MONO \<phi> \<Longrightarrow> \<forall>\<pi>.  \<phi>(\<^bold>\<Pi> \<pi>) \<preceq> \<^bold>\<Pi>(\<phi> \<circ> \<pi>)" by (metis MONO_iMULTa iMULT_a_def mforall_char mforall_comp mforall_const_char)

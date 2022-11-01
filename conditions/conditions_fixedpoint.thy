@@ -1,4 +1,4 @@
-theory conditions_fp
+theory conditions_fixedpoint
   imports conditions_complement
 begin
 
