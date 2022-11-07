@@ -113,37 +113,35 @@ lemma DNRM_fp: "DNRM \<phi> = DNRM \<phi>\<^sup>f\<^sup>p" by (simp add: DNRM_de
 lemma NORM_fpc: "NORM \<phi> = NORM \<phi>\<^sup>f\<^sup>p\<^sup>c" by (simp add: NORM_def bottom_def ofp_fixpoint_compl_def sdiff_def)
 lemma DNRM_fpc: "DNRM \<phi> = nDNRM \<phi>\<^sup>f\<^sup>p\<^sup>c" using DNRM_fp nDNRM_DNRM_compl by blast
 
-(**p-Idempotence (pIDEM).*)
-definition pIDEM::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("pIDEM") 
-  where "pIDEM \<phi>  \<equiv> \<forall>A. \<phi>(\<phi>\<^sup>d A) \<approx> (\<phi> A)"
-definition pIDEM_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("pIDEM\<^sup>a") 
-  where "pIDEM\<^sup>a \<phi> \<equiv>   \<forall>A. (\<phi> A) \<preceq> \<phi>(\<phi>\<^sup>d A)"
-definition pIDEM_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("pIDEM\<^sup>b") 
-  where "pIDEM\<^sup>b \<phi> \<equiv> \<forall>A. \<phi>(\<phi>\<^sup>d A) \<preceq> (\<phi> A)"
 
-(**q-Idempotence (qIDEM).*)
-definition qIDEM::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("qIDEM") 
-  where "qIDEM \<phi> \<equiv>  \<forall>A. \<phi>(\<phi> A) \<approx> (\<phi>\<^sup>- A)"
-definition qIDEM_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("qIDEM\<^sup>a") 
-  where "qIDEM\<^sup>a \<phi> \<equiv> \<forall>A. \<phi>(\<phi> A) \<preceq> (\<phi>\<^sup>- A)"
-definition qIDEM_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("qIDEM\<^sup>b") 
-  where "qIDEM\<^sup>b \<phi> \<equiv>   \<forall>A. (\<phi>\<^sup>- A) \<preceq> \<phi>(\<phi> A)"
+definition IDEMr_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("IDEMr\<^sup>a")
+  where "IDEMr\<^sup>a \<phi> \<equiv> \<forall>A. \<phi>(A \<^bold>\<or> \<phi> A) \<preceq>\<^sup>A (\<phi> A)"
+definition IDEMr_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("IDEMr\<^sup>b") 
+  where "IDEMr\<^sup>b \<phi> \<equiv> \<forall>A. (\<phi> A) \<preceq>\<^sub>A \<phi>(A \<^bold>\<and> \<phi> A)"
 
-declare pIDEM_def[cond] pIDEM_a_def[cond] pIDEM_b_def[cond]
-        qIDEM_def[cond] qIDEM_a_def[cond] qIDEM_b_def[cond]
+definition nIDEMr_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nIDEMr\<^sup>a") 
+  where "nIDEMr_a \<phi> \<equiv> \<forall>A. (\<phi> A) \<preceq>\<^sup>A \<phi>(A \<^bold>\<or> \<^bold>\<midarrow>(\<phi> A))"
+definition nIDEMr_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nIDEMr\<^sup>b") 
+  where "nIDEMr_b \<phi> \<equiv> \<forall>A. \<phi>(A \<^bold>\<and> \<^bold>\<midarrow>(\<phi> A)) \<preceq>\<^sub>A A \<^bold>\<and> (\<phi> A)"
 
-lemma pIDEM_dual: "pIDEM\<^sup>a \<phi> = pIDEM\<^sup>b \<phi>\<^sup>d" unfolding cond by (metis BA_cp BA_dn op_dual_def setequ_ext)
-lemma qIDEM_dual: "qIDEM\<^sup>a \<phi> = qIDEM\<^sup>b \<phi>\<^sup>d" unfolding cond by (smt (verit, ccfv_SIG) BA_cp dualcompl_invol op_dual_def sdfun_dcompl_def)
-lemma pqIDEM_compl1: "qIDEM\<^sup>a \<phi> = pIDEM\<^sup>a \<phi>\<^sup>c" by (metis (no_types, lifting) dual_compl_char2 dual_invol op_dual_def pIDEM_b_def pIDEM_dual qIDEM_a_def sdfun_dcompl_def)
-lemma pqIDEM_compl2: "qIDEM\<^sup>b \<phi> = pIDEM\<^sup>b \<phi>\<^sup>c" by (metis dual_compl_char2 dual_invol dualcompl_invol pIDEM_dual pqIDEM_compl1 qIDEM_dual sfun_compl_invol)
 
-(*Assuming ADDI & EXPN, pIDEM\<^sup>a is the 'fixedpoint condition' for IDEM\<^sup>a*)
-lemma "(ADDI \<phi> \<and> EXPN \<phi>) \<longrightarrow> IDEM\<^sup>a \<phi> = pIDEM\<^sup>a \<phi>\<^sup>f\<^sup>p" oops
-(*Assuming ADDI & EXPN, qIDEM\<^sup>a is the 'fixedpoint-complement condition' for IDEM\<^sup>a*)
-lemma "(ADDI \<phi> \<and> EXPN \<phi>) \<longrightarrow> IDEM\<^sup>a \<phi> = qIDEM\<^sup>a \<phi>\<^sup>f\<^sup>p\<^sup>c" oops
-(*Assuming MULT & CNTR, qIDEM\<^sup>b is the 'fixedpoint condition' for IDEM\<^sup>b*)
-lemma "(MULT \<phi> \<and> CNTR \<phi>) \<longrightarrow> IDEM\<^sup>b \<phi> = qIDEM\<^sup>b \<phi>\<^sup>f\<^sup>p" oops
-(*Assuming MULT & CNTR, pIDEM\<^sup>b is the 'fixedpoint-complement condition' for IDEM\<^sup>b*)
-lemma "(MULT \<phi> \<and> CNTR \<phi>) \<longrightarrow> IDEM\<^sup>b \<phi> = pIDEM\<^sup>b \<phi>\<^sup>f\<^sup>p\<^sup>c" oops
+declare IDEMr_a_def[cond] IDEMr_b_def[cond]
+        nIDEMr_a_def[cond] nIDEMr_b_def[cond]
+
+lemma nIDEMr_dual: "nIDEMr\<^sup>a \<phi> = nIDEMr\<^sup>b \<phi>\<^sup>d" unfolding cond subset_in_char subset_out_char by (smt (z3) BA_cmpl_equ BA_cp BA_deMorgan2 L5 L6 op_dual_def setequ_ext)
+lemma nIDEMr_a_compl: "IDEMr\<^sup>a \<phi> = nIDEMr\<^sup>a \<phi>\<^sup>c" unfolding cond subset_out_char svfun_compl_def conn setequ_ext subset_def by auto
+lemma nIDEMr_b_compl: "IDEMr\<^sup>b \<phi> = nIDEMr\<^sup>b \<phi>\<^sup>c" unfolding cond subset_in_char svfun_compl_def conn setequ_ext subset_def by auto
+
+lemma aux1: "EXPN \<phi> \<Longrightarrow> IDEM\<^sup>a \<phi> \<longrightarrow> nIDEMr\<^sup>a \<phi>\<^sup>f\<^sup>p" unfolding cond op_fixpoint_def subset_out_char conn by (smt (verit, best) setequ_char setequ_ext subset_def)
+lemma aux2: "EXPN \<phi> \<Longrightarrow> nIDEMr\<^sup>a \<phi> \<longrightarrow> IDEM\<^sup>a \<phi>\<^sup>f\<^sup>p" sorry (*TODO: kernel reconstruction fails*) (* unfolding cond subset_out_char op_fixpoint_def conn *) (* apply auto sledgehammer(setequ_def setequ_ext subset_def) *)
+
+(*Assuming EXPN, nIDEMr\<^sup>a is the 'fixedpoint condition' for IDEM\<^sup>a *)
+lemma IDEM_a_fp: "EXPN \<phi> \<longrightarrow> IDEM\<^sup>a \<phi> = nIDEMr\<^sup>a \<phi>\<^sup>f\<^sup>p" by (metis EXPN_fp aux1 aux2 ofp_invol)
+(*Assuming EXPN, IDEMr\<^sup>a is the 'fixedpoint-complement condition' for IDEM\<^sup>a*)
+lemma IDEM_a_fpc: "EXPN \<phi> \<longrightarrow> IDEM\<^sup>a \<phi> = IDEMr\<^sup>a \<phi>\<^sup>f\<^sup>p\<^sup>c" by (simp add: IDEM_a_fp nIDEMr_a_compl sfun_compl_invol)
+(*Assuming CNTR, IDEMr\<^sup>b is the 'fixedpoint condition' for IDEM\<^sup>b*)
+lemma IDEM_b_fp:  "CNTR \<phi> \<longrightarrow> IDEM\<^sup>b \<phi> = IDEMr\<^sup>b \<phi>\<^sup>f\<^sup>p" by (simp add: EXPN_CNTR_dual2 IDEM_a_fp IDEM_dual2 dual_compl_char2 dual_invol nIDEMr_b_compl nIDEMr_dual ofp_comm_dc1)
+(*Assuming CNTR, nIDEMr\<^sup>b is the 'fixedpoint-complement condition' for IDEM\<^sup>b*)
+lemma IDEM_b_fpc: "CNTR \<phi> \<longrightarrow> IDEM\<^sup>b \<phi> = nIDEMr\<^sup>b \<phi>\<^sup>f\<^sup>p\<^sup>c" by (simp add: IDEM_b_fp nIDEMr_b_compl)
 
 end
