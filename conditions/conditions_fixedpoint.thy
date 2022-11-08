@@ -34,6 +34,17 @@ definition ADDIr_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool"
  
 declare ADDIr_def[cond] ADDIr_a_def[cond] ADDIr_b_def[cond]
 
+lemma ADDIr_char: "ADDIr \<phi> = (ADDIr\<^sup>a \<phi> \<and> ADDIr\<^sup>b \<phi>)" unfolding cond by (meson setequ_char setequ_out_char subset_out_char)
+
+lemma ADDIr_a_rel: "ADDI\<^sup>a \<phi> \<longrightarrow> ADDIr\<^sup>a \<phi>" by (simp add: ADDI_a_def ADDIr_a_def subset_def subset_out_def)
+lemma "ADDIr\<^sup>a \<phi> \<longrightarrow> ADDI\<^sup>a \<phi>" nitpick oops
+lemma ADDIr_a_rel': "EXPN \<phi> \<Longrightarrow> ADDIr\<^sup>a \<phi> = ADDI\<^sup>a \<phi>" unfolding cond by (smt (verit, del_insts) join_def subset_def subset_out_def)
+
+lemma ADDIr_b_rel: "ADDI\<^sup>b \<phi> \<longrightarrow> ADDIr\<^sup>b \<phi>" by (simp add: ADDI_b_def ADDIr_b_def subset_def subset_out_def)
+lemma "ADDIr\<^sup>b \<phi> \<longrightarrow> ADDI\<^sup>b \<phi>" nitpick oops
+lemma ADDIr_b_rel': "EXPN \<phi> \<Longrightarrow> ADDIr\<^sup>b \<phi> = ADDI\<^sup>b \<phi>" unfolding cond by (smt (z3) subset_def subset_out_def)
+
+
 definition MULTr::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("MULTr")
   where "MULTr \<phi>  \<equiv> \<forall>A B. let U = (A \<^bold>\<and> B) in ( \<phi>(A \<^bold>\<and> B) \<approx>\<^sub>U (\<phi> A) \<^bold>\<and> (\<phi> B))"
 definition MULTr_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("MULTr\<^sup>a")
@@ -43,8 +54,15 @@ definition MULTr_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool"
 
 declare MULTr_def[cond] MULTr_a_def[cond] MULTr_b_def[cond]
 
-lemma ADDIr_char: "ADDIr \<phi> = (ADDIr\<^sup>a \<phi> \<and> ADDIr\<^sup>b \<phi>)" unfolding cond by (meson setequ_char setequ_out_char subset_out_char)
 lemma MULTr_char: "MULTr \<phi> = (MULTr\<^sup>a \<phi> \<and> MULTr\<^sup>b \<phi>)" unfolding cond by (meson setequ_char setequ_in_char subset_in_char)
+
+lemma MULTr_a_rel: "MULT\<^sup>a \<phi> \<longrightarrow> MULTr\<^sup>a \<phi>" by (simp add: MULT_a_def MULTr_a_def subset_def subset_in_def)
+lemma "MULTr\<^sup>a \<phi> \<longrightarrow> MULT\<^sup>a \<phi>" nitpick oops
+lemma MULTr_a_rel': "CNTR \<phi> \<Longrightarrow> MULTr\<^sup>a \<phi> = MULT\<^sup>a \<phi>" unfolding cond by (smt (verit, del_insts) subset_def subset_in_def)
+
+lemma MULTr_b_rel: "MULT\<^sup>b \<phi> \<longrightarrow> MULTr\<^sup>b \<phi>" by (simp add: MULT_b_def MULTr_b_def subset_def subset_in_def)
+lemma "MULTr\<^sup>b \<phi> \<longrightarrow> MULT\<^sup>b \<phi>" nitpick oops
+lemma MULTr_b_rel': "CNTR \<phi> \<Longrightarrow> MULTr\<^sup>b \<phi> = MULT\<^sup>b \<phi>" unfolding cond by (smt (verit, del_insts) meet_def subset_def subset_in_def)
 
 
 definition nADDIr::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nADDIr")
@@ -56,6 +74,18 @@ definition nADDIr_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool
  
 declare nADDIr_def[cond] nADDIr_a_def[cond] nADDIr_b_def[cond]
 
+lemma nADDIr_char: "nADDIr \<phi> = (nADDIr\<^sup>a \<phi> \<and> nADDIr\<^sup>b \<phi>)" unfolding cond by (meson setequ_char setequ_out_char subset_out_char)
+
+lemma nADDIr_a_rel: "nADDI\<^sup>a \<phi> \<longrightarrow> nADDIr\<^sup>a \<phi>" by (simp add: nADDI_a_def nADDIr_a_def subset_def subset_out_def)
+lemma "nADDIr\<^sup>a \<phi> \<longrightarrow> nADDI\<^sup>a \<phi>" nitpick oops
+lemma nADDIr_a_rel': "nEXPN \<phi> \<Longrightarrow> nADDIr\<^sup>a \<phi> = nADDI\<^sup>a \<phi>" unfolding cond by (smt (z3) compl_def join_def meet_def subset_def subset_out_def)
+lemma "EXPN \<phi> \<Longrightarrow> nADDIr\<^sup>a \<phi> = nADDI\<^sup>a \<phi>" unfolding cond by (smt (z3) compl_def join_def meet_def subset_def subset_out_def)
+
+lemma nADDIr_b_rel: "nADDI\<^sup>b \<phi> \<longrightarrow> nADDIr\<^sup>b \<phi>" by (simp add: nADDI_b_def nADDIr_b_def subset_def subset_out_def)
+lemma "nADDIr\<^sup>b \<phi> \<longrightarrow> nADDI\<^sup>b \<phi>" nitpick oops
+lemma nADDIr_b_rel': "nEXPN \<phi> \<Longrightarrow> nADDIr\<^sup>b \<phi> = nADDI\<^sup>b \<phi>" unfolding cond by (smt (verit, del_insts) compl_def subset_def subset_out_def)
+
+
 definition nMULTr::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nMULTr")
   where "nMULTr \<phi>  \<equiv> \<forall>A B. let U = (A \<^bold>\<and> B) in ( \<phi>(A \<^bold>\<and> B) \<approx>\<^sub>U (\<phi> A) \<^bold>\<or> (\<phi> B))"
 definition nMULTr_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nMULTr\<^sup>a")
@@ -65,8 +95,17 @@ definition nMULTr_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool
 
 declare nMULTr_def[cond] nMULTr_a_def[cond] nMULTr_b_def[cond]
 
-lemma nADDIr_char: "nADDIr \<phi> = (nADDIr\<^sup>a \<phi> \<and> nADDIr\<^sup>b \<phi>)" unfolding cond by (meson setequ_char setequ_out_char subset_out_char)
 lemma nMULTr_char: "nMULTr \<phi> = (nMULTr\<^sup>a \<phi> \<and> nMULTr\<^sup>b \<phi>)" unfolding cond by (meson setequ_char setequ_in_char subset_in_char)
+
+lemma nMULTr_a_rel: "nMULT\<^sup>a \<phi> \<longrightarrow> nMULTr\<^sup>a \<phi>" by (simp add: nMULT_a_def nMULTr_a_def subset_def subset_in_def)
+lemma "nMULTr\<^sup>a \<phi> \<longrightarrow> nMULT\<^sup>a \<phi>" nitpick oops
+lemma nMULTr_a_rel': "nCNTR \<phi> \<Longrightarrow> nMULTr\<^sup>a \<phi> = nMULT\<^sup>a \<phi>" unfolding cond by (smt (z3) compl_def subset_def subset_in_def)
+
+lemma nMULTr_b_rel: "nMULT\<^sup>b \<phi> \<longrightarrow> nMULTr\<^sup>b \<phi>" by (simp add: nMULT_b_def nMULTr_b_def subset_def subset_in_def)
+lemma "nMULTr\<^sup>b \<phi> \<longrightarrow> nMULT\<^sup>b \<phi>" nitpick oops
+lemma nMULTr_b_rel': "nCNTR \<phi> \<Longrightarrow> nMULTr\<^sup>b \<phi> = nMULT\<^sup>b \<phi>" unfolding cond by (smt (z3) compl_def join_def meet_def subset_def subset_in_def)
+lemma "CNTR \<phi> \<Longrightarrow> nMULTr\<^sup>b \<phi> = nMULT\<^sup>b \<phi>" unfolding cond by (smt (verit, del_insts) subset_def subset_in_def)
+
 
 lemma fp_nADDI_nMULT_dual1: "nADDIr\<^sup>a \<phi> = nMULTr\<^sup>b \<phi>\<^sup>d" unfolding cond subset_in_char subset_out_char by (smt (verit, del_insts) BA_cp BA_deMorgan1 BA_dn op_dual_def setequ_ext)
 lemma fp_nADDI_nMULT_dual2: "nADDIr\<^sup>b \<phi> = nMULTr\<^sup>a \<phi>\<^sup>d" by (smt (z3) BA_deMorgan1 BA_dn compl_def nADDIr_b_def nMULTr_a_def op_dual_def setequ_ext subset_in_def subset_out_def)
