@@ -5,11 +5,12 @@ begin
 subsection \<open>Encoding quantifiers (restricted and unrestricted)\<close>
 
 (*Introduce pedagogically convenient notation*)
-notation HOL.All ("\<Pi>_") notation HOL.Ex ("\<Sigma>_")
+notation HOL.All ("\<Pi>") notation HOL.Ex ("\<Sigma>")
 
 (**Let us recall that in HOL we have: *)
-lemma "(\<forall>x. \<phi>) = \<Pi>(\<lambda>x. \<phi>)" by simp
-lemma "(\<exists>x. \<phi>) = \<Sigma>(\<lambda>x. \<phi>)" by simp
+lemma "(\<forall>x. P) = \<Pi>(\<lambda>x. P)" by simp
+lemma "(\<exists>x. P) = \<Sigma>(\<lambda>x. P)" by simp
+lemma "\<Sigma> = (\<lambda>P. \<not>\<Pi>(\<lambda>x. \<not>P x))" by simp
 
 (**We can introduce their respective 'w-type-lifted variants as follows: *)
 definition mforall::"('i\<Rightarrow>'w \<sigma>)\<Rightarrow>'w \<sigma>" ("\<^bold>\<Pi>_")
