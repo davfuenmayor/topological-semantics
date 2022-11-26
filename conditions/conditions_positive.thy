@@ -1,4 +1,4 @@
-theory conditions_kuratowski
+theory conditions_positive
   imports "../boolean_algebra/boolean_algebra_functional"
 begin
 

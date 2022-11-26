@@ -1,5 +1,5 @@
-theory conditions_complement_infinitary
-  imports conditions_complement conditions_kuratowski_infinitary
+theory conditions_negative_infinitary
+  imports conditions_negative conditions_positive_infinitary
 begin
 
 (**We define and interrelate infinitary variants for some previously introduced

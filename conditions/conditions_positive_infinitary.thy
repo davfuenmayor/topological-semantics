@@ -1,5 +1,5 @@
-theory conditions_kuratowski_infinitary
-  imports conditions_kuratowski "../boolean_algebra/boolean_algebra_infinitary"
+theory conditions_positive_infinitary
+  imports conditions_positive "../boolean_algebra/boolean_algebra_infinitary"
 begin
 
 (**We define and interrelate infinitary variants for some previously introduced
