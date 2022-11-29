@@ -85,6 +85,9 @@ definition setequ::"'w \<sigma> \<Rightarrow> 'w \<sigma> \<Rightarrow> bool" (i
 named_theorems order (*to group together order-related definitions*)
 declare setequ_def[order] subset_def[order]
 
+lemma subset_char1: "(A \<preceq> B) = (\<forall>C. B \<preceq> C \<longrightarrow> A \<preceq> C)" by (metis subset_def)
+lemma subset_char2: "(A \<preceq> B) = (\<forall>C. C \<preceq> A \<longrightarrow> C \<preceq> B)" by (metis subset_def)
+
 (**These (trivial) lemmas are intended to help automated tools with equational reasoning.*)
 lemma setequ_char: "(A \<approx> B) = (A \<preceq> B \<and> B \<preceq> A)" unfolding order by blast
 lemma setequ_ext: "(A \<approx> B) = (A = B)" unfolding order by blast
@@ -136,12 +139,14 @@ lemma L5: "(A \<^bold>\<and> B) \<^bold>\<or> B \<approx> B" unfolding setequ_ch
 lemma L6: "A \<^bold>\<and> (A \<^bold>\<or> B) \<approx> A" unfolding setequ_char conn order by simp
 lemma L7: "A \<preceq> C \<and> B \<preceq> C \<longrightarrow> A \<^bold>\<or> B \<preceq> C" unfolding conn order by simp 
 lemma L8: "C \<preceq> A \<and> C \<preceq> B \<longrightarrow> C \<preceq> A \<^bold>\<and> B" unfolding conn order by simp
-lemma L9: "A \<preceq> B \<longleftrightarrow> (A \<^bold>\<or> B) \<approx> B" unfolding setequ_char conn order by simp
+lemma L9:  "A \<preceq> B \<longleftrightarrow> (A \<^bold>\<or> B) \<approx> B" unfolding setequ_char conn order by simp
 lemma L10: "B \<preceq> A \<longleftrightarrow> (A \<^bold>\<and> B) \<approx> B" unfolding setequ_char conn order by simp
 lemma L11: "A \<preceq> B \<and> C \<preceq> D \<longrightarrow> A \<^bold>\<or> C \<preceq> B \<^bold>\<or> D" unfolding conn order by simp
 lemma L12: "A \<preceq> B \<and> C \<preceq> D \<longrightarrow> A \<^bold>\<and> C \<preceq> B \<^bold>\<and> D" unfolding conn order by simp
 lemma L13: "A \<^bold>\<and> \<^bold>\<top> \<approx> A" unfolding conn order by simp
 lemma L14: "A \<^bold>\<or> \<^bold>\<bottom> \<approx> A" unfolding conn order by simp
+lemma L15: "A \<preceq> B \<longleftrightarrow> (\<forall>C. C \<^bold>\<and> A \<preceq> C \<^bold>\<and> B)" by (metis L3 L4 L5 L8 setequ_char subset_char1)
+lemma L16: "A \<preceq> B \<longleftrightarrow> (\<forall>C. C \<^bold>\<or> A \<preceq> C \<^bold>\<or> B)" by (metis L11 L4 L5 setequ_char setequ_ext)
 
 (**These properties below hold in particular also for Boolean algebras.*)
 lemma BA_impl: "A \<preceq> B \<longleftrightarrow> A \<^bold>\<rightarrow> B \<approx> \<^bold>\<top>" unfolding conn order by simp
@@ -163,7 +168,7 @@ definition join_closed::"('w \<sigma>)\<sigma> \<Rightarrow> bool"
 definition upwards_closed::"('w \<sigma>)\<sigma> \<Rightarrow> bool"
   where "upwards_closed S \<equiv> \<forall>X Y. S X \<and> X \<preceq> Y \<longrightarrow> S Y"
 definition downwards_closed::"('w \<sigma>)\<sigma> \<Rightarrow> bool" 
-where "downwards_closed S \<equiv> \<forall>X Y. S X \<and> Y \<preceq> X \<longrightarrow> S Y"
+  where "downwards_closed S \<equiv> \<forall>X Y. S X \<and> Y \<preceq> X \<longrightarrow> S Y"
 
 
 subsection \<open>Atomicity and primitive equality\<close>

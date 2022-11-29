@@ -1,5 +1,5 @@
-theory conditions_fixedpoint_infinitary
-  imports conditions_fixedpoint conditions_complement_infinitary
+theory conditions_relativized_infinitary
+  imports conditions_relativized conditions_negative_infinitary
 begin                        
 
 (**We define and interrelate infinitary variants for some previously introduced
