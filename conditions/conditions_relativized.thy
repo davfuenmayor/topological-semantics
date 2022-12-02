@@ -97,6 +97,11 @@ lemma MONOw2_MULTr_a: "MONOw\<^sup>2 \<phi> = MULTr\<^sup>a \<phi>" proof -
   show ?thesis using l2r r2l by blast
 qed
 
+lemma "MONO \<phi> \<longrightarrow> MONOw\<^sup>1 \<phi>" by (simp add: ADDIr_b_impl MONO_ADDIb MONOw1_ADDIr_b)
+lemma "MONOw\<^sup>1 \<phi> \<longrightarrow> MONO \<phi>" nitpick oops
+lemma "MONO \<phi> \<longrightarrow> MONOw\<^sup>2 \<phi>" by (simp add: MONO_MULTa MONOw2_MULTr_a MULTr_a_impl)
+lemma "MONOw\<^sup>2 \<phi> \<longrightarrow> MONO \<phi>" nitpick oops
+
 (****************** Relativized nADDI variants ****************)
 
 definition nADDIr::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nADDIr")
@@ -162,6 +167,10 @@ lemma ANTIw2_nMULTr_a: "ANTIw\<^sup>2 \<phi> = nMULTr\<^sup>a \<phi>" proof -
   show ?thesis using l2r r2l by blast
 qed
 
+lemma "ANTI \<phi> \<longrightarrow> ANTIw\<^sup>1 \<phi>" by (simp add: ANTI_nADDIb ANTIw1_nADDIr_b nADDIr_b_impl)
+lemma "ANTIw\<^sup>1 \<phi> \<longrightarrow> ANTI \<phi>" nitpick oops
+lemma "ANTI \<phi> \<longrightarrow> ANTIw\<^sup>2 \<phi>" by (simp add: ANTI_nMULTa ANTIw2_nMULTr_a nMULTr_a_impl)
+lemma "ANTIw\<^sup>2 \<phi> \<longrightarrow> ANTI \<phi>" nitpick oops
 
 (****************** Dual interrelations ****************)
 
@@ -192,54 +201,61 @@ lemma CNTR_fp:  "CNTR \<phi> = nCNTR \<phi>\<^sup>f\<^sup>p" by (metis EXPN_CNTR
 lemma CNTR_fpc: "CNTR \<phi> = CNTR \<phi>\<^sup>f\<^sup>p\<^sup>c" by (metis CNTR_fp nCNTR_EXPN_compl ofp_comm_compl ofp_invol)
 
 lemma nNORM_fp: "NORM \<phi> = nNORM \<phi>\<^sup>f\<^sup>p" by (metis NORM_def fixpoints_def fp_rel nNORM_def)
-lemma DNRM_fp: "DNRM \<phi> = DNRM \<phi>\<^sup>f\<^sup>p" by (simp add: DNRM_def dimpl_def op_fixpoint_def top_def)
 lemma NORM_fpc: "NORM \<phi> = NORM \<phi>\<^sup>f\<^sup>p\<^sup>c" by (simp add: NORM_def bottom_def ofp_fixpoint_compl_def sdiff_def)
+lemma DNRM_fp:  "DNRM \<phi> = DNRM \<phi>\<^sup>f\<^sup>p" by (simp add: DNRM_def dimpl_def op_fixpoint_def top_def)
 lemma DNRM_fpc: "DNRM \<phi> = nDNRM \<phi>\<^sup>f\<^sup>p\<^sup>c" using DNRM_fp nDNRM_DNRM_compl by blast
 
 lemma ADDIr_a_fpc: "ADDIr\<^sup>a \<phi> = ADDIr\<^sup>a \<phi>\<^sup>f\<^sup>p\<^sup>c" unfolding cond subset_out_def by (simp add: join_def ofp_fixpoint_compl_def sdiff_def)
-lemma ADDIr_b_fpc: "ADDIr\<^sup>b \<phi> = ADDIr\<^sup>b \<phi>\<^sup>f\<^sup>p\<^sup>c" unfolding cond subset_out_def by (simp add: join_def ofp_fixpoint_compl_def sdiff_def)
 lemma ADDIr_a_fp: "ADDIr\<^sup>a \<phi> = nADDIr\<^sup>a \<phi>\<^sup>f\<^sup>p" by (metis ADDIr_a_cmpl ADDIr_a_fpc sfun_compl_invol)
+lemma ADDIr_b_fpc: "ADDIr\<^sup>b \<phi> = ADDIr\<^sup>b \<phi>\<^sup>f\<^sup>p\<^sup>c" unfolding cond subset_out_def by (simp add: join_def ofp_fixpoint_compl_def sdiff_def)
 lemma ADDIr_b_fp: "ADDIr\<^sup>b \<phi> = nADDIr\<^sup>b \<phi>\<^sup>f\<^sup>p" by (metis ADDIr_b_cmpl ADDIr_b_fpc sfun_compl_invol)
 
 lemma MULTr_a_fp: "MULTr\<^sup>a \<phi> = MULTr\<^sup>a \<phi>\<^sup>f\<^sup>p" unfolding cond subset_in_def by (simp add: dimpl_def meet_def op_fixpoint_def)
-lemma MULTr_b_fp: "MULTr\<^sup>b \<phi> = MULTr\<^sup>b \<phi>\<^sup>f\<^sup>p" unfolding cond subset_in_def by (simp add: dimpl_def meet_def op_fixpoint_def)
 lemma MULTr_a_fpc: "MULTr\<^sup>a \<phi> = nMULTr\<^sup>a \<phi>\<^sup>f\<^sup>p\<^sup>c" using MULTr_a_cmpl MULTr_a_fp by blast
+lemma MULTr_b_fp: "MULTr\<^sup>b \<phi> = MULTr\<^sup>b \<phi>\<^sup>f\<^sup>p" unfolding cond subset_in_def by (simp add: dimpl_def meet_def op_fixpoint_def)
 lemma MULTr_b_fpc: "MULTr\<^sup>b \<phi> = nMULTr\<^sup>b \<phi>\<^sup>f\<^sup>p\<^sup>c" using MULTr_b_cmpl MULTr_b_fp by blast
 
 
 (****************** Relativized IDEM variants ****************)
 
-definition IDEMr1::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("IDEMr\<^sup>1")
-  where "IDEMr\<^sup>1 \<phi> \<equiv> \<forall>A. \<phi>(A \<^bold>\<or> \<phi> A) \<preceq>\<^sup>A (\<phi> A)"
-definition IDEMr2::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("IDEMr\<^sup>2") 
-  where "IDEMr\<^sup>2 \<phi> \<equiv> \<forall>A. (\<phi> A) \<preceq>\<^sub>A \<phi>(A \<^bold>\<and> \<phi> A)"
-
-declare IDEMr1_def[cond] IDEMr2_def[cond]
+definition IDEMr_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("IDEMr\<^sup>a")
+  where "IDEMr\<^sup>a \<phi> \<equiv> \<forall>A. \<phi>(A \<^bold>\<or> \<phi> A) \<preceq>\<^sup>A (\<phi> A)"
+definition IDEMr_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("IDEMr\<^sup>b") 
+  where "IDEMr\<^sup>b \<phi> \<equiv> \<forall>A. (\<phi> A) \<preceq>\<^sub>A \<phi>(A \<^bold>\<and> \<phi> A)"
+declare IDEMr_a_def[cond] IDEMr_b_def[cond]
 
 (****************** Relativized nIDEM variants ****************)
-definition nIDEMr1::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nIDEMr\<^sup>1") 
-  where "nIDEMr\<^sup>1 \<phi> \<equiv> \<forall>A. (\<phi> A) \<preceq>\<^sup>A \<phi>(A \<^bold>\<or> \<^bold>\<midarrow>(\<phi> A))"
-definition nIDEMr2::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nIDEMr\<^sup>2") 
-  where "nIDEMr\<^sup>2 \<phi> \<equiv> \<forall>A. \<phi>(A \<^bold>\<and> \<^bold>\<midarrow>(\<phi> A)) \<preceq>\<^sub>A A \<^bold>\<and> (\<phi> A)"
+definition nIDEMr_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nIDEMr\<^sup>a") 
+  where "nIDEMr\<^sup>a \<phi> \<equiv> \<forall>A. (\<phi> A) \<preceq>\<^sup>A \<phi>(A \<^bold>\<or> \<^bold>\<midarrow>(\<phi> A))"
+definition nIDEMr_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nIDEMr\<^sup>b") 
+  where "nIDEMr\<^sup>b \<phi> \<equiv> \<forall>A. \<phi>(A \<^bold>\<and> \<^bold>\<midarrow>(\<phi> A)) \<preceq>\<^sub>A (\<phi> A)"
 
-declare nIDEMr1_def[cond] nIDEMr2_def[cond]
+declare nIDEMr_a_def[cond] nIDEMr_b_def[cond]
 
-lemma IDEMr1_fp: "IDEMr\<^sup>1 \<phi> = nIDEMr\<^sup>1 \<phi>\<^sup>f\<^sup>p" proof -
-  have l2r: "IDEMr\<^sup>1 \<phi> \<longrightarrow> nIDEMr\<^sup>1 \<phi>\<^sup>f\<^sup>p" 
+lemma IDEMr_dual: "IDEMr\<^sup>a \<phi> = IDEMr\<^sup>b \<phi>\<^sup>d" unfolding cond subset_in_def subset_out_def op_dual_def by (metis (mono_tags, opaque_lifting) BA_dn compl_def diff_char1 diff_char2 impl_char setequ_ext)
+lemma IDEMr_a_cmpl: "IDEMr\<^sup>a \<phi> = nIDEMr\<^sup>a \<phi>\<^sup>c" unfolding cond subset_in_def subset_out_def by (metis compl_def sfun_compl_invol svfun_compl_def)
+lemma IDEMr_b_cmpl: "IDEMr\<^sup>b \<phi> = nIDEMr\<^sup>b \<phi>\<^sup>c" unfolding cond subset_in_def subset_out_def by (metis compl_def sfun_compl_invol svfun_compl_def)
+lemma nIDEMr_dual: "nIDEMr\<^sup>a \<phi> = nIDEMr\<^sup>b \<phi>\<^sup>d" by (metis IDEMr_dual IDEMr_a_cmpl IDEMr_b_cmpl dual_compl_char1 dual_compl_char2 sfun_compl_invol)
+
+
+
+
+lemma IDEMr_a_fp: "IDEMr\<^sup>a \<phi> = nIDEMr\<^sup>a \<phi>\<^sup>f\<^sup>p" proof -
+  have l2r: "IDEMr\<^sup>a \<phi> \<longrightarrow> nIDEMr\<^sup>a \<phi>\<^sup>f\<^sup>p" 
     unfolding cond subset_out_char op_fixpoint_def conn order apply simp (*by metis*) sorry (*fix*)
-  have r2l: "nIDEMr\<^sup>1 \<phi>\<^sup>f\<^sup>p \<longrightarrow> IDEMr\<^sup>1 \<phi>" 
+  have r2l: "nIDEMr\<^sup>a \<phi>\<^sup>f\<^sup>p \<longrightarrow> IDEMr\<^sup>a \<phi>" 
     unfolding cond subset_out_def op_fixpoint_def conn order apply simp (*by metis*) sorry (*fix*) 
   from l2r r2l show ?thesis by blast
 qed
-lemma IDEMr1_fpc: "IDEMr\<^sup>1 \<phi> = IDEMr\<^sup>1 \<phi>\<^sup>f\<^sup>p\<^sup>c" using IDEMr1_fp by (smt (verit, del_insts) IDEMr1_def compl_def nIDEMr1_def subset_out_def svfun_compl_def)
+lemma IDEMr_a_fpc: "IDEMr\<^sup>a \<phi> = IDEMr\<^sup>a \<phi>\<^sup>f\<^sup>p\<^sup>c" using IDEMr_a_fp by (smt (verit, del_insts) IDEMr_a_def compl_def nIDEMr_a_def subset_out_def svfun_compl_def)
 
-lemma IDEMr2_fp: "IDEMr\<^sup>2 \<phi> = IDEMr\<^sup>2 \<phi>\<^sup>f\<^sup>p" proof -
-  have l2r: "IDEMr\<^sup>2 \<phi> \<longrightarrow> IDEMr\<^sup>2 \<phi>\<^sup>f\<^sup>p" 
+lemma IDEMr_b_fp: "IDEMr\<^sup>b \<phi> = IDEMr\<^sup>b \<phi>\<^sup>f\<^sup>p" proof -
+  have l2r: "IDEMr\<^sup>b \<phi> \<longrightarrow> IDEMr\<^sup>b \<phi>\<^sup>f\<^sup>p" 
     unfolding cond subset_in_def op_fixpoint_def conn order apply simp (*by metis*) sorry (*fix*)
-  have r2l: "IDEMr\<^sup>2 \<phi>\<^sup>f\<^sup>p \<longrightarrow> IDEMr\<^sup>2 \<phi>" 
+  have r2l: "IDEMr\<^sup>b \<phi>\<^sup>f\<^sup>p \<longrightarrow> IDEMr\<^sup>b \<phi>" 
     unfolding cond subset_in_def op_fixpoint_def conn order apply simp (*by metis*) sorry (*fix*)
   from l2r r2l show ?thesis by blast
 qed
-lemma IDEMr2_fpc: "IDEMr\<^sup>2 \<phi> = nIDEMr\<^sup>2 \<phi>\<^sup>f\<^sup>p\<^sup>c" using IDEMr2_fp  sorry (* TODO*)
+lemma IDEMr_b_fpc: "IDEMr\<^sup>b \<phi> = nIDEMr\<^sup>b \<phi>\<^sup>f\<^sup>p\<^sup>c" using IDEMr_b_fp  sorry (* TODO*)
 
 end
