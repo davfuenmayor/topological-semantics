@@ -1,5 +1,5 @@
 theory LFIs_border
-  imports "logical_consequence" "../conditions/conditions_fixedpoint_infinitary"
+  imports "logical_consequence" "../conditions/conditions_relativized_infinitary"
 begin
 
 section \<open>Logics of Formal Inconsistency (LFIs)\<close>
@@ -93,29 +93,32 @@ abbreviation ca_b where "ca_b \<equiv> ca_conj_b \<and> ca_disj_b \<and> ca_impl
 
 (**cf*)
 lemma "BORDER \<B> \<Longrightarrow> cf" nitpick oops (*countermodel*)
+
 (**ce*)
 lemma "BORDER \<B> \<Longrightarrow> ce" nitpick oops (*countermodel*)
+
 (**ciw*)
 lemma prop_ciw_a: "ciw_a" by (simp add: conn)
 lemma prop_ciw_b: "ciw_b" by (simp add: conn svfun_compl_def)
+
 (**ci*)
 lemma "BORDER \<B> \<Longrightarrow> ci_a" nitpick oops (*countermodel*)
 lemma "BORDER \<B> \<Longrightarrow> ci_b" nitpick oops (*countermodel*)
+
 (**cl*)
 lemma "BORDER \<B> \<Longrightarrow> cl_a" nitpick oops (*countermodel*)
 lemma "BORDER \<B> \<Longrightarrow> cl_b" nitpick oops (*countermodel*)
 
 (**ca_conj*)
+lemma prop_ca_conj_b: "nMULT\<^sup>b \<B> = ca_conj_b" by (metis MULT_b_def nMULTb_compl sfun_compl_invol)
 lemma prop_ca_conj_a: "nMULTr\<^sup>b \<B> = ca_conj_a" unfolding cond op_fixpoint_def by (smt (z3) compl_def dimpl_def join_def meet_def op_fixpoint_def subset_def subset_in_def)
-lemma prop_ca_conj_b: "ADDI \<C> \<Longrightarrow> ca_conj_b" unfolding cond op_fixpoint_def op_dual_def  svfun_compl_def by (smt (verit, ccfv_threshold) BA_deMorgan2 BA_dn dimpl_def join_def meet_def setequ_ext subset_def)
-(*
-(**ca_disj*)
-lemma prop_ca_disj_a: "ADDI \<C> \<Longrightarrow> ca_disj_a" unfolding cond unfolding sdfun_dcompl_def apply auto by (smt (z3) BA_deMorgan1 BA_deMorgan2 L5 L6 join_def meet_def sdfun_dcompl_def setequ_ext subset_def)
-lemma prop_ca_disj_b: "ADDI \<C> \<Longrightarrow> EXPN \<C> \<Longrightarrow> ca_disj_b" unfolding cond unfolding svfun_compl_def by (smt (z3) BA_deMorgan1 BA_deMorgan2 BA_dn L5 L6 dimpl_def meet_def op_dual_def op_fixpoint_def setequ_ext subset_def) 
-(**ca_impl*)
-lemma "CLOSURE \<C> \<Longrightarrow> ca_impl_a" nitpick oops (*countermodel*)
-lemma "CLOSURE \<C> \<Longrightarrow> ca_impl_b" nitpick oops (*countermodel*)
 
-*)
+(**ca_disj*)
+lemma prop_ca_disj_b: "ADDI\<^sup>a \<B> = ca_disj_b" by (simp add: nADDI_a_def nADDIa_compl)
+lemma prop_ca_disj_a: "nMULTr\<^sup>a \<B> = ca_disj_a" (*nitpick*) oops (*TODO: verify*)
+
+(**ca_impl*)
+lemma "BORDER \<B> \<Longrightarrow> ca_impl_a" nitpick oops (*countermodel*)
+lemma "BORDER \<B> \<Longrightarrow> ca_impl_b" nitpick oops (*countermodel*)
 
 end

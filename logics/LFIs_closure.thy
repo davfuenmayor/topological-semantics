@@ -1,5 +1,5 @@
 theory LFIs_closure
-  imports "logical_consequence" "../conditions/conditions_fixedpoint_infinitary"
+  imports "logical_consequence" "../conditions/conditions_relativized_infinitary"
 begin
 
 section \<open>Logics of Formal Inconsistency (LFIs)\<close>
@@ -97,29 +97,32 @@ abbreviation ca_b where "ca_b \<equiv> ca_conj_b \<and> ca_disj_b \<and> ca_impl
 
 (**cf*)
 lemma "CLOSURE \<C> \<Longrightarrow> cf" nitpick oops (*countermodel*)
+
 (**ce*)
 lemma "CLOSURE \<C> \<Longrightarrow> ce" nitpick oops (*countermodel*)
+
 (**ciw*)
 lemma prop_ciw_a: "ciw_a" by (simp add: conn)
 lemma prop_ciw_b: "ciw_b" by (simp add: conn svfun_compl_def)
+
 (**ci*)
 lemma "CLOSURE \<C> \<Longrightarrow> ci_a" nitpick oops (*countermodel*)
 lemma "CLOSURE \<C> \<Longrightarrow> ci_b" nitpick oops (*countermodel*)
+
 (**cl*)
 lemma "CLOSURE \<C> \<Longrightarrow> cl_a" nitpick oops (*countermodel*)
 lemma "CLOSURE \<C> \<Longrightarrow> cl_b" nitpick oops (*countermodel*)
+
 (**ca_conj*)
-lemma prop_ca_conj_a: "ADDI\<^sup>a \<C> \<Longrightarrow> ca_conj_a" unfolding cond sdfun_dcompl_def by (smt (z3) BA_deMorgan2 compl_def join_def setequ_ext subset_def)
-lemma prop_ca_conj_a': "EXPN \<C> \<Longrightarrow> ca_conj_a \<longrightarrow> ADDI\<^sup>a \<C>" unfolding cond sdfun_dcompl_def 
-  conn apply simp oops (*TODO: reconstruct in kernel*)
-lemma prop_ca_conj_b: "ADDI \<C> \<Longrightarrow> ca_conj_b" unfolding cond op_fixpoint_def op_dual_def  svfun_compl_def by (smt (verit, ccfv_threshold) BA_deMorgan2 BA_dn dimpl_def join_def meet_def setequ_ext subset_def)
-lemma "ADDI\<^sup>a \<C> \<Longrightarrow> ca_conj_b" nitpick oops (*countermodel*)
+lemma prop_ca_conj_b: "EXPN \<C> \<Longrightarrow> ADDI\<^sup>a \<C> = ca_conj_b" by (metis ADDIa_MULTb_dual2 ADDIr_a_cmpl ADDIr_a_equ' ADDIr_a_fpc EXPN_fpc MULT_b_def dual_compl_char1 dual_compl_char2 dual_invol nADDIa_compl nADDIr_a_equ' nEXPN_CNTR_compl)
+lemma prop_ca_conj_a: "ADDIr\<^sup>a \<C> = ca_conj_a" (*nitpick*) oops (*TODO: verify*)
+
 (**ca_disj*)
-lemma prop_ca_disj_a: "MONO \<C> \<Longrightarrow> ca_disj_a" unfolding cond conn2 conn subset_def by smt
-lemma prop_ca_disj_b: "MONO \<C> \<Longrightarrow> EXPN \<C> \<Longrightarrow> ca_disj_b" unfolding cond conn2 conn subset_def by smt
-lemma "ADDI \<C> \<Longrightarrow> ca_disj_b" nitpick oops (*countermodel*)
+lemma prop_ca_disj_b: "EXPN \<C> \<Longrightarrow> ADDI\<^sup>b \<C> = ca_disj_b" (*nitpick*) oops (*TODO: verify*)
+lemma prop_ca_disj_a: "ADDIr\<^sup>b \<C> = ca_disj_a" (*nitpick*) oops (*TODO: verify*)
+
 (**ca_impl*)
 lemma "CLOSURE \<C> \<Longrightarrow> ca_impl_a" nitpick oops (*countermodel*)
 lemma "CLOSURE \<C> \<Longrightarrow> ca_impl_b" nitpick oops (*countermodel*)
-*)
+
 end
