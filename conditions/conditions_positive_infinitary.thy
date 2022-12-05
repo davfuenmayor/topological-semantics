@@ -126,4 +126,123 @@ assume mono: "MONO \<phi>" and expn: "EXPN \<phi>" and idem:"IDEM\<^sup>a \<phi>
 qed
 *)
 
+section \<open>Alexandrov topologies and (generalized) specialization preorders\<close>
+
+(**A topology is called 'Alexandrov' (after the Russian mathematician Pavel Alexandrov) if the intersection
+(resp. union) of any (finite or infinite) family of open (resp. closed) sets is open (resp. closed);
+in algebraic terms, this means that the set of fixed points of the interior (closure) operation is closed
+under infinite meets (joins). Another common algebraic formulation requires the closure (interior) operation
+to satisfy the infinitary variants of additivity (multiplicativity), i.e. iADDI (iMULT) as introduced before.
+
+In the literature, the well-known Kuratowski conditions for the closure (resp. interior) operation are assumed,
+namely: ADDI, EXPN, NORM, IDEM (resp. MULT, CNTR, DNRM, IDEM). This makes both formulations equivalent.
+However, this is not the case in general if those conditions become negotiable.*)
+
+(**Alexandrov topologies have interesting properties relating them to the semantics of modal logic.
+Assuming Kuratowski conditions, Alexandrov topological operations defined on subsets of S are in one-to-one
+correspondence with preorders on S; in topological terms, Alexandrov topologies are uniquely determined by
+their specialization preorders. Since we do not presuppose any Kuratowski conditions to begin with, the
+preorders in question are in general not even transitive. Here we just call them 'reachability relations'.
+We will still call (generalized) closure/interior-like operations as such (for lack of a better name).
+We explore minimal conditions under which some relevant results for the semantics of modal logic obtain.*)
+
+(**Closure/interior(-like) operators can be derived from an arbitrary relation (as in modal logic)*)
+definition Cl_rel::"('w \<Rightarrow> 'w \<Rightarrow> bool) \<Rightarrow> ('w \<sigma> \<Rightarrow> 'w \<sigma>)" ("\<C>[_]") 
+  where "\<C>[R] \<equiv> \<lambda>A. \<lambda>w. \<exists>v. R w v \<and> A v"
+definition Int_rel::"('w \<Rightarrow> 'w \<Rightarrow> bool) \<Rightarrow> ('w \<sigma> \<Rightarrow> 'w \<sigma>)" ("\<I>[_]") 
+  where "\<I>[R] \<equiv> \<lambda>A. \<lambda>w. \<forall>v. R w v \<longrightarrow> A v"
+
+(**Duality between interior and closure follows directly:*)
+lemma dual_CI: "\<C>[R] = \<I>[R]\<^sup>d" by (simp add: Cl_rel_def Int_rel_def compl_def op_dual_def setequ_char)
+
+(**We explore minimal conditions of the reachability relation under which some operation's conditions obtain.*) 
+(**Define some relevant properties of relations: *)
+abbreviation "serial R  \<equiv> \<forall>x. \<exists>y. R x y"
+abbreviation "reflexive R  \<equiv> \<forall>x. R x x"
+abbreviation "transitive R \<equiv> \<forall>x y z. R x y \<and> R y z \<longrightarrow> R x z"
+abbreviation "antisymmetric R  \<equiv> \<forall>x y. R x y \<and> R y x \<longrightarrow> x = y"
+abbreviation "symmetric R  \<equiv> \<forall>x y. R x y \<longrightarrow> R y x"
+
+lemma rC1: "iADDI \<C>[R]" unfolding iADDI_def Cl_rel_def image_def supremum_def using setequ_def by fastforce
+lemma rC2: "reflexive R = EXPN \<C>[R]" by (metis (full_types) CNTR_def EXPN_CNTR_dual2 Int_rel_def dual_CI subset_def)
+lemma rC3: "NORM \<C>[R]" by (simp add: iADDI_NORM rC1)
+lemma rC4: "transitive R = IDEM\<^sup>a \<C>[R]" proof -
+  have l2r: "transitive R \<longrightarrow> IDEM\<^sup>a \<C>[R]"  by (smt (verit, best) Cl_rel_def IDEM_a_def subset_def)
+  have r2l: "IDEM\<^sup>a \<C>[R] \<longrightarrow> transitive R" unfolding Cl_rel_def IDEM_a_def subset_def using compl_def by force
+  from l2r r2l show ?thesis by blast
+qed
+
+
+(**A reachability (specialization) relation (preorder) can be derived from a given operation (intended as a closure-like operation).*)
+definition \<R>::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> ('w \<Rightarrow> 'w \<Rightarrow> bool)" ("\<R>[_]") 
+  where "\<R>[\<phi>] \<equiv> \<lambda>w v. \<phi> (\<lambda>x. x = v) w"
+
+(**Preorder properties of the reachability relation follow from the corresponding operation's conditions.*)
+lemma rel_refl: "EXPN \<phi> \<longrightarrow> reflexive \<R>[\<phi>]" by (simp add: EXPN_def \<R>_def subset_def)
+lemma rel_trans: "MONO \<phi> \<and> IDEM\<^sup>a \<phi> \<longrightarrow> transitive \<R>[\<phi>]" by (smt (verit, best) IDEM_a_def MONO_def \<R>_def subset_def)
+lemma "IDEM\<^sup>a \<phi> \<longrightarrow> transitive \<R>[\<phi>]" nitpick oops (*counterexample*)
+
+(*The converse directions do not hold*)
+lemma "reflexive \<R>[\<phi>] \<longrightarrow> EXPN \<phi>" nitpick oops (*counterexample*)
+lemma "transitive \<R>[\<phi>] \<longrightarrow> IDEM\<^sup>a \<phi>" nitpick oops (*counterexample*)
+lemma "transitive \<R>[\<phi>] \<longrightarrow> MONO \<phi>" nitpick oops (*counterexample*)
+
+(**However, we can obtain finite countermodels for antisymmetry and symmetry given all relevant conditions.
+We will revisit this issue later and examine their relation with the topological separation axioms T0 and T1 resp.*)
+lemma "iADDI \<phi> \<Longrightarrow> EXPN \<phi> \<Longrightarrow> IDEM\<^sup>a \<phi> \<Longrightarrow> antisymmetric \<R>[\<phi>]" nitpick oops (*counterexample*)
+lemma "iADDI \<phi> \<Longrightarrow> EXPN \<phi> \<Longrightarrow> IDEM\<^sup>a \<phi> \<Longrightarrow> symmetric \<R>[\<phi>]" nitpick oops (*counterexample*)
+
+(**As mentioned previously, Alexandrov closure (and by duality interior) operations correspond to 
+specialization orderings (reachability relations).
+It is worth mentioning that in Alexandrov topologies every point has a minimal/smallest neighborhood,
+namely the set of points related to it by the specialization preorder (reachability relation).
+We examine below  minimal conditions under which these relations obtain.*)
+
+lemma Cl_rel'_a:   "MONO \<phi> \<longrightarrow> (\<forall>A. \<C>[\<R>[\<phi>]] A \<preceq> \<phi> A)" unfolding Cl_rel_def MONO_def \<R>_def by (smt (verit, ccfv_SIG) subset_def)
+lemma Cl_rel'_b: "iADDI\<^sup>a \<phi> \<longrightarrow> (\<forall>A. \<phi> A \<preceq> \<C>[\<R>[\<phi>]] A)" proof -
+{ assume iaddia: "iADDI\<^sup>a \<phi>"
+  { fix A::"'a \<sigma>"
+    let ?S="\<lambda>B. \<exists>w. A w \<and> B=(\<lambda>u. u=w)"
+    have "A \<approx> (\<^bold>\<Or>?S)" unfolding supremum_def setequ_def by auto
+    hence "\<phi>(A) \<approx> \<phi>(\<^bold>\<Or>?S)" by (simp add: setequ_ext)
+    moreover have "\<^bold>\<Or>\<lbrakk>\<phi> ?S\<rbrakk> \<approx> \<C>[\<R>[\<phi>]] A" by (smt (verit) Cl_rel_def \<R>_def image_def setequ_def supremum_def)
+    moreover from iaddia have "\<phi>(\<^bold>\<Or>?S) \<preceq> \<^bold>\<Or>\<lbrakk>\<phi> ?S\<rbrakk>" unfolding iADDI_a_def by simp
+    ultimately have "\<phi> A \<preceq> \<C>[\<R>[\<phi>]] A" by (simp add: setequ_ext)
+} } thus ?thesis by simp
+qed
+lemma Cl_rel': "iADDI \<phi> \<longrightarrow> \<phi> \<cong> \<C>[\<R>[\<phi>]]" by (simp add: MONO_iADDIb iADDI_char setequ_char Cl_rel'_a Cl_rel'_b svfun_equ_def)
+lemma Cl_rel: "iADDI \<phi> \<longleftrightarrow> \<phi> = \<C>[\<R>[\<phi>]]" using Cl_rel' by (metis rC1 svfun_equ_ext)
+
+(**It is instructive to expand the definitions in the above result:*)
+lemma "iADDI \<phi> \<longleftrightarrow> (\<forall>A. \<forall>w. (\<phi> A) w \<longleftrightarrow> (\<exists>v. A v \<and> \<phi> (\<lambda>x. x=v) w))" oops
+
+(**Closure (interior) operations derived from relations are thus closed under infinite joins (meets).*)
+lemma "supremum_closed (fp \<C>[R])" by (simp add: fp_sup_closed_cond1 rC1)
+lemma "infimum_closed  (fp \<I>[R])" by (metis dual_CI fp_inf_closed_cond1 iADDI_iMULT_dual2 rC1)
+
+
+(**We can now revisit the relationship between (anti)symmetry and the separation axioms T1 and T0.
+The operator \<C> is intended as a closure operator (and its dual as interior)*)
+
+(**T0: any two distinct points in the space can be separated by a closed (or open) set (i.e. containing one point and not the other).*)
+abbreviation "T0 \<C> \<equiv> (\<forall>p q. p \<noteq> q \<longrightarrow> (\<exists>G. (fp \<C>) G \<and> \<not>(G p \<longleftrightarrow> G q)))"
+(**T1: any two distinct points can be separated by (two not necessarily disjoint) closed (or open) sets.*)
+abbreviation "T1 \<C> \<equiv> (\<forall>p q. p \<noteq> q \<longrightarrow> (\<exists>G H. (fp \<C>) G \<and> (fp \<C>) H \<and> G p \<and> \<not>G q \<and> H q \<and> \<not>H p))"
+
+(**We can (sanity) check that T1 entails T0 but not viceversa.*)
+lemma "T1 \<C> \<Longrightarrow> T0 \<C>" by meson
+lemma "T0 \<C> \<Longrightarrow> T1 \<C>" nitpick oops (*counterexample*)
+
+
+(**Under appropriate conditions, T0-separation corresponds to antisymmetry of the specialization relation (here an ordering).*)
+lemma "T0 \<C> \<longleftrightarrow> antisymmetric \<R>[\<C>]" nitpick oops (*counterexample*)
+lemma T0_antisymm_a: "MONO \<C> \<Longrightarrow> T0 \<C> \<longrightarrow> antisymmetric \<R>[\<C>]" by (smt (verit, best) Cl_rel'_a Cl_rel_def fixpoints_def setequ_ext subset_def)
+lemma T0_antisymm_b: "EXPN \<C> \<Longrightarrow> IDEM\<^sup>a \<C> \<Longrightarrow> antisymmetric \<R>[\<C>] \<longrightarrow> T0 \<C>" by (metis EXPN_impl_IDEM_b IDEM_char IDEM_def \<R>_def fixpoints_def rel_refl)
+lemma T0_antisymm: "MONO \<C> \<Longrightarrow> EXPN \<C> \<Longrightarrow> IDEM\<^sup>a \<C> \<Longrightarrow> T0 \<C> = antisymmetric \<R>[\<C>]" using T0_antisymm_a T0_antisymm_b by fastforce
+
+(**Also, under the appropriate conditions, T1-separation corresponds to symmetry of the specialization relation.*)
+lemma T1_symm_a: "MONO \<C> \<Longrightarrow> T1 \<C> \<longrightarrow> symmetric \<R>[\<C>]" by (metis (mono_tags, opaque_lifting) Cl_rel'_a Cl_rel_def fixpoints_def setequ_ext subset_def)
+lemma T1_symm_b: "MONO \<C> \<Longrightarrow> EXPN \<C> \<Longrightarrow> T0 \<C> \<Longrightarrow> symmetric \<R>[\<C>] \<longrightarrow> T1 \<C>" by (smt (verit, ccfv_SIG) T0_antisymm_a \<R>_def fixpoints_def rel_refl setequ_def)
+lemma T1_symm: "MONO \<C> \<Longrightarrow> EXPN \<C> \<Longrightarrow> T0 \<C> \<Longrightarrow> symmetric \<R>[\<C>] = T1 \<C>" using T1_symm_a T1_symm_b by (smt (verit, ccfv_threshold))
+
 end
