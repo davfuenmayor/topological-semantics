@@ -97,10 +97,17 @@ lemma MONOw2_MULTr_a: "MONOw\<^sup>2 \<phi> = MULTr\<^sup>a \<phi>" proof -
   show ?thesis using l2r r2l by blast
 qed
 
-lemma "MONO \<phi> \<longrightarrow> MONOw\<^sup>1 \<phi>" by (simp add: ADDIr_b_impl MONO_ADDIb MONOw1_ADDIr_b)
+lemma MONOw1_impl: "MONO \<phi> \<longrightarrow> MONOw\<^sup>1 \<phi>" by (simp add: ADDIr_b_impl MONO_ADDIb MONOw1_ADDIr_b)
 lemma "MONOw\<^sup>1 \<phi> \<longrightarrow> MONO \<phi>" nitpick oops
-lemma "MONO \<phi> \<longrightarrow> MONOw\<^sup>2 \<phi>" by (simp add: MONO_MULTa MONOw2_MULTr_a MULTr_a_impl)
+lemma MONOw2_impl: "MONO \<phi> \<longrightarrow> MONOw\<^sup>2 \<phi>" by (simp add: MONO_MULTa MONOw2_MULTr_a MULTr_a_impl)
 lemma "MONOw\<^sup>2 \<phi> \<longrightarrow> MONO \<phi>" nitpick oops
+
+
+(** We have in fact that (n)CNTR (resp. (n)EXPN) implies MONOw\<^sup>1/ADDIr\<^sup>b (resp. MONOw\<^sup>2/MULTr\<^sup>a) *)
+lemma CNTR_MONOw1_impl: "CNTR \<phi> \<longrightarrow> MONOw\<^sup>1 \<phi>" by (metis CNTR_def L3 MONOw1_def subset_char1)
+lemma nCNTR_MONOw1_impl: "nCNTR \<phi> \<longrightarrow> MONOw\<^sup>1 \<phi>" by (smt (verit, ccfv_threshold) MONOw1_def compl_def join_def nCNTR_def subset_def)
+lemma EXPN_MONOw2_impl: "EXPN \<phi> \<longrightarrow> MONOw\<^sup>2 \<phi>" by (metis EXPN_def L4 MONOw2_def subset_char1)
+lemma nEXPN_MONOw2_impl: "nEXPN \<phi> \<longrightarrow> MONOw\<^sup>2 \<phi>" by (smt (verit) MONOw2_def compl_def meet_def nEXPN_def subset_def)
 
 (****************** Relativized nADDI variants ****************)
 
@@ -171,6 +178,12 @@ lemma "ANTI \<phi> \<longrightarrow> ANTIw\<^sup>1 \<phi>" by (simp add: ANTI_nA
 lemma "ANTIw\<^sup>1 \<phi> \<longrightarrow> ANTI \<phi>" nitpick oops
 lemma "ANTI \<phi> \<longrightarrow> ANTIw\<^sup>2 \<phi>" by (simp add: ANTI_nMULTa ANTIw2_nMULTr_a nMULTr_a_impl)
 lemma "ANTIw\<^sup>2 \<phi> \<longrightarrow> ANTI \<phi>" nitpick oops
+
+(** We have in fact that (n)CNTR (resp. (n)EXPN) implies ANTIw\<^sup>1/nADDIr\<^sup>b (resp. ANTIw\<^sup>2/nMULTr\<^sup>a) *)
+lemma CNTR_ANTIw1_impl: "CNTR \<phi> \<longrightarrow> ANTIw\<^sup>1 \<phi>" unfolding cond using L3 subset_char1 by blast
+lemma nCNTR_ANTIw1_impl: "nCNTR \<phi> \<longrightarrow> ANTIw\<^sup>1 \<phi>" unfolding cond by (metis (full_types) compl_def join_def subset_def)
+lemma EXPN_ANTIw2_impl: "EXPN \<phi> \<longrightarrow> ANTIw\<^sup>2 \<phi>" unfolding cond using L4 subset_char1 by blast
+lemma nEXPN_ANTIw2_impl: "nEXPN \<phi> \<longrightarrow> ANTIw\<^sup>2 \<phi>" unfolding cond by (metis (full_types) compl_def meet_def subset_def)
 
 (****************** Dual interrelations ****************)
 
@@ -265,11 +278,21 @@ qed
 lemma IDEMr_b_fpc: "IDEMr\<^sup>b \<phi> = nIDEMr\<^sup>b \<phi>\<^sup>f\<^sup>p\<^sup>c" using IDEMr_b_fp IDEMr_b_cmpl by blast
 
 
+(***************************************************)
+(*** Verifying original border axioms by Zarycki ***)
+(***************************************************)
 
-(******************************************************************************************)
-(*** Modulo conditions nMULTr and CNTR the border condition B4 is equivalent to nIDEMr\<^sup>b ***)
-(******************************************************************************************)
+(*The original border condition B1' is equivalent to the conjuntion of nMULTr and CNTR*)
+abbreviation "B1' \<phi> \<equiv> \<forall>A B. \<phi>(A \<^bold>\<and> B) \<approx> (A \<^bold>\<and> \<phi> B) \<^bold>\<or> (\<phi> A \<^bold>\<and> B)" 
 
+lemma "B1' \<phi> = (nMULTr \<phi> \<and> CNTR \<phi>)" proof -
+  have l2ra: "B1' \<phi> \<longrightarrow> nMULTr \<phi>" unfolding cond by (smt (z3) join_def meet_def setequ_ext setequ_in_def)
+  have l2rb: "B1' \<phi> \<longrightarrow> CNTR \<phi>" unfolding cond by (metis L2 L4 L5 L7 L9 setequ_ext)
+  have r2l: "(nMULTr \<phi> \<and> CNTR \<phi>) \<longrightarrow> B1' \<phi>" unfolding cond by (smt (z3) L10 join_def meet_def setequ_def setequ_in_char)
+  from l2ra l2rb r2l show ?thesis by blast
+qed
+
+(*Modulo conditions nMULTr and CNTR the border condition B4 is equivalent to nIDEMr\<^sup>b*)
 abbreviation "B4 \<phi> \<equiv> \<forall>A. \<phi>(\<^bold>\<midarrow>\<phi>(\<^bold>\<midarrow>A)) \<preceq> A"
 
 lemma "nMULTr \<phi> \<Longrightarrow> CNTR \<phi> \<Longrightarrow> B4 \<phi> = nIDEMr\<^sup>b \<phi>" proof -
@@ -278,6 +301,7 @@ lemma "nMULTr \<phi> \<Longrightarrow> CNTR \<phi> \<Longrightarrow> B4 \<phi> =
   have r2l: "nMULTr\<^sup>a \<phi> \<Longrightarrow> CNTR \<phi> \<Longrightarrow> nIDEMr\<^sup>b \<phi> \<longrightarrow> B4 \<phi>" unfolding cond by (smt (verit) compl_def join_def meet_def subset_def subset_in_def)
   from l2r r2l show ?thesis using a1 a2 nMULTr_char by blast
 qed
+
 
 
 end
