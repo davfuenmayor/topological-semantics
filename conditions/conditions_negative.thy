@@ -16,7 +16,7 @@ declare ANTI_def[cond]
 (**ANTI is self-dual*)
 lemma ANTI_dual: "ANTI \<phi> = ANTI \<phi>\<^sup>d" by (smt (verit) BA_cp ANTI_def dual_invol op_dual_def)
 (**ANTI is the 'complement' of MONO*)
-lemma ANTI_MONO: "MONO \<phi> = ANTI \<phi>\<^sup>c" by (metis ANTI_def BA_cp MONO_def svfun_compl_def)
+lemma ANTI_MONO: "MONO \<phi> = ANTI \<phi>\<^sup>-" by (metis ANTI_def BA_cp MONO_def svfun_compl_def)
 
 
 (**anti-expansive/extensive (nEXPN) and its dual anti-contractive (nCNTR).*)
@@ -32,8 +32,8 @@ lemma nEXPN_nCNTR_dual1: "nEXPN \<phi> = nCNTR \<phi>\<^sup>d" unfolding cond by
 lemma nEXPN_nCNTR_dual2: "nCNTR \<phi> = nEXPN \<phi>\<^sup>d" by (simp add: dual_invol nEXPN_nCNTR_dual1)
 
 (**nEXPN and nCNTR are the 'complements' of EXPN and CNTR respectively*)
-lemma nEXPN_CNTR_compl: "EXPN \<phi> = nEXPN \<phi>\<^sup>c" by (metis BA_cp EXPN_def nEXPN_def svfun_compl_def)
-lemma nCNTR_EXPN_compl: "CNTR \<phi> = nCNTR \<phi>\<^sup>c" by (metis EXPN_CNTR_dual2 dual_compl_char1 dual_compl_char2 nEXPN_CNTR_compl nEXPN_nCNTR_dual2)
+lemma nEXPN_CNTR_compl: "EXPN \<phi> = nEXPN \<phi>\<^sup>-" by (metis BA_cp EXPN_def nEXPN_def svfun_compl_def)
+lemma nCNTR_EXPN_compl: "CNTR \<phi> = nCNTR \<phi>\<^sup>-" by (metis EXPN_CNTR_dual2 dual_compl_char1 dual_compl_char2 nEXPN_CNTR_compl nEXPN_nCNTR_dual2)
 
 (**anti-Normality (nNORM) and its dual (nDNRM).*)
 definition nNORM::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nNORM")
@@ -48,8 +48,8 @@ lemma nNOR_dual1: "nNORM \<phi> = nDNRM \<phi>\<^sup>d" unfolding cond by (simp 
 lemma nNOR_dual2: "nDNRM \<phi> = nNORM \<phi>\<^sup>d" by (simp add: dual_invol nNOR_dual1) 
 
 (**nNORM and nDNRM are the 'complements' of NORM and DNRM respectively*)
-lemma nNORM_NORM_compl: "NORM \<phi> = nNORM \<phi>\<^sup>c" by (simp add: NORM_def bottom_def compl_def nNORM_def setequ_def svfun_compl_def top_def)
-lemma nDNRM_DNRM_compl: "DNRM \<phi> = nDNRM \<phi>\<^sup>c" by (simp add: DNRM_def bottom_def compl_def nDNRM_def setequ_def svfun_compl_def top_def)
+lemma nNORM_NORM_compl: "NORM \<phi> = nNORM \<phi>\<^sup>-" by (simp add: NORM_def bottom_def compl_def nNORM_def setequ_def svfun_compl_def top_def)
+lemma nDNRM_DNRM_compl: "DNRM \<phi> = nDNRM \<phi>\<^sup>-" by (simp add: DNRM_def bottom_def compl_def nDNRM_def setequ_def svfun_compl_def top_def)
 
 (**nEXPN (nCNTR) entail nDNRM (nNORM).*)
 lemma nEXPN_impl_nDNRM: "nEXPN \<phi> \<longrightarrow> nDNRM \<phi>" unfolding cond by (metis bottom_def compl_def setequ_def subset_def top_def)
@@ -74,9 +74,9 @@ lemma nIDEM_char: "nIDEM \<phi> = (nIDEM\<^sup>a \<phi> \<and> nIDEM\<^sup>b \<p
 lemma nIDEM_dual: "nIDEM \<phi> = nIDEM \<phi>\<^sup>d" using nIDEM_char nIDEM_dual1 nIDEM_dual2 by blast
 
 (**nIDEM(a/b) and IDEM(a/b) are the 'complements' each other*)
-lemma nIDEM_a_compl: "IDEM\<^sup>a \<phi> = nIDEM\<^sup>a \<phi>\<^sup>c" by (metis (no_types, lifting) BA_cp IDEM_a_def nIDEM_a_def sfun_compl_invol svfun_compl_def)
-lemma nIDEM_b_compl: "IDEM\<^sup>b \<phi> = nIDEM\<^sup>b \<phi>\<^sup>c" by (metis IDEM_dual2 dual_compl_char1 dual_compl_char2 nIDEM_a_compl nIDEM_dual2)
-lemma nIDEM_compl: "nIDEM \<phi> = IDEM \<phi>\<^sup>c" by (simp add: IDEM_char nIDEM_a_compl nIDEM_b_compl nIDEM_char sfun_compl_invol)
+lemma nIDEM_a_compl: "IDEM\<^sup>a \<phi> = nIDEM\<^sup>a \<phi>\<^sup>-" by (metis (no_types, lifting) BA_cp IDEM_a_def nIDEM_a_def sfun_compl_invol svfun_compl_def)
+lemma nIDEM_b_compl: "IDEM\<^sup>b \<phi> = nIDEM\<^sup>b \<phi>\<^sup>-" by (metis IDEM_dual2 dual_compl_char1 dual_compl_char2 nIDEM_a_compl nIDEM_dual2)
+lemma nIDEM_compl: "nIDEM \<phi> = IDEM \<phi>\<^sup>-" by (simp add: IDEM_char nIDEM_a_compl nIDEM_b_compl nIDEM_char sfun_compl_invol)
 
 (**nEXPN (nCNTR) entail nIDEM-a (nIDEM-b).*)
 lemma nEXPN_impl_nIDEM_a: "nEXPN \<phi> \<longrightarrow> nIDEM\<^sup>b \<phi>" by (metis nEXPN_def nIDEM_b_def sfun_compl_invol svfun_compl_def)
@@ -122,25 +122,25 @@ lemma nADDI_nMULT_dual1: "nADDI \<phi> = nMULT \<phi>\<^sup>d" using nADDI_char 
 lemma nADDI_nMULT_dual2: "nMULT \<phi> = nADDI \<phi>\<^sup>d" by (simp add: dual_invol nADDI_nMULT_dual1)
 
 (**nADDI and nMULT are the 'complements' of ADDI and MULT respectively*)
-lemma nADDIa_compl: "ADDI\<^sup>a \<phi> = nADDI\<^sup>a \<phi>\<^sup>c" by (metis ADDI_a_def BA_cp BA_deMorgan1 nADDI_a_def setequ_ext svfun_compl_def)
-lemma nADDIb_compl: "ADDI\<^sup>b \<phi> = nADDI\<^sup>b \<phi>\<^sup>c" by (simp add: ANTI_nADDIb ANTI_MONO MONO_ADDIb sfun_compl_invol)
-lemma nADDI_compl: "ADDI \<phi> = nADDI \<phi>\<^sup>c" by (simp add: ADDI_char nADDI_char nADDIa_compl nADDIb_compl)
-lemma nMULTa_compl: "MULT\<^sup>a \<phi> = nMULT\<^sup>a \<phi>\<^sup>c" by (simp add: ANTI_MONO ANTI_nMULTa MONO_MULTa sfun_compl_invol)
-lemma nMULTb_compl: "MULT\<^sup>b \<phi> = nMULT\<^sup>b \<phi>\<^sup>c" by (metis BA_cp BA_deMorgan2 MULT_b_def nMULT_b_def setequ_ext svfun_compl_def)
-lemma nMULT_compl: "MULT \<phi> = nMULT \<phi>\<^sup>c" by (simp add: MULT_char nMULT_char nMULTa_compl nMULTb_compl)
+lemma nADDIa_compl: "ADDI\<^sup>a \<phi> = nADDI\<^sup>a \<phi>\<^sup>-" by (metis ADDI_a_def BA_cp BA_deMorgan1 nADDI_a_def setequ_ext svfun_compl_def)
+lemma nADDIb_compl: "ADDI\<^sup>b \<phi> = nADDI\<^sup>b \<phi>\<^sup>-" by (simp add: ANTI_nADDIb ANTI_MONO MONO_ADDIb sfun_compl_invol)
+lemma nADDI_compl: "ADDI \<phi> = nADDI \<phi>\<^sup>-" by (simp add: ADDI_char nADDI_char nADDIa_compl nADDIb_compl)
+lemma nMULTa_compl: "MULT\<^sup>a \<phi> = nMULT\<^sup>a \<phi>\<^sup>-" by (simp add: ANTI_MONO ANTI_nMULTa MONO_MULTa sfun_compl_invol)
+lemma nMULTb_compl: "MULT\<^sup>b \<phi> = nMULT\<^sup>b \<phi>\<^sup>-" by (metis BA_cp BA_deMorgan2 MULT_b_def nMULT_b_def setequ_ext svfun_compl_def)
+lemma nMULT_compl: "MULT \<phi> = nMULT \<phi>\<^sup>-" by (simp add: MULT_char nMULT_char nMULTa_compl nMULTb_compl)
 
 
 (**We verify properties regarding closure over meets/joins for fixed-points.*)
 
 (**nMULT for an operator implies join-closedness of the set of fixed-points of its dual-complement*)
-lemma nMULT_joinclosed: "nMULT \<phi> \<Longrightarrow> join_closed (fp (\<phi>\<^sup>-))" by (smt (verit, del_insts) ADDI_MULT_dual2 ADDI_joinclosed BA_deMorgan1 MULT_def dual_compl_char2 nMULT_def setequ_ext svfun_compl_def)
-lemma "join_closed (fp (\<phi>\<^sup>-)) \<Longrightarrow> nMULT \<phi>" nitpick oops (*countermodel found: needs further assumptions*)
-lemma joinclosed_nMULT: "ANTI \<phi> \<Longrightarrow> nCNTR \<phi> \<Longrightarrow> nIDEM\<^sup>b \<phi> \<Longrightarrow> join_closed (fp (\<phi>\<^sup>-)) \<Longrightarrow> nMULT \<phi>" by (metis ANTI_MONO ANTI_dual IDEM_char IDEM_dual dual_compl_char1 dual_compl_char2 joinclosed_ADDI nADDI_compl nADDI_nMULT_dual2 nCNTR_impl_nIDEM_b nEXPN_CNTR_compl nEXPN_nCNTR_dual2 nIDEM_char nIDEM_compl sfun_compl_invol)
+lemma nMULT_joinclosed: "nMULT \<phi> \<Longrightarrow> join_closed (fp (\<phi>\<^sup>d\<^sup>-))" by (smt (verit, del_insts) ADDI_MULT_dual2 ADDI_joinclosed BA_deMorgan1 MULT_def dual_compl_char2 nMULT_def setequ_ext svfun_compl_def)
+lemma "join_closed (fp (\<phi>\<^sup>d\<^sup>-)) \<Longrightarrow> nMULT \<phi>" nitpick oops (*countermodel found: needs further assumptions*)
+lemma joinclosed_nMULT: "ANTI \<phi> \<Longrightarrow> nCNTR \<phi> \<Longrightarrow> nIDEM\<^sup>b \<phi> \<Longrightarrow> join_closed (fp (\<phi>\<^sup>d\<^sup>-)) \<Longrightarrow> nMULT \<phi>" by (metis ANTI_MONO ANTI_dual IDEM_char IDEM_dual dual_compl_char1 dual_compl_char2 joinclosed_ADDI nADDI_compl nADDI_nMULT_dual2 nCNTR_impl_nIDEM_b nEXPN_CNTR_compl nEXPN_nCNTR_dual2 nIDEM_char nIDEM_compl sfun_compl_invol)
 
 (**nADDI for an operator implies meet-closedness of the set of fixed-points of its dual-complement*)
-lemma nADDI_meetclosed: "nADDI \<phi> \<Longrightarrow> meet_closed (fp (\<phi>\<^sup>-))" by (smt (verit, ccfv_threshold) ADDI_MULT_dual1 ADDI_def BA_deMorgan2 MULT_meetclosed dual_compl_char2 nADDI_def setequ_ext svfun_compl_def)
-lemma "meet_closed (fp (\<phi>\<^sup>-)) \<Longrightarrow> nADDI \<phi>" nitpick oops (*countermodel found: needs further assumptions*)
-lemma meetclosed_nADDI: "ANTI \<phi> \<Longrightarrow> nEXPN \<phi> \<Longrightarrow> nIDEM\<^sup>a \<phi> \<Longrightarrow> meet_closed (fp (\<phi>\<^sup>-)) \<Longrightarrow> nADDI \<phi>" by (metis ADDI_MULT_dual2 ADDI_joinclosed ANTI_MONO ANTI_dual dual_compl_char1 dual_compl_char2 joinclosed_nMULT meetclosed_MULT nADDI_nMULT_dual1 nCNTR_EXPN_compl nEXPN_nCNTR_dual1 nIDEM_b_compl nIDEM_dual1 sfun_compl_invol)
+lemma nADDI_meetclosed: "nADDI \<phi> \<Longrightarrow> meet_closed (fp (\<phi>\<^sup>d\<^sup>-))" by (smt (verit, ccfv_threshold) ADDI_MULT_dual1 ADDI_def BA_deMorgan2 MULT_meetclosed dual_compl_char2 nADDI_def setequ_ext svfun_compl_def)
+lemma "meet_closed (fp (\<phi>\<^sup>d\<^sup>-)) \<Longrightarrow> nADDI \<phi>" nitpick oops (*countermodel found: needs further assumptions*)
+lemma meetclosed_nADDI: "ANTI \<phi> \<Longrightarrow> nEXPN \<phi> \<Longrightarrow> nIDEM\<^sup>a \<phi> \<Longrightarrow> meet_closed (fp (\<phi>\<^sup>d\<^sup>-)) \<Longrightarrow> nADDI \<phi>" by (metis ADDI_MULT_dual2 ADDI_joinclosed ANTI_MONO ANTI_dual dual_compl_char1 dual_compl_char2 joinclosed_nMULT meetclosed_MULT nADDI_nMULT_dual1 nCNTR_EXPN_compl nEXPN_nCNTR_dual1 nIDEM_b_compl nIDEM_dual1 sfun_compl_invol)
 
 (**Assuming ANTI, we have that nEXPN (nCNTR) implies meet-closed (join-closed) for the set of fixed-points.*)
 lemma nEXPN_meetclosed: "ANTI \<phi> \<Longrightarrow> nEXPN \<phi> \<Longrightarrow> meet_closed (fp \<phi>)" by (metis (full_types) L10 compl_def fixpoints_def meet_closed_def nEXPN_def setequ_ext subset_def)

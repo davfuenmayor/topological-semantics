@@ -34,8 +34,8 @@ definition mexistsInt::"(\<sigma> \<Rightarrow> \<sigma>) \<Rightarrow> \<sigma>
 notation mforallInt (binder "\<^bold>\<forall>\<^sup>I" [48]49) 
 notation mexistsInt (binder "\<^bold>\<exists>\<^sup>I" [48]49) 
 
-abbreviation intneg ("\<^bold>\<not>\<^sup>I_") where "\<^bold>\<not>\<^sup>IA \<equiv> \<I>\<^sup>- A"
-abbreviation parneg ("\<^bold>\<not>\<^sup>C_") where "\<^bold>\<not>\<^sup>CA \<equiv> \<C>\<^sup>- A"
+abbreviation intneg ("\<^bold>\<not>\<^sup>I_") where "\<^bold>\<not>\<^sup>IA \<equiv> \<I>\<^sup>d\<^sup>- A"
+abbreviation parneg ("\<^bold>\<not>\<^sup>C_") where "\<^bold>\<not>\<^sup>CA \<equiv> \<C>\<^sup>d\<^sup>- A"
 abbreviation turnstile ("\<turnstile>_") where "\<turnstile> A \<equiv> \<forall>w. A w"
 
 lemma "(\<^bold>\<forall>X. (\<^bold>\<exists>B. (X  \<^bold>\<leftrightarrow> \<^bold>\<midarrow>B))) \<^bold>= \<^bold>\<top>" by (smt (verit, del_insts) compl_def dimpl_def mexists_def mforall_def setequ_def top_def)

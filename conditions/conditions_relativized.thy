@@ -198,35 +198,35 @@ lemma nADDIr_dual: "nADDIr \<phi> = nMULTr \<phi>\<^sup>d" using nADDIr_char nAD
 
 (****************** Complement interrelations ****************)
 
-lemma ADDIr_a_cmpl: "ADDIr\<^sup>a \<phi> = nADDIr\<^sup>a \<phi>\<^sup>c" unfolding cond by (smt (verit, del_insts) BA_deMorgan1 compl_def setequ_ext subset_out_def svfun_compl_def)
-lemma ADDIr_b_cmpl: "ADDIr\<^sup>b \<phi> = nADDIr\<^sup>b \<phi>\<^sup>c" unfolding cond by (smt (verit, del_insts) BA_deMorgan1 compl_def setequ_ext subset_out_def svfun_compl_def)
-lemma ADDIr_cmpl: "ADDIr \<phi> = nADDIr \<phi>\<^sup>c" by (simp add: ADDIr_a_cmpl ADDIr_b_cmpl ADDIr_char nADDIr_char)
-lemma MULTr_a_cmpl: "MULTr\<^sup>a \<phi> = nMULTr\<^sup>a \<phi>\<^sup>c" unfolding cond by (smt (verit, del_insts) BA_deMorgan2 compl_def setequ_ext subset_in_def svfun_compl_def)
-lemma MULTr_b_cmpl: "MULTr\<^sup>b \<phi> = nMULTr\<^sup>b \<phi>\<^sup>c" unfolding cond by (smt (verit, ccfv_threshold) BA_deMorgan2 compl_def setequ_ext subset_in_def svfun_compl_def)
-lemma MULTr_cmpl: "MULTr \<phi> = nMULTr \<phi>\<^sup>c" by (simp add: MULTr_a_cmpl MULTr_b_cmpl MULTr_char nMULTr_char)
+lemma ADDIr_a_cmpl: "ADDIr\<^sup>a \<phi> = nADDIr\<^sup>a \<phi>\<^sup>-" unfolding cond by (smt (verit, del_insts) BA_deMorgan1 compl_def setequ_ext subset_out_def svfun_compl_def)
+lemma ADDIr_b_cmpl: "ADDIr\<^sup>b \<phi> = nADDIr\<^sup>b \<phi>\<^sup>-" unfolding cond by (smt (verit, del_insts) BA_deMorgan1 compl_def setequ_ext subset_out_def svfun_compl_def)
+lemma ADDIr_cmpl: "ADDIr \<phi> = nADDIr \<phi>\<^sup>-" by (simp add: ADDIr_a_cmpl ADDIr_b_cmpl ADDIr_char nADDIr_char)
+lemma MULTr_a_cmpl: "MULTr\<^sup>a \<phi> = nMULTr\<^sup>a \<phi>\<^sup>-" unfolding cond by (smt (verit, del_insts) BA_deMorgan2 compl_def setequ_ext subset_in_def svfun_compl_def)
+lemma MULTr_b_cmpl: "MULTr\<^sup>b \<phi> = nMULTr\<^sup>b \<phi>\<^sup>-" unfolding cond by (smt (verit, ccfv_threshold) BA_deMorgan2 compl_def setequ_ext subset_in_def svfun_compl_def)
+lemma MULTr_cmpl: "MULTr \<phi> = nMULTr \<phi>\<^sup>-" by (simp add: MULTr_a_cmpl MULTr_b_cmpl MULTr_char nMULTr_char)
 
 
 (****************** Fixed-point interrelations ****************)
 
 lemma EXPN_fp:  "EXPN \<phi> = EXPN \<phi>\<^sup>f\<^sup>p" by (simp add: EXPN_def dimpl_def op_fixpoint_def subset_def)
-lemma EXPN_fpc: "EXPN \<phi> = nEXPN \<phi>\<^sup>f\<^sup>p\<^sup>c" using EXPN_fp nEXPN_CNTR_compl by blast
+lemma EXPN_fpc: "EXPN \<phi> = nEXPN \<phi>\<^sup>f\<^sup>p\<^sup>-" using EXPN_fp nEXPN_CNTR_compl by blast
 lemma CNTR_fp:  "CNTR \<phi> = nCNTR \<phi>\<^sup>f\<^sup>p" by (metis EXPN_CNTR_dual1 EXPN_fp dual_compl_char2 dual_invol nCNTR_EXPN_compl ofp_comm_dc1 sfun_compl_invol)
-lemma CNTR_fpc: "CNTR \<phi> = CNTR \<phi>\<^sup>f\<^sup>p\<^sup>c" by (metis CNTR_fp nCNTR_EXPN_compl ofp_comm_compl ofp_invol)
+lemma CNTR_fpc: "CNTR \<phi> = CNTR \<phi>\<^sup>f\<^sup>p\<^sup>-" by (metis CNTR_fp nCNTR_EXPN_compl ofp_comm_compl ofp_invol)
 
 lemma nNORM_fp: "NORM \<phi> = nNORM \<phi>\<^sup>f\<^sup>p" by (metis NORM_def fixpoints_def fp_rel nNORM_def)
-lemma NORM_fpc: "NORM \<phi> = NORM \<phi>\<^sup>f\<^sup>p\<^sup>c" by (simp add: NORM_def bottom_def ofp_fixpoint_compl_def sdiff_def)
+lemma NORM_fpc: "NORM \<phi> = NORM \<phi>\<^sup>f\<^sup>p\<^sup>-" by (simp add: NORM_def bottom_def ofp_fixpoint_compl_def sdiff_def)
 lemma DNRM_fp:  "DNRM \<phi> = DNRM \<phi>\<^sup>f\<^sup>p" by (simp add: DNRM_def dimpl_def op_fixpoint_def top_def)
-lemma DNRM_fpc: "DNRM \<phi> = nDNRM \<phi>\<^sup>f\<^sup>p\<^sup>c" using DNRM_fp nDNRM_DNRM_compl by blast
+lemma DNRM_fpc: "DNRM \<phi> = nDNRM \<phi>\<^sup>f\<^sup>p\<^sup>-" using DNRM_fp nDNRM_DNRM_compl by blast
 
-lemma ADDIr_a_fpc: "ADDIr\<^sup>a \<phi> = ADDIr\<^sup>a \<phi>\<^sup>f\<^sup>p\<^sup>c" unfolding cond subset_out_def by (simp add: join_def ofp_fixpoint_compl_def sdiff_def)
+lemma ADDIr_a_fpc: "ADDIr\<^sup>a \<phi> = ADDIr\<^sup>a \<phi>\<^sup>f\<^sup>p\<^sup>-" unfolding cond subset_out_def by (simp add: join_def ofp_fixpoint_compl_def sdiff_def)
 lemma ADDIr_a_fp: "ADDIr\<^sup>a \<phi> = nADDIr\<^sup>a \<phi>\<^sup>f\<^sup>p" by (metis ADDIr_a_cmpl ADDIr_a_fpc sfun_compl_invol)
-lemma ADDIr_b_fpc: "ADDIr\<^sup>b \<phi> = ADDIr\<^sup>b \<phi>\<^sup>f\<^sup>p\<^sup>c" unfolding cond subset_out_def by (simp add: join_def ofp_fixpoint_compl_def sdiff_def)
+lemma ADDIr_b_fpc: "ADDIr\<^sup>b \<phi> = ADDIr\<^sup>b \<phi>\<^sup>f\<^sup>p\<^sup>-" unfolding cond subset_out_def by (simp add: join_def ofp_fixpoint_compl_def sdiff_def)
 lemma ADDIr_b_fp: "ADDIr\<^sup>b \<phi> = nADDIr\<^sup>b \<phi>\<^sup>f\<^sup>p" by (metis ADDIr_b_cmpl ADDIr_b_fpc sfun_compl_invol)
 
 lemma MULTr_a_fp: "MULTr\<^sup>a \<phi> = MULTr\<^sup>a \<phi>\<^sup>f\<^sup>p" unfolding cond subset_in_def by (simp add: dimpl_def meet_def op_fixpoint_def)
-lemma MULTr_a_fpc: "MULTr\<^sup>a \<phi> = nMULTr\<^sup>a \<phi>\<^sup>f\<^sup>p\<^sup>c" using MULTr_a_cmpl MULTr_a_fp by blast
+lemma MULTr_a_fpc: "MULTr\<^sup>a \<phi> = nMULTr\<^sup>a \<phi>\<^sup>f\<^sup>p\<^sup>-" using MULTr_a_cmpl MULTr_a_fp by blast
 lemma MULTr_b_fp: "MULTr\<^sup>b \<phi> = MULTr\<^sup>b \<phi>\<^sup>f\<^sup>p" unfolding cond subset_in_def by (simp add: dimpl_def meet_def op_fixpoint_def)
-lemma MULTr_b_fpc: "MULTr\<^sup>b \<phi> = nMULTr\<^sup>b \<phi>\<^sup>f\<^sup>p\<^sup>c" using MULTr_b_cmpl MULTr_b_fp by blast
+lemma MULTr_b_fpc: "MULTr\<^sup>b \<phi> = nMULTr\<^sup>b \<phi>\<^sup>f\<^sup>p\<^sup>-" using MULTr_b_cmpl MULTr_b_fp by blast
 
 
 (****************** Relativized IDEM variants ****************)
@@ -249,8 +249,8 @@ declare nIDEMr_a_def[cond] nIDEMr_b_def[cond]
 
 (****************** Complement interrelations ****************)
 
-lemma IDEMr_a_cmpl: "IDEMr\<^sup>a \<phi> = nIDEMr\<^sup>a \<phi>\<^sup>c" unfolding cond subset_in_def subset_out_def by (metis compl_def sfun_compl_invol svfun_compl_def)
-lemma IDEMr_b_cmpl: "IDEMr\<^sup>b \<phi> = nIDEMr\<^sup>b \<phi>\<^sup>c" unfolding cond subset_in_def subset_out_def by (metis compl_def sfun_compl_invol svfun_compl_def)
+lemma IDEMr_a_cmpl: "IDEMr\<^sup>a \<phi> = nIDEMr\<^sup>a \<phi>\<^sup>-" unfolding cond subset_in_def subset_out_def by (metis compl_def sfun_compl_invol svfun_compl_def)
+lemma IDEMr_b_cmpl: "IDEMr\<^sup>b \<phi> = nIDEMr\<^sup>b \<phi>\<^sup>-" unfolding cond subset_in_def subset_out_def by (metis compl_def sfun_compl_invol svfun_compl_def)
 
 (****************** Dual interrelation ****************)
 
@@ -266,7 +266,7 @@ lemma IDEMr_a_fp: "IDEMr\<^sup>a \<phi> = nIDEMr\<^sup>a \<phi>\<^sup>f\<^sup>p"
     unfolding cond subset_out_def op_fixpoint_def conn order apply simp (*by metis*) sorry (*fix proof reconstruction in kernel*) 
   from l2r r2l show ?thesis by blast
 qed
-lemma IDEMr_a_fpc: "IDEMr\<^sup>a \<phi> = IDEMr\<^sup>a \<phi>\<^sup>f\<^sup>p\<^sup>c" using IDEMr_a_fp by (metis IDEMr_a_cmpl sfun_compl_invol)
+lemma IDEMr_a_fpc: "IDEMr\<^sup>a \<phi> = IDEMr\<^sup>a \<phi>\<^sup>f\<^sup>p\<^sup>-" using IDEMr_a_fp by (metis IDEMr_a_cmpl sfun_compl_invol)
 
 lemma IDEMr_b_fp: "IDEMr\<^sup>b \<phi> = IDEMr\<^sup>b \<phi>\<^sup>f\<^sup>p" proof -
   have l2r: "IDEMr\<^sup>b \<phi> \<longrightarrow> IDEMr\<^sup>b \<phi>\<^sup>f\<^sup>p" 
@@ -275,7 +275,7 @@ lemma IDEMr_b_fp: "IDEMr\<^sup>b \<phi> = IDEMr\<^sup>b \<phi>\<^sup>f\<^sup>p" 
     unfolding cond subset_in_def op_fixpoint_def conn order apply simp (*by metis*) sorry (*fix proof reconstruction in kernel*)
   from l2r r2l show ?thesis by blast
 qed
-lemma IDEMr_b_fpc: "IDEMr\<^sup>b \<phi> = nIDEMr\<^sup>b \<phi>\<^sup>f\<^sup>p\<^sup>c" using IDEMr_b_fp IDEMr_b_cmpl by blast
+lemma IDEMr_b_fpc: "IDEMr\<^sup>b \<phi> = nIDEMr\<^sup>b \<phi>\<^sup>f\<^sup>p\<^sup>-" using IDEMr_b_fp IDEMr_b_cmpl by blast
 
 
 (***************************************************)

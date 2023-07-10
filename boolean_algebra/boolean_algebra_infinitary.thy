@@ -17,8 +17,8 @@ definition supremum::"('w \<sigma>)\<sigma> \<Rightarrow> 'w \<sigma>" ("\<^bold
 declare infimum_def[conn] supremum_def[conn]
 
 (**Infimum and supremum satisfy an infinite variant of the De Morgan laws*)
-lemma iDM_a: "\<^bold>\<midarrow>(\<^bold>\<And>S) \<^bold>= \<^bold>\<Or>(S\<^sup>-)" unfolding order conn conn2 by force
-lemma iDM_b:" \<^bold>\<midarrow>(\<^bold>\<Or>S) \<^bold>= \<^bold>\<And>(S\<^sup>-)" unfolding order conn conn2 by force
+lemma iDM_a: "\<^bold>\<midarrow>(\<^bold>\<And>S) \<^bold>= \<^bold>\<Or>(S\<^sup>d\<^sup>-)" unfolding order conn conn2 by force
+lemma iDM_b:" \<^bold>\<midarrow>(\<^bold>\<Or>S) \<^bold>= \<^bold>\<And>(S\<^sup>d\<^sup>-)" unfolding order conn conn2 by force
 
 (**We show that the our encoded Boolean algebras are lattice-complete.*)
 
@@ -80,8 +80,8 @@ lemma inf_closed_char: "infimum_closed S = (infimum_closed' S \<and> S \<^bold>\
 lemma sup_closed_char: "supremum_closed S = (supremum_closed' S \<and> S \<^bold>\<bottom>)"
   unfolding supremum_closed'_def supremum_closed_def by (metis (no_types, opaque_lifting) L14 L9 bottom_def setequ_ext subset_def supremum_def)
 
-lemma inf_sup_closed_dc: "infimum_closed S = supremum_closed S\<^sup>-" by (smt (verit) BA_dn iDM_a iDM_b infimum_closed_def setequ_ext sdfun_dcompl_def subset_def supremum_closed_def)
-lemma inf_sup_closed_dc': "infimum_closed' S = supremum_closed' S\<^sup>-" by (smt (verit) dualcompl_invol iDM_a infimum_closed'_def sdfun_dcompl_def setequ_ext subset_def supremum_closed'_def)
+lemma inf_sup_closed_dc: "infimum_closed S = supremum_closed S\<^sup>d\<^sup>-" by (smt (verit) BA_dn iDM_a iDM_b infimum_closed_def setequ_ext sdfun_dcompl_def subset_def supremum_closed_def)
+lemma inf_sup_closed_dc': "infimum_closed' S = supremum_closed' S\<^sup>d\<^sup>-" by (smt (verit) dualcompl_invol iDM_a infimum_closed'_def sdfun_dcompl_def setequ_ext subset_def supremum_closed'_def)
 
 (**We check some further properties:*)
 lemma fp_inf_sup_closed_dual: "infimum_closed (fp \<phi>) = supremum_closed (fp \<phi>\<^sup>d)" 

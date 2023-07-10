@@ -26,7 +26,7 @@ lemma "(\<^bold>\<forall>X. \<phi>) = \<^bold>\<Pi>(\<lambda>X. \<phi>)" by (sim
 lemma "(\<^bold>\<exists>X. \<phi>) = \<^bold>\<Sigma>(\<lambda>X. \<phi>)" by (simp add: mexists_def)
 
 (**Quantifiers are dual to each other in the expected way*)
-lemma "\<^bold>\<Pi>\<phi> = \<^bold>\<midarrow>(\<^bold>\<Sigma>\<phi>\<^sup>c)" by (simp add: compl_def mexists_def mforall_def svfun_compl_def)
+lemma "\<^bold>\<Pi>\<phi> = \<^bold>\<midarrow>(\<^bold>\<Sigma>\<phi>\<^sup>-)" by (simp add: compl_def mexists_def mforall_def svfun_compl_def)
 lemma "(\<^bold>\<forall>X. \<phi> X) = \<^bold>\<midarrow>(\<^bold>\<exists>X. \<^bold>\<midarrow>(\<phi> X))" by (simp add: compl_def mexists_def mforall_def)
 
 (**Relationship between quantifiers and the infinitary supremum and infimum operations*)
@@ -75,8 +75,8 @@ lemma "\<^bold>\<Pi>[D]\<phi> = \<^bold>\<Pi>{D\<upharpoonleft>}\<phi>" by (simp
 lemma "\<^bold>\<Sigma>[D]\<phi> = \<^bold>\<Sigma>{D\<upharpoonleft>}\<phi>" by (simp add: mexists_const_def mexists_var_def)
 
 (**Restricted quantifiers are dual to each other in the expected way*)
-lemma "\<^bold>\<Pi>[D]\<phi> = \<^bold>\<midarrow>(\<^bold>\<Sigma>[D]\<phi>\<^sup>c)" by (metis iDM_b im_prop2 mexists_const_char mforall_const_char setequ_ext)
-lemma "\<^bold>\<Pi>{\<psi>}\<phi> = \<^bold>\<midarrow>(\<^bold>\<Sigma>{\<psi>}\<phi>\<^sup>c)" by (simp add: compl_def mexists_var_def mforall_var_def svfun_compl_def)
+lemma "\<^bold>\<Pi>[D]\<phi> = \<^bold>\<midarrow>(\<^bold>\<Sigma>[D]\<phi>\<^sup>-)" by (metis iDM_b im_prop2 mexists_const_char mforall_const_char setequ_ext)
+lemma "\<^bold>\<Pi>{\<psi>}\<phi> = \<^bold>\<midarrow>(\<^bold>\<Sigma>{\<psi>}\<phi>\<^sup>-)" by (simp add: compl_def mexists_var_def mforall_var_def svfun_compl_def)
 
 
 (**We can use 2nd-order connectives on set-valued functions to encode restricted quantifiers as unrestricted*)

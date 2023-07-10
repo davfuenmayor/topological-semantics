@@ -16,13 +16,13 @@ consts \<C>::"w \<sigma> \<Rightarrow> w \<sigma>"
 (*From the topological cube of opposition:*)
 abbreviation "\<I> \<equiv> \<C>\<^sup>d" 
 abbreviation "\<B> \<equiv> (\<C>\<^sup>f\<^sup>p)\<^sup>d" 
-lemma "\<C>\<^sup>- = \<B>\<^sup>f\<^sup>p" by (simp add: ofp_comm_dc1 ofp_invol)
+lemma "\<C>\<^sup>d\<^sup>- = \<B>\<^sup>f\<^sup>p" by (simp add: ofp_comm_dc1 ofp_invol)
 
 (*let us recall that: *)
 lemma "EXPN \<C> = CNTR \<B>" using EXPN_CNTR_dual1 EXPN_fp by blast
 
-(**For LFIs we use the negation previously defined as \<C>\<^sup>- = \<B>\<^sup>f\<^sup>p *)
-abbreviation cneg ("\<^bold>\<not>_"[70]71) where "cneg \<equiv> \<C>\<^sup>-"
+(**For LFIs we use the negation previously defined as \<C>\<^sup>d\<^sup>- = \<B>\<^sup>f\<^sup>p *)
+abbreviation cneg ("\<^bold>\<not>_"[70]71) where "cneg \<equiv> \<C>\<^sup>d\<^sup>-"
 
 (**In terms of the border operator the negation looks as follows:*)
 lemma cneg_char: "EXPN \<C> \<longrightarrow> \<^bold>\<not>A \<^bold>= \<^bold>\<midarrow>A \<^bold>\<or> (\<B> A)" by (smt (verit, ccfv_SIG) EXPN_def compl_def dimpl_def join_def ofp_comm_dc2 op_fixpoint_def sdfun_dcompl_def setequ_def subset_def)
@@ -48,7 +48,7 @@ abbreviation op_con_a::"w \<sigma> \<Rightarrow> w \<sigma>" ("\<^bold>\<circ>\<
 abbreviation op_inc_b::"w \<sigma> \<Rightarrow> w \<sigma>" ("\<bullet>\<^sup>B_" [57]58) (* \<bullet> as border *)
   where "\<bullet>\<^sup>BA \<equiv> \<B> A"
 abbreviation op_con_b::"w \<sigma> \<Rightarrow> w \<sigma>" ("\<^bold>\<circ>\<^sup>B_" [57]58) 
-  where "\<^bold>\<circ>\<^sup>BA \<equiv> \<B>\<^sup>c A"
+  where "\<^bold>\<circ>\<^sup>BA \<equiv> \<B>\<^sup>- A"
 
 (**Observe that assumming EXPN \<C> are we allowed to exchange A and B variants.*)
 lemma pincAB: "EXPN \<C> \<longrightarrow> \<bullet>\<^sup>AA \<^bold>= \<bullet>\<^sup>BA" by (smt (verit, ccfv_threshold) cneg_char compl_def dimpl_def join_def meet_def op_dual_def op_fixpoint_def sdfun_dcompl_def setequ_def)

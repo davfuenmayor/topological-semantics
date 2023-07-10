@@ -15,8 +15,8 @@ definition svfun_join::"('i \<Rightarrow> 'w \<sigma>) \<Rightarrow> ('i \<Right
 (**analogously, we can define an 'implication' and a 'complement'*)
 definition svfun_impl::"('i \<Rightarrow> 'w \<sigma>) \<Rightarrow> ('i \<Rightarrow> 'w \<sigma>) \<Rightarrow> ('i \<Rightarrow> 'w \<sigma>)" (infixr "\<^bold>\<rightarrow>''" 61) 
   where "\<psi> \<^bold>\<rightarrow>' \<phi> \<equiv> \<lambda>x. (\<psi> x) \<^bold>\<rightarrow> (\<phi> x)"
-definition svfun_compl::"('i \<Rightarrow> 'w \<sigma>) \<Rightarrow> ('i \<Rightarrow> 'w \<sigma>)" ("(_\<^sup>c)") 
-  where "\<phi>\<^sup>c \<equiv> \<lambda>x. \<^bold>\<midarrow>(\<phi> x)"
+definition svfun_compl::"('i \<Rightarrow> 'w \<sigma>) \<Rightarrow> ('i \<Rightarrow> 'w \<sigma>)" ("(_\<^sup>-)") 
+  where "\<phi>\<^sup>- \<equiv> \<lambda>x. \<^bold>\<midarrow>(\<phi> x)"
 (**There are two natural 0-ary connectives (aka. constants) *)
 definition svfun_top::"'i \<Rightarrow> 'w \<sigma>" ("\<^bold>\<top>''") 
   where "\<^bold>\<top>' \<equiv> \<lambda>x. \<^bold>\<top>"
@@ -41,19 +41,19 @@ lemma svfun_equ_char: "(\<psi> \<^bold>=' \<phi>) = (\<psi> \<^bold>\<le>' \<phi
 lemma svfun_equ_ext: "(\<psi> \<^bold>=' \<phi>) = (\<psi> = \<phi>)" by (meson ext setequ_ext svfun_equ_def)
 
 (**Clearly, set-valued functions form a Boolean algebra. We can prove some interesting relationships*)
-lemma svfun_compl_char: "\<phi>\<^sup>c = (\<phi> \<^bold>\<rightarrow>' \<^bold>\<bottom>')" unfolding conn conn2 by simp
-lemma svfun_impl_char1: "(\<psi> \<^bold>\<rightarrow>' \<phi>) = (\<psi>\<^sup>c \<^bold>\<or>' \<phi>)" unfolding conn conn2 by simp
-lemma svfun_impl_char2: "(\<psi> \<^bold>\<rightarrow>' \<phi>) = (\<psi> \<^bold>\<and>' (\<phi>\<^sup>c))\<^sup>c" unfolding conn conn2 by simp
-lemma svfun_deMorgan1: "(\<psi> \<^bold>\<and>' \<phi>)\<^sup>c = (\<psi>\<^sup>c) \<^bold>\<or>' (\<phi>\<^sup>c)" unfolding conn conn2 by simp
-lemma svfun_deMorgan2: "(\<psi> \<^bold>\<or>' \<phi>)\<^sup>c = (\<psi>\<^sup>c) \<^bold>\<and>' (\<phi>\<^sup>c)" unfolding conn conn2 by simp
+lemma svfun_compl_char: "\<phi>\<^sup>- = (\<phi> \<^bold>\<rightarrow>' \<^bold>\<bottom>')" unfolding conn conn2 by simp
+lemma svfun_impl_char1: "(\<psi> \<^bold>\<rightarrow>' \<phi>) = (\<psi>\<^sup>- \<^bold>\<or>' \<phi>)" unfolding conn conn2 by simp
+lemma svfun_impl_char2: "(\<psi> \<^bold>\<rightarrow>' \<phi>) = (\<psi> \<^bold>\<and>' (\<phi>\<^sup>-))\<^sup>-" unfolding conn conn2 by simp
+lemma svfun_deMorgan1: "(\<psi> \<^bold>\<and>' \<phi>)\<^sup>- = (\<psi>\<^sup>-) \<^bold>\<or>' (\<phi>\<^sup>-)" unfolding conn conn2 by simp
+lemma svfun_deMorgan2: "(\<psi> \<^bold>\<or>' \<phi>)\<^sup>- = (\<psi>\<^sup>-) \<^bold>\<and>' (\<phi>\<^sup>-)" unfolding conn conn2 by simp
 
 
 subsection \<open>Further algebraic connectives on operators\<close>
 
 (**Dual to set-valued functions we can have set-domain functions. For them we can define the 'dual-complement'*)
-definition sdfun_dcompl::"('w \<sigma> \<Rightarrow> 'i) \<Rightarrow> ('w \<sigma> \<Rightarrow> 'i)" ("(_\<^sup>-)") 
-  where "\<phi>\<^sup>- \<equiv> \<lambda>X. \<phi>(\<^bold>\<midarrow>X)"
-lemma sdfun_dcompl_char: "\<phi>\<^sup>- = (\<lambda>X. \<exists>Y. (\<phi> Y) \<and> (X = \<^bold>\<midarrow>Y))" by (metis BA_dn setequ_ext sdfun_dcompl_def)
+definition sdfun_dcompl::"('w \<sigma> \<Rightarrow> 'i) \<Rightarrow> ('w \<sigma> \<Rightarrow> 'i)" ("(_\<^sup>d\<^sup>-)") 
+  where "\<phi>\<^sup>d\<^sup>- \<equiv> \<lambda>X. \<phi>(\<^bold>\<midarrow>X)"
+lemma sdfun_dcompl_char: "\<phi>\<^sup>d\<^sup>- = (\<lambda>X. \<exists>Y. (\<phi> Y) \<and> (X = \<^bold>\<midarrow>Y))" by (metis BA_dn setequ_ext sdfun_dcompl_def)
 
 (**Operators are a particularly important kind of functions. They are both set-valued and set-domain.
 Thus our algebra of operators inherits the connectives defined above plus some idiosyncratic ones. *)
@@ -72,19 +72,19 @@ definition compl_op::"'w \<sigma> \<Rightarrow> 'w \<sigma>" ("\<^bold>n")
 declare sdfun_dcompl_def[conn2] op_dual_def[conn2] id_op_def[conn2] compl_op_def[conn2]
 
 (**We now prove some lemmas (some of them might help provers in their hard work).*)
-lemma dual_compl_char1: "\<phi>\<^sup>- = (\<phi>\<^sup>d)\<^sup>c" unfolding conn2 conn order by simp
-lemma dual_compl_char2: "\<phi>\<^sup>- = (\<phi>\<^sup>c)\<^sup>d" unfolding conn2 conn order by simp
-lemma sfun_compl_invol: "\<phi>\<^sup>c\<^sup>c = \<phi>" unfolding conn2 conn order by simp
+lemma dual_compl_char1: "\<phi>\<^sup>d\<^sup>- = (\<phi>\<^sup>d)\<^sup>-" unfolding conn2 conn order by simp
+lemma dual_compl_char2: "\<phi>\<^sup>d\<^sup>- = (\<phi>\<^sup>-)\<^sup>d" unfolding conn2 conn order by simp
+lemma sfun_compl_invol: "\<phi>\<^sup>-\<^sup>- = \<phi>" unfolding conn2 conn order by simp
 lemma dual_invol: "\<phi>\<^sup>d\<^sup>d = \<phi>" unfolding conn2 conn order by simp
-lemma dualcompl_invol: "(\<phi>\<^sup>-)\<^sup>- = \<phi>" unfolding conn2 conn order by simp
+lemma dualcompl_invol: "(\<phi>\<^sup>d\<^sup>-)\<^sup>d\<^sup>- = \<phi>" unfolding conn2 conn order by simp
 
 lemma op_prop1: "\<^bold>e\<^sup>d = \<^bold>e" unfolding conn2 conn by simp
 lemma op_prop2: "\<^bold>n\<^sup>d = \<^bold>n" unfolding conn2 conn by simp
-lemma op_prop3: "\<^bold>e\<^sup>c = \<^bold>n" unfolding conn2 conn by simp
+lemma op_prop3: "\<^bold>e\<^sup>- = \<^bold>n" unfolding conn2 conn by simp
 lemma op_prop4: "(\<phi> \<^bold>\<or>' \<psi>)\<^sup>d = (\<phi>\<^sup>d) \<^bold>\<and>' (\<psi>\<^sup>d)" unfolding conn2 conn by simp
-lemma op_prop5: "(\<phi> \<^bold>\<or>' \<psi>)\<^sup>c = (\<phi>\<^sup>c) \<^bold>\<and>' (\<psi>\<^sup>c)" unfolding conn2 conn by simp
+lemma op_prop5: "(\<phi> \<^bold>\<or>' \<psi>)\<^sup>- = (\<phi>\<^sup>-) \<^bold>\<and>' (\<psi>\<^sup>-)" unfolding conn2 conn by simp
 lemma op_prop6: "(\<phi> \<^bold>\<and>' \<psi>)\<^sup>d = (\<phi>\<^sup>d) \<^bold>\<or>' (\<psi>\<^sup>d)" unfolding conn2 conn by simp
-lemma op_prop7: "(\<phi> \<^bold>\<and>' \<psi>)\<^sup>c = (\<phi>\<^sup>c) \<^bold>\<or>' (\<psi>\<^sup>c)" unfolding conn2 conn by simp
+lemma op_prop7: "(\<phi> \<^bold>\<and>' \<psi>)\<^sup>- = (\<phi>\<^sup>-) \<^bold>\<or>' (\<psi>\<^sup>-)" unfolding conn2 conn by simp
 lemma op_prop8: "\<^bold>\<top>' = \<^bold>n \<^bold>\<or>' \<^bold>e" unfolding conn2 conn by simp
 lemma op_prop9: "\<^bold>\<bottom>' = \<^bold>n \<^bold>\<and>' \<^bold>e" unfolding conn2 conn by simp
 
@@ -100,50 +100,50 @@ definition op_fixpoint::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> (
 declare fixpoints_def[conn2] op_fixpoint_def[conn2]
 
 (**Interestingly, the fixed-point connective is definable in terms of the others*)
-lemma op_fixpoint_char: "\<phi>\<^sup>f\<^sup>p = (\<phi> \<^bold>\<and>' \<^bold>e) \<^bold>\<or>' (\<phi>\<^sup>c \<^bold>\<and>' \<^bold>n)" unfolding conn2 order conn by blast
+lemma op_fixpoint_char: "\<phi>\<^sup>f\<^sup>p = (\<phi> \<^bold>\<and>' \<^bold>e) \<^bold>\<or>' (\<phi>\<^sup>- \<^bold>\<and>' \<^bold>n)" unfolding conn2 order conn by blast
 
 (**Given an operator \<phi>: the fixed-points of \<phi>'s dual is the set of complements of \<phi>' fixed-points*)
-lemma fp_dual: "fp \<phi>\<^sup>d = (fp \<phi>)\<^sup>-" unfolding order conn conn2 by blast
+lemma fp_dual: "fp \<phi>\<^sup>d = (fp \<phi>)\<^sup>d\<^sup>-" unfolding order conn conn2 by blast
 (**the fixed-points of \<phi>'s complement is the set of complements of the fixed-points of \<phi>'s dual-complement*)
-lemma fp_compl: "fp \<phi>\<^sup>c = (fp (\<phi>\<^sup>-))\<^sup>-" by (simp add: dual_compl_char2 dualcompl_invol fp_dual)
+lemma fp_compl: "fp \<phi>\<^sup>- = (fp (\<phi>\<^sup>d\<^sup>-))\<^sup>d\<^sup>-" by (simp add: dual_compl_char2 dualcompl_invol fp_dual)
 (**the fixed-points of \<phi>'s dual-complement is the set of complements of the fixed-points of \<phi>'s complement*)
-lemma fp_dcompl: "fp (\<phi>\<^sup>-) = (fp \<phi>\<^sup>c)\<^sup>-" by (simp add: dualcompl_invol fp_compl)
+lemma fp_dcompl: "fp (\<phi>\<^sup>d\<^sup>-) = (fp \<phi>\<^sup>-)\<^sup>d\<^sup>-" by (simp add: dualcompl_invol fp_compl)
 
 (**The fixed-points function and the fixed-point connective are essentially related.*)
 lemma fp_rel: "fp \<phi> A \<longleftrightarrow> (\<phi>\<^sup>f\<^sup>p A) \<^bold>= \<^bold>\<top>" unfolding conn2 order conn by simp
 lemma fp_d_rel:  "fp \<phi>\<^sup>d A \<longleftrightarrow> \<phi>\<^sup>f\<^sup>p(\<^bold>\<midarrow>A) \<^bold>= \<^bold>\<top>" unfolding conn2 order conn by blast
-lemma fp_c_rel: "fp \<phi>\<^sup>c A \<longleftrightarrow> \<phi>\<^sup>f\<^sup>p A \<^bold>= \<^bold>\<bottom>" unfolding conn2 order conn by blast
-lemma fp_dc_rel: "fp (\<phi>\<^sup>-) A \<longleftrightarrow> \<phi>\<^sup>f\<^sup>p(\<^bold>\<midarrow>A) \<^bold>= \<^bold>\<bottom>" unfolding conn2 order conn by simp
+lemma fp_c_rel: "fp \<phi>\<^sup>- A \<longleftrightarrow> \<phi>\<^sup>f\<^sup>p A \<^bold>= \<^bold>\<bottom>" unfolding conn2 order conn by blast
+lemma fp_dc_rel: "fp (\<phi>\<^sup>d\<^sup>-) A \<longleftrightarrow> \<phi>\<^sup>f\<^sup>p(\<^bold>\<midarrow>A) \<^bold>= \<^bold>\<bottom>" unfolding conn2 order conn by simp
 
 (**The fixed-point operation is involutive*)
 lemma ofp_invol: "(\<phi>\<^sup>f\<^sup>p)\<^sup>f\<^sup>p = \<phi>" unfolding conn2 order conn by blast
 (**and commutes the dual with the dual-complement operations*)
-lemma ofp_comm_dc1: "(\<phi>\<^sup>d)\<^sup>f\<^sup>p = (\<phi>\<^sup>f\<^sup>p)\<^sup>-" unfolding conn2 order conn by blast
-lemma ofp_comm_dc2:"(\<phi>\<^sup>-)\<^sup>f\<^sup>p = (\<phi>\<^sup>f\<^sup>p)\<^sup>d" unfolding conn2 order conn by simp
+lemma ofp_comm_dc1: "(\<phi>\<^sup>d)\<^sup>f\<^sup>p = (\<phi>\<^sup>f\<^sup>p)\<^sup>d\<^sup>-" unfolding conn2 order conn by blast
+lemma ofp_comm_dc2:"(\<phi>\<^sup>d\<^sup>-)\<^sup>f\<^sup>p = (\<phi>\<^sup>f\<^sup>p)\<^sup>d" unfolding conn2 order conn by simp
 
 (**The fixed-point operation commutes with the complement*)
-lemma ofp_comm_compl: "(\<phi>\<^sup>c)\<^sup>f\<^sup>p = (\<phi>\<^sup>f\<^sup>p)\<^sup>c" unfolding conn2 order conn by blast
+lemma ofp_comm_compl: "(\<phi>\<^sup>-)\<^sup>f\<^sup>p = (\<phi>\<^sup>f\<^sup>p)\<^sup>-" unfolding conn2 order conn by blast
 (**The above motivates the following alternative definition for a 'complemented-fixed-point' operation*)
-lemma ofp_fixpoint_compl_def: "\<phi>\<^sup>f\<^sup>p\<^sup>c = (\<lambda>X. (\<phi> X) \<^bold>\<triangle> X)" unfolding conn2 conn by simp
+lemma ofp_fixpoint_compl_def: "\<phi>\<^sup>f\<^sup>p\<^sup>- = (\<lambda>X. (\<phi> X) \<^bold>\<triangle> X)" unfolding conn2 conn by simp
 (**Analogously, the complemented fixed-point connective is also definable in terms of the others*)
-lemma op_fixpoint_compl_char: "\<phi>\<^sup>f\<^sup>p\<^sup>c = (\<phi> \<^bold>\<or>' \<^bold>e) \<^bold>\<and>' (\<phi>\<^sup>c \<^bold>\<or>' \<^bold>n)" unfolding conn2 conn by blast
+lemma op_fixpoint_compl_char: "\<phi>\<^sup>f\<^sup>p\<^sup>- = (\<phi> \<^bold>\<or>' \<^bold>e) \<^bold>\<and>' (\<phi>\<^sup>- \<^bold>\<or>' \<^bold>n)" unfolding conn2 conn by blast
 
 (**In fact, function composition can be seen as an additional binary connective for operators.
   We show below some interesting relationships that hold: *)
 lemma op_prop10: "\<phi> = (\<^bold>e \<circ> \<phi>)" unfolding conn2 fun_comp_def by simp
 lemma op_prop11: "\<phi> = (\<phi> \<circ> \<^bold>e)" unfolding conn2 fun_comp_def by simp
 lemma op_prop12: "\<^bold>e = (\<^bold>n \<circ> \<^bold>n)" unfolding conn2 conn fun_comp_def by simp
-lemma op_prop13: "\<phi>\<^sup>c = (\<^bold>n \<circ> \<phi>)" unfolding conn2 fun_comp_def by simp
-lemma op_prop14: "\<phi>\<^sup>- = (\<phi> \<circ> \<^bold>n)" unfolding conn2 fun_comp_def by simp
+lemma op_prop13: "\<phi>\<^sup>- = (\<^bold>n \<circ> \<phi>)" unfolding conn2 fun_comp_def by simp
+lemma op_prop14: "\<phi>\<^sup>d\<^sup>- = (\<phi> \<circ> \<^bold>n)" unfolding conn2 fun_comp_def by simp
 lemma op_prop15: "\<phi>\<^sup>d = (\<^bold>n \<circ> \<phi> \<circ> \<^bold>n)" unfolding conn2 fun_comp_def by simp
 
 (**There are also some useful properties regarding the images of operators*)
-lemma im_prop1: "\<lbrakk>\<phi> D\<rbrakk>\<^sup>-  = \<lbrakk>\<phi>\<^sup>d D\<^sup>-\<rbrakk>" unfolding image_def op_dual_def sdfun_dcompl_def by (metis BA_dn setequ_ext)
-lemma im_prop2: "\<lbrakk>\<phi>\<^sup>c D\<rbrakk>\<^sup>- = \<lbrakk>\<phi> D\<rbrakk>" unfolding image_def svfun_compl_def sdfun_dcompl_def by (metis BA_dn setequ_ext)
-lemma im_prop3: "\<lbrakk>\<phi>\<^sup>d D\<rbrakk>\<^sup>- = \<lbrakk>\<phi> D\<^sup>-\<rbrakk>" unfolding image_def op_dual_def sdfun_dcompl_def by (metis BA_dn setequ_ext)
-lemma im_prop4: "\<lbrakk>\<phi>\<^sup>- D\<rbrakk>\<^sup>- = \<lbrakk>\<phi>\<^sup>d D\<rbrakk>" unfolding image_def op_dual_def sdfun_dcompl_def by (metis BA_dn setequ_ext)
-lemma im_prop5: "\<lbrakk>\<phi>\<^sup>c D\<^sup>-\<rbrakk>  = \<lbrakk>\<phi>\<^sup>- D\<rbrakk>\<^sup>-" unfolding image_def svfun_compl_def sdfun_dcompl_def by (metis (no_types, opaque_lifting) BA_dn setequ_ext)
-lemma im_prop6: "\<lbrakk>\<phi>\<^sup>- D\<^sup>-\<rbrakk>  = \<lbrakk>\<phi> D\<rbrakk>" unfolding image_def sdfun_dcompl_def by (metis BA_dn setequ_ext)
+lemma im_prop1: "\<lbrakk>\<phi> D\<rbrakk>\<^sup>d\<^sup>-  = \<lbrakk>\<phi>\<^sup>d D\<^sup>d\<^sup>-\<rbrakk>" unfolding image_def op_dual_def sdfun_dcompl_def by (metis BA_dn setequ_ext)
+lemma im_prop2: "\<lbrakk>\<phi>\<^sup>- D\<rbrakk>\<^sup>d\<^sup>- = \<lbrakk>\<phi> D\<rbrakk>" unfolding image_def svfun_compl_def sdfun_dcompl_def by (metis BA_dn setequ_ext)
+lemma im_prop3: "\<lbrakk>\<phi>\<^sup>d D\<rbrakk>\<^sup>d\<^sup>- = \<lbrakk>\<phi> D\<^sup>d\<^sup>-\<rbrakk>" unfolding image_def op_dual_def sdfun_dcompl_def by (metis BA_dn setequ_ext)
+lemma im_prop4: "\<lbrakk>\<phi>\<^sup>d\<^sup>- D\<rbrakk>\<^sup>d\<^sup>- = \<lbrakk>\<phi>\<^sup>d D\<rbrakk>" unfolding image_def op_dual_def sdfun_dcompl_def by (metis BA_dn setequ_ext)
+lemma im_prop5: "\<lbrakk>\<phi>\<^sup>- D\<^sup>d\<^sup>-\<rbrakk>  = \<lbrakk>\<phi>\<^sup>d\<^sup>- D\<rbrakk>\<^sup>d\<^sup>-" unfolding image_def svfun_compl_def sdfun_dcompl_def by (metis (no_types, opaque_lifting) BA_dn setequ_ext)
+lemma im_prop6: "\<lbrakk>\<phi>\<^sup>d\<^sup>- D\<^sup>d\<^sup>-\<rbrakk>  = \<lbrakk>\<phi> D\<rbrakk>" unfolding image_def sdfun_dcompl_def by (metis BA_dn setequ_ext)
 
 
 (**Observe that all results obtained by assuming fixed-point predicates extend to their associated operators.*)

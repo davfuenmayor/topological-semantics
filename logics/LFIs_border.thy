@@ -14,14 +14,14 @@ typedecl w
 consts \<B>::"w \<sigma> \<Rightarrow> w \<sigma>"
 
 (*From the topological cube of opposition:*)
-abbreviation "\<C> \<equiv> (\<B>\<^sup>f\<^sup>p)\<^sup>-" 
-abbreviation "\<I> \<equiv> \<B>\<^sup>f\<^sup>p\<^sup>c" 
-lemma "\<C>\<^sup>- = \<B>\<^sup>f\<^sup>p" by (simp add: dualcompl_invol)
+abbreviation "\<C> \<equiv> (\<B>\<^sup>f\<^sup>p)\<^sup>d\<^sup>-" 
+abbreviation "\<I> \<equiv> \<B>\<^sup>f\<^sup>p\<^sup>-" 
+lemma "\<C>\<^sup>d\<^sup>- = \<B>\<^sup>f\<^sup>p" by (simp add: dualcompl_invol)
 
 (*let us recall that: *)
 lemma expn_cntr: "EXPN \<C> = CNTR \<B>" by (metis EXPN_CNTR_dual2 EXPN_fp ofp_comm_dc1)
 
-(**For LFIs we use the negation previously defined as \<C>\<^sup>- = \<B>\<^sup>f\<^sup>p *)
+(**For LFIs we use the negation previously defined as \<C>\<^sup>d\<^sup>- = \<B>\<^sup>f\<^sup>p *)
 abbreviation cneg ("\<^bold>\<not>_"[70]71) where "cneg \<equiv> \<B>\<^sup>f\<^sup>p"
 
 (**In terms of the border operator the negation looks as follows:*)
@@ -42,7 +42,7 @@ abbreviation op_con_a::"w \<sigma> \<Rightarrow> w \<sigma>" ("\<^bold>\<circ>\<
 abbreviation op_inc_b::"w \<sigma> \<Rightarrow> w \<sigma>" ("\<bullet>\<^sup>B_" [57]58) (* \<bullet> as border *)
   where "\<bullet>\<^sup>BA \<equiv> \<B> A"
 abbreviation op_con_b::"w \<sigma> \<Rightarrow> w \<sigma>" ("\<^bold>\<circ>\<^sup>B_" [57]58) 
-  where "\<^bold>\<circ>\<^sup>BA \<equiv> \<B>\<^sup>c A"
+  where "\<^bold>\<circ>\<^sup>BA \<equiv> \<B>\<^sup>- A"
 
 (**Observe that assumming CNTR \<B> are we allowed to exchange A and B variants.*)
 lemma pincAB: "CNTR \<B> \<longrightarrow> \<bullet>\<^sup>AA \<^bold>= \<bullet>\<^sup>BA" by (smt (verit, ccfv_SIG) cneg_char dimpl_def join_def meet_def op_fixpoint_def setequ_def)

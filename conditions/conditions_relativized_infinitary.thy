@@ -58,24 +58,24 @@ lemma inADDIr_dual:  "inADDIr \<phi> = inMULTr \<phi>\<^sup>d" using inADDIr_cha
 
 (****************** Complement interrelations ****************)
 
-lemma iADDIr_a_cmpl: "iADDIr\<^sup>a \<phi> = inADDIr\<^sup>a \<phi>\<^sup>c" unfolding cond by (smt (z3) compl_def dualcompl_invol iDM_b im_prop2 setequ_ext subset_out_def svfun_compl_def)
-lemma iADDIr_b_cmpl: "iADDIr\<^sup>b \<phi> = inADDIr\<^sup>b \<phi>\<^sup>c" unfolding cond by (smt (z3) compl_def iDM_b im_prop2 setequ_ext sfun_compl_invol subset_out_def svfun_compl_def)
-lemma iADDIr_cmpl: "iADDIr \<phi> = inADDIr \<phi>\<^sup>c" by (simp add: iADDIr_a_cmpl iADDIr_b_cmpl iADDIr_char inADDIr_char)
+lemma iADDIr_a_cmpl: "iADDIr\<^sup>a \<phi> = inADDIr\<^sup>a \<phi>\<^sup>-" unfolding cond by (smt (z3) compl_def dualcompl_invol iDM_b im_prop2 setequ_ext subset_out_def svfun_compl_def)
+lemma iADDIr_b_cmpl: "iADDIr\<^sup>b \<phi> = inADDIr\<^sup>b \<phi>\<^sup>-" unfolding cond by (smt (z3) compl_def iDM_b im_prop2 setequ_ext sfun_compl_invol subset_out_def svfun_compl_def)
+lemma iADDIr_cmpl: "iADDIr \<phi> = inADDIr \<phi>\<^sup>-" by (simp add: iADDIr_a_cmpl iADDIr_b_cmpl iADDIr_char inADDIr_char)
 
-lemma iMULTr_a_cmpl: "iMULTr\<^sup>a \<phi> = inMULTr\<^sup>a \<phi>\<^sup>c" unfolding cond by (smt (z3) compl_def iDM_b im_prop2 setequ_ext subset_in_def svfun_compl_def)
-lemma iMULTr_b_cmpl: "iMULTr\<^sup>b \<phi> = inMULTr\<^sup>b \<phi>\<^sup>c" unfolding cond by (smt (z3) compl_def dualcompl_invol iDM_a im_prop2 setequ_ext subset_in_def svfun_compl_def)
-lemma iMULTr_cmpl: "MULTr \<phi> = nMULTr \<phi>\<^sup>c" by (simp add: MULTr_a_cmpl MULTr_b_cmpl MULTr_char nMULTr_char)
+lemma iMULTr_a_cmpl: "iMULTr\<^sup>a \<phi> = inMULTr\<^sup>a \<phi>\<^sup>-" unfolding cond by (smt (z3) compl_def iDM_b im_prop2 setequ_ext subset_in_def svfun_compl_def)
+lemma iMULTr_b_cmpl: "iMULTr\<^sup>b \<phi> = inMULTr\<^sup>b \<phi>\<^sup>-" unfolding cond by (smt (z3) compl_def dualcompl_invol iDM_a im_prop2 setequ_ext subset_in_def svfun_compl_def)
+lemma iMULTr_cmpl: "MULTr \<phi> = nMULTr \<phi>\<^sup>-" by (simp add: MULTr_a_cmpl MULTr_b_cmpl MULTr_char nMULTr_char)
 
  (****************** Fixed-point interrelations ****************)
 
-lemma iADDIr_a_fpc: "iADDIr\<^sup>a \<phi> = iADDIr\<^sup>a \<phi>\<^sup>f\<^sup>p\<^sup>c" unfolding cond subset_out_def image_def ofp_fixpoint_compl_def supremum_def sdiff_def by (smt (verit))
+lemma iADDIr_a_fpc: "iADDIr\<^sup>a \<phi> = iADDIr\<^sup>a \<phi>\<^sup>f\<^sup>p\<^sup>-" unfolding cond subset_out_def image_def ofp_fixpoint_compl_def supremum_def sdiff_def by (smt (verit))
 lemma iADDIr_a_fp: "iADDIr\<^sup>a \<phi> = inADDIr\<^sup>a \<phi>\<^sup>f\<^sup>p" by (metis iADDIr_a_cmpl iADDIr_a_fpc sfun_compl_invol)
-lemma iADDIr_b_fpc: "iADDIr\<^sup>b \<phi> = iADDIr\<^sup>b \<phi>\<^sup>f\<^sup>p\<^sup>c" unfolding cond subset_out_def image_def ofp_fixpoint_compl_def supremum_def sdiff_def by (smt (verit))
+lemma iADDIr_b_fpc: "iADDIr\<^sup>b \<phi> = iADDIr\<^sup>b \<phi>\<^sup>f\<^sup>p\<^sup>-" unfolding cond subset_out_def image_def ofp_fixpoint_compl_def supremum_def sdiff_def by (smt (verit))
 lemma iADDIr_b_fp: "iADDIr\<^sup>b \<phi> = inADDIr\<^sup>b \<phi>\<^sup>f\<^sup>p" by (metis iADDIr_b_cmpl iADDIr_b_fpc sfun_compl_invol)
 
 lemma iMULTr_a_fp: "iMULTr\<^sup>a \<phi> = iMULTr\<^sup>a \<phi>\<^sup>f\<^sup>p" unfolding cond subset_in_def image_def by (smt (z3) dimpl_def infimum_def ofp_invol op_fixpoint_def)
-lemma iMULTr_a_fpc: "iMULTr\<^sup>a \<phi> = inMULTr\<^sup>a \<phi>\<^sup>f\<^sup>p\<^sup>c" using iMULTr_a_cmpl iMULTr_a_fp by blast
+lemma iMULTr_a_fpc: "iMULTr\<^sup>a \<phi> = inMULTr\<^sup>a \<phi>\<^sup>f\<^sup>p\<^sup>-" using iMULTr_a_cmpl iMULTr_a_fp by blast
 lemma iMULTr_b_fp: "iMULTr\<^sup>b \<phi> = iMULTr\<^sup>b \<phi>\<^sup>f\<^sup>p" unfolding cond subset_in_def image_def dimpl_def infimum_def op_fixpoint_def by (smt (verit))
-lemma iMULTr_b_fpc: "iMULTr\<^sup>b \<phi> = inMULTr\<^sup>b \<phi>\<^sup>f\<^sup>p\<^sup>c" using iMULTr_b_cmpl iMULTr_b_fp by blast
+lemma iMULTr_b_fpc: "iMULTr\<^sup>b \<phi> = inMULTr\<^sup>b \<phi>\<^sup>f\<^sup>p\<^sup>-" using iMULTr_b_cmpl iMULTr_b_fp by blast
 
 end
