@@ -7,19 +7,19 @@ begin
 
 (**anti-distribution over infinite joins (suprema) or infinite anti-additivity (inADDI).*)
 definition inADDI::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("inADDI")
-  where "inADDI \<phi>  \<equiv> \<forall>S. \<phi>(\<^bold>\<Or>S) \<approx> \<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk>" 
+  where "inADDI \<phi>  \<equiv> \<forall>S. \<phi>(\<^bold>\<Or>S) \<^bold>= \<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk>" 
 definition inADDI_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("inADDI\<^sup>a")
-  where "inADDI\<^sup>a \<phi> \<equiv> \<forall>S. \<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk> \<preceq> \<phi>(\<^bold>\<Or>S)  " 
+  where "inADDI\<^sup>a \<phi> \<equiv> \<forall>S. \<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk> \<^bold>\<le> \<phi>(\<^bold>\<Or>S)  " 
 definition inADDI_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("inADDI\<^sup>b")
-  where "inADDI\<^sup>b \<phi> \<equiv> \<forall>S. \<phi>(\<^bold>\<Or>S) \<preceq> \<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk>"
+  where "inADDI\<^sup>b \<phi> \<equiv> \<forall>S. \<phi>(\<^bold>\<Or>S) \<^bold>\<le> \<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk>"
 
 (**anti-distribution over infinite meets (infima) or infinite anti-multiplicativity (inMULT).*)
 definition inMULT::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("inMULT")
-  where "inMULT \<phi>  \<equiv> \<forall>S. \<phi>(\<^bold>\<And>S) \<approx> \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>" 
+  where "inMULT \<phi>  \<equiv> \<forall>S. \<phi>(\<^bold>\<And>S) \<^bold>= \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>" 
 definition inMULT_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("inMULT\<^sup>a")
-  where "inMULT\<^sup>a \<phi> \<equiv> \<forall>S. \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk> \<preceq> \<phi>(\<^bold>\<And>S)"
+  where "inMULT\<^sup>a \<phi> \<equiv> \<forall>S. \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk> \<^bold>\<le> \<phi>(\<^bold>\<And>S)"
 definition inMULT_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("inMULT\<^sup>b")
-  where "inMULT\<^sup>b \<phi> \<equiv> \<forall>S. \<phi>(\<^bold>\<And>S) \<preceq> \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>"
+  where "inMULT\<^sup>b \<phi> \<equiv> \<forall>S. \<phi>(\<^bold>\<And>S) \<^bold>\<le> \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>"
 
 declare inADDI_def[cond] inADDI_a_def[cond] inADDI_b_def[cond]
         inMULT_def[cond] inMULT_a_def[cond] inMULT_b_def[cond]
@@ -37,8 +37,8 @@ lemma inADDIb_equ: "inADDI\<^sup>b \<phi> = nADDI\<^sup>b \<phi>" proof -
     hence p1: "\<phi>(\<^bold>\<Or>?S) = \<phi>(A \<^bold>\<or> B)" by simp
     have "\<lbrakk>\<phi> ?S\<rbrakk> = (\<lambda>Z. Z=(\<phi> A) \<or> Z=(\<phi> B))" unfolding image_def by metis
     hence p2: "\<^bold>\<And>\<lbrakk>\<phi> ?S\<rbrakk> = (\<phi> A) \<^bold>\<and> (\<phi> B)" unfolding infimum_def meet_def by auto
-    have "\<phi>(\<^bold>\<Or>?S) \<preceq> \<^bold>\<And>\<lbrakk>\<phi> ?S\<rbrakk>" using inaddib inADDI_b_def by blast
-    hence "\<phi>(A \<^bold>\<or> B) \<preceq> (\<phi> A) \<^bold>\<and> (\<phi> B)" using p1 p2 by simp
+    have "\<phi>(\<^bold>\<Or>?S) \<^bold>\<le> \<^bold>\<And>\<lbrakk>\<phi> ?S\<rbrakk>" using inaddib inADDI_b_def by blast
+    hence "\<phi>(A \<^bold>\<or> B) \<^bold>\<le> (\<phi> A) \<^bold>\<and> (\<phi> B)" using p1 p2 by simp
   } thus ?thesis by (simp add: nADDI_b_def) qed
   have rl: "nADDI\<^sup>b \<phi> \<Longrightarrow> inADDI\<^sup>b \<phi>" unfolding inADDI_b_def ANTI_nADDIb ANTI_def image_def
     by (smt (verit) glb_def inf_glb lower_bounds_def lub_def sup_lub upper_bounds_def)
@@ -54,8 +54,8 @@ lemma inMULTa_equ: "inMULT\<^sup>a \<phi> = nMULT\<^sup>a \<phi>" proof -
     hence p1: "\<phi>(\<^bold>\<And>?S) = \<phi>(A \<^bold>\<and> B)" by simp
     have "\<lbrakk>\<phi> ?S\<rbrakk> = (\<lambda>Z. Z=(\<phi> A) \<or> Z=(\<phi> B))" unfolding image_def by metis
     hence p2: "\<^bold>\<Or>\<lbrakk>\<phi> ?S\<rbrakk> = (\<phi> A) \<^bold>\<or> (\<phi> B)" unfolding supremum_def join_def by auto
-    have "\<^bold>\<Or>\<lbrakk>\<phi> ?S\<rbrakk> \<preceq> \<phi>(\<^bold>\<And>?S)" using inmulta inMULT_a_def by blast    
-    hence "(\<phi> A) \<^bold>\<or> (\<phi> B) \<preceq> \<phi>(A \<^bold>\<and> B)" using p1 p2 by simp
+    have "\<^bold>\<Or>\<lbrakk>\<phi> ?S\<rbrakk> \<^bold>\<le> \<phi>(\<^bold>\<And>?S)" using inmulta inMULT_a_def by blast    
+    hence "(\<phi> A) \<^bold>\<or> (\<phi> B) \<^bold>\<le> \<phi>(A \<^bold>\<and> B)" using p1 p2 by simp
   } thus ?thesis by (simp add: nMULT_a_def) qed
   have rl: "nMULT\<^sup>a \<phi> \<Longrightarrow> inMULT\<^sup>a \<phi>" unfolding inMULT_a_def ANTI_nMULTa ANTI_def image_def
     by (smt (verit) glb_def inf_glb lower_bounds_def lub_def sup_lub upper_bounds_def)

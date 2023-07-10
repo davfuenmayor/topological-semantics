@@ -6,35 +6,35 @@ begin
  axiomatic conditions on operators.*)
 
 definition iADDIr::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("iADDIr")
-  where "iADDIr \<phi>  \<equiv> \<forall>S. let U=\<^bold>\<Or>S in (\<phi>(\<^bold>\<Or>S) \<approx>\<^sup>U \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>)"
+  where "iADDIr \<phi>  \<equiv> \<forall>S. let U=\<^bold>\<Or>S in (\<phi>(\<^bold>\<Or>S) \<^bold>=\<^sup>U \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>)"
 definition iADDIr_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("iADDIr\<^sup>a")
-  where "iADDIr\<^sup>a \<phi> \<equiv> \<forall>S. let U=\<^bold>\<Or>S in (\<phi>(\<^bold>\<Or>S) \<preceq>\<^sup>U \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>)" 
+  where "iADDIr\<^sup>a \<phi> \<equiv> \<forall>S. let U=\<^bold>\<Or>S in (\<phi>(\<^bold>\<Or>S) \<^bold>\<le>\<^sup>U \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>)" 
 definition iADDIr_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("iADDIr\<^sup>b")
-  where "iADDIr\<^sup>b \<phi> \<equiv> \<forall>S. let U=\<^bold>\<Or>S in (\<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk> \<preceq>\<^sup>U \<phi>(\<^bold>\<Or>S))" 
+  where "iADDIr\<^sup>b \<phi> \<equiv> \<forall>S. let U=\<^bold>\<Or>S in (\<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk> \<^bold>\<le>\<^sup>U \<phi>(\<^bold>\<Or>S))" 
 
 definition inADDIr::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("inADDIr")
-  where "inADDIr \<phi>  \<equiv> \<forall>S. let U=\<^bold>\<Or>S in (\<phi>(\<^bold>\<Or>S) \<approx>\<^sup>U \<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk>)"
+  where "inADDIr \<phi>  \<equiv> \<forall>S. let U=\<^bold>\<Or>S in (\<phi>(\<^bold>\<Or>S) \<^bold>=\<^sup>U \<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk>)"
 definition inADDIr_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("inADDIr\<^sup>a")
-  where "inADDIr\<^sup>a \<phi> \<equiv> \<forall>S. let U=\<^bold>\<Or>S in (\<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk> \<preceq>\<^sup>U \<phi>(\<^bold>\<Or>S))"  
+  where "inADDIr\<^sup>a \<phi> \<equiv> \<forall>S. let U=\<^bold>\<Or>S in (\<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk> \<^bold>\<le>\<^sup>U \<phi>(\<^bold>\<Or>S))"  
 definition inADDIr_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("inADDIr\<^sup>b")
-  where "inADDIr\<^sup>b \<phi> \<equiv> \<forall>S. let U=\<^bold>\<Or>S in (\<phi>(\<^bold>\<Or>S) \<preceq>\<^sup>U \<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk>)" 
+  where "inADDIr\<^sup>b \<phi> \<equiv> \<forall>S. let U=\<^bold>\<Or>S in (\<phi>(\<^bold>\<Or>S) \<^bold>\<le>\<^sup>U \<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk>)" 
 
 declare iADDIr_def[cond] iADDIr_a_def[cond] iADDIr_b_def[cond]
         inADDIr_def[cond] inADDIr_a_def[cond] inADDIr_b_def[cond]
 
 definition iMULTr::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("iMULTr")
-  where "iMULTr \<phi>  \<equiv> \<forall>S. let U=\<^bold>\<And>S in (\<phi>(\<^bold>\<And>S) \<approx>\<^sub>U \<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk>)"
+  where "iMULTr \<phi>  \<equiv> \<forall>S. let U=\<^bold>\<And>S in (\<phi>(\<^bold>\<And>S) \<^bold>=\<^sub>U \<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk>)"
 definition iMULTr_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("iMULTr\<^sup>a")
-  where "iMULTr\<^sup>a \<phi> \<equiv> \<forall>S. let U=\<^bold>\<And>S in (\<phi>(\<^bold>\<And>S) \<preceq>\<^sub>U \<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk>)"
+  where "iMULTr\<^sup>a \<phi> \<equiv> \<forall>S. let U=\<^bold>\<And>S in (\<phi>(\<^bold>\<And>S) \<^bold>\<le>\<^sub>U \<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk>)"
 definition iMULTr_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("iMULTr\<^sup>b")
-  where "iMULTr\<^sup>b \<phi> \<equiv> \<forall>S. let U=\<^bold>\<And>S in (\<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk> \<preceq>\<^sub>U \<phi>(\<^bold>\<And>S))"
+  where "iMULTr\<^sup>b \<phi> \<equiv> \<forall>S. let U=\<^bold>\<And>S in (\<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk> \<^bold>\<le>\<^sub>U \<phi>(\<^bold>\<And>S))"
 
 definition inMULTr::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("inMULTr")
-  where "inMULTr \<phi>  \<equiv> \<forall>S. let U=\<^bold>\<And>S in (\<phi>(\<^bold>\<And>S) \<approx>\<^sub>U \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>)"
+  where "inMULTr \<phi>  \<equiv> \<forall>S. let U=\<^bold>\<And>S in (\<phi>(\<^bold>\<And>S) \<^bold>=\<^sub>U \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>)"
 definition inMULTr_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("inMULTr\<^sup>a")
-  where "inMULTr\<^sup>a \<phi> \<equiv> \<forall>S. let U=\<^bold>\<And>S in (\<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk> \<preceq>\<^sub>U \<phi>(\<^bold>\<And>S))"
+  where "inMULTr\<^sup>a \<phi> \<equiv> \<forall>S. let U=\<^bold>\<And>S in (\<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk> \<^bold>\<le>\<^sub>U \<phi>(\<^bold>\<And>S))"
 definition inMULTr_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("inMULTr\<^sup>b")
-  where "inMULTr\<^sup>b \<phi> \<equiv> \<forall>S. let U=\<^bold>\<And>S in (\<phi>(\<^bold>\<And>S) \<preceq>\<^sub>U \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>)"
+  where "inMULTr\<^sup>b \<phi> \<equiv> \<forall>S. let U=\<^bold>\<And>S in (\<phi>(\<^bold>\<And>S) \<^bold>\<le>\<^sub>U \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>)"
 
 declare iMULTr_def[cond] iMULTr_a_def[cond] iMULTr_b_def[cond]
         inMULTr_def[cond] inMULTr_a_def[cond] inMULTr_b_def[cond]

@@ -40,7 +40,7 @@ lemma "\<F> = \<F>\<^sub>C (\<C>\<^sub>F \<F>)" nitpick oops
 lemma "\<F> = \<F>\<^sub>I (\<I>\<^sub>F \<F>)" nitpick oops
 lemma "\<F> = \<F>\<^sub>B (\<B>\<^sub>F \<F>)" nitpick oops
 
-abbreviation "SYMM \<phi> \<equiv> \<forall>A. \<phi>(\<^bold>\<midarrow>A) \<approx> \<phi> A"
+abbreviation "SYMM \<phi> \<equiv> \<forall>A. \<phi>(\<^bold>\<midarrow>A) \<^bold>= \<phi> A"
 
 lemma "CNTR \<B> \<Longrightarrow> \<B> = \<B>\<^sub>C (\<C>\<^sub>B \<B>)" unfolding CNTR_def Br_cl_def Cl_br_def compl_def join_def meet_def subset_def by metis
 lemma "CNTR \<B> \<Longrightarrow> \<B> = \<B>\<^sub>I (\<I>\<^sub>B \<B>)" unfolding CNTR_def Br_int_def Int_br_def diff_def subset_def by metis
@@ -52,6 +52,6 @@ lemma "SYMM \<F> \<Longrightarrow> \<F> = \<F>\<^sub>B (\<B>\<^sub>F \<F>)" unfo
 lemma "EXPN \<C> \<Longrightarrow> \<C> = \<C>\<^sub>B (\<B>\<^sub>C \<C>)" oops
   (* unfolding CNTR_def Br_cl_def Cl_br_def compl_def join_def meet_def subset_def by metis *)
 
-lemma "\<C> = (\<C>\<^sup>d)\<^sup>d" sledgehammer
+lemma "\<C> = (\<C>\<^sup>d)\<^sup>d" by (simp add: dual_invol)
 
 end

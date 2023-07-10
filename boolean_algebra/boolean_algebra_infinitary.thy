@@ -17,33 +17,33 @@ definition supremum::"('w \<sigma>)\<sigma> \<Rightarrow> 'w \<sigma>" ("\<^bold
 declare infimum_def[conn] supremum_def[conn]
 
 (**Infimum and supremum satisfy an infinite variant of the De Morgan laws*)
-lemma iDM_a: "\<^bold>\<midarrow>(\<^bold>\<And>S) \<approx> \<^bold>\<Or>(S\<^sup>-)" unfolding order conn conn2 by force
-lemma iDM_b:" \<^bold>\<midarrow>(\<^bold>\<Or>S) \<approx> \<^bold>\<And>(S\<^sup>-)" unfolding order conn conn2 by force
+lemma iDM_a: "\<^bold>\<midarrow>(\<^bold>\<And>S) \<^bold>= \<^bold>\<Or>(S\<^sup>-)" unfolding order conn conn2 by force
+lemma iDM_b:" \<^bold>\<midarrow>(\<^bold>\<Or>S) \<^bold>= \<^bold>\<And>(S\<^sup>-)" unfolding order conn conn2 by force
 
 (**We show that the our encoded Boolean algebras are lattice-complete.*)
 
 (**The functions below return the set of upper-/lower-bounds of a set of sets S (wrt. domain D)*)
 definition upper_bounds::"('w \<sigma>)\<sigma> \<Rightarrow> ('w \<sigma>)\<sigma>" ("ub")
-  where "ub S \<equiv> \<lambda>U. \<forall>X. S X \<longrightarrow> X \<preceq> U" 
+  where "ub S \<equiv> \<lambda>U. \<forall>X. S X \<longrightarrow> X \<^bold>\<le> U" 
 definition upper_bounds_restr::"('w \<sigma>)\<sigma> \<Rightarrow> ('w \<sigma>)\<sigma> \<Rightarrow> ('w \<sigma>)\<sigma>" ("ub\<^sup>_")
-  where "ub\<^sup>D S \<equiv> \<lambda>U. D U \<and> (\<forall>X. S X \<longrightarrow> X \<preceq> U)" 
+  where "ub\<^sup>D S \<equiv> \<lambda>U. D U \<and> (\<forall>X. S X \<longrightarrow> X \<^bold>\<le> U)" 
 definition lower_bounds::"('w \<sigma>)\<sigma> \<Rightarrow> ('w \<sigma>)\<sigma>" ("lb")
-  where "lb S \<equiv> \<lambda>L. \<forall>X. S X \<longrightarrow> L \<preceq> X"
+  where "lb S \<equiv> \<lambda>L. \<forall>X. S X \<longrightarrow> L \<^bold>\<le> X"
 definition lower_bounds_restr::"('w \<sigma>)\<sigma> \<Rightarrow> ('w \<sigma>)\<sigma> \<Rightarrow> ('w \<sigma>)\<sigma>" ("lb\<^sup>_")
-  where "lb\<^sup>D S \<equiv> \<lambda>L. D L \<and> (\<forall>X. S X \<longrightarrow> L \<preceq> X)"
+  where "lb\<^sup>D S \<equiv> \<lambda>L. D L \<and> (\<forall>X. S X \<longrightarrow> L \<^bold>\<le> X)"
 
 lemma ub_char: "ub S = (let D=\<^bold>\<top> in ub\<^sup>D S) " by (simp add: top_def upper_bounds_def upper_bounds_restr_def)
 lemma lb_char: "lb S = (let D=\<^bold>\<top> in lb\<^sup>D S) " by (simp add: top_def lower_bounds_def lower_bounds_restr_def)
 
 (**Similarly, the functions below return the set of least/greatest upper-/lower-bounds for S (wrt. D)*)
 definition lub::"('w \<sigma>)\<sigma> \<Rightarrow> ('w \<sigma>)\<sigma>" ("lub") 
-  where "lub S \<equiv> \<lambda>U. ub S U \<and> (\<forall>X. ub S X \<longrightarrow> U \<preceq> X)"
+  where "lub S \<equiv> \<lambda>U. ub S U \<and> (\<forall>X. ub S X \<longrightarrow> U \<^bold>\<le> X)"
 definition lub_restr::"('w \<sigma>)\<sigma> \<Rightarrow> ('w \<sigma>)\<sigma> \<Rightarrow> ('w \<sigma>)\<sigma>" ("lub\<^sup>_") 
-  where "lub\<^sup>D S \<equiv> \<lambda>U. ub\<^sup>D S U \<and> (\<forall>X. ub\<^sup>D S X \<longrightarrow> U \<preceq> X)"
+  where "lub\<^sup>D S \<equiv> \<lambda>U. ub\<^sup>D S U \<and> (\<forall>X. ub\<^sup>D S X \<longrightarrow> U \<^bold>\<le> X)"
 definition glb::"('w \<sigma>)\<sigma> \<Rightarrow> ('w \<sigma>)\<sigma>" ("glb")
-  where "glb S \<equiv> \<lambda>L. lb S L \<and> (\<forall>X. lb S X \<longrightarrow> X \<preceq> L)"
+  where "glb S \<equiv> \<lambda>L. lb S L \<and> (\<forall>X. lb S X \<longrightarrow> X \<^bold>\<le> L)"
 definition glb_restr::"('w \<sigma>)\<sigma> \<Rightarrow> ('w \<sigma>)\<sigma> \<Rightarrow> ('w \<sigma>)\<sigma>" ("glb\<^sup>_")
-  where "glb\<^sup>D S \<equiv> \<lambda>L. lb\<^sup>D S L \<and> (\<forall>X. lb\<^sup>D S X \<longrightarrow> X \<preceq> L)"
+  where "glb\<^sup>D S \<equiv> \<lambda>L. lb\<^sup>D S L \<and> (\<forall>X. lb\<^sup>D S X \<longrightarrow> X \<^bold>\<le> L)"
 
 lemma lub_char: "lub S = (let D=\<^bold>\<top> in lub\<^sup>D S) " by (simp add: lub_def lub_restr_def ub_char)
 lemma glb_char: "glb S = (let D=\<^bold>\<top> in glb\<^sup>D S) " by (simp add: glb_def glb_restr_def lb_char)
@@ -54,18 +54,18 @@ lemma sup_exist_unique: "\<forall>S. \<exists>!X. lub S X" by (meson lub_def set
 lemma inf_glb: "glb S \<^bold>\<And>S" unfolding glb_def lower_bounds_def infimum_def subset_def by blast
 lemma inf_exist_unique: "\<forall>S. \<exists>!X. glb S X" by (meson glb_def inf_glb setequ_char setequ_ext)
 
-lemma inf_empty: "isEmpty S \<Longrightarrow> \<^bold>\<And>S \<approx> \<^bold>\<top>" unfolding order conn by simp
-lemma sup_empty: "isEmpty S \<Longrightarrow> \<^bold>\<Or>S \<approx> \<^bold>\<bottom>" unfolding order conn by simp
+lemma inf_empty: "isEmpty S \<Longrightarrow> \<^bold>\<And>S \<^bold>= \<^bold>\<top>" unfolding order conn by simp
+lemma sup_empty: "isEmpty S \<Longrightarrow> \<^bold>\<Or>S \<^bold>= \<^bold>\<bottom>" unfolding order conn by simp
 
 (**The property of being closed under arbitrary (resp. nonempty) supremum/infimum.*)
 definition infimum_closed :: "('w \<sigma>)\<sigma> \<Rightarrow> bool"
-  where "infimum_closed S  \<equiv> \<forall>D. D \<preceq> S \<longrightarrow> S(\<^bold>\<And>D)" (*observe that D can be empty*)
+  where "infimum_closed S  \<equiv> \<forall>D. D \<^bold>\<le> S \<longrightarrow> S(\<^bold>\<And>D)" (*observe that D can be empty*)
 definition supremum_closed :: "('w \<sigma>)\<sigma> \<Rightarrow> bool" 
-  where "supremum_closed S \<equiv> \<forall>D. D \<preceq> S \<longrightarrow> S(\<^bold>\<Or>D)" (*observe that D can be empty*)
+  where "supremum_closed S \<equiv> \<forall>D. D \<^bold>\<le> S \<longrightarrow> S(\<^bold>\<Or>D)" (*observe that D can be empty*)
 definition infimum_closed' :: "('w \<sigma>)\<sigma> \<Rightarrow> bool" 
-  where"infimum_closed' S  \<equiv> \<forall>D. nonEmpty D \<and> D \<preceq> S \<longrightarrow> S(\<^bold>\<And>D)"
+  where"infimum_closed' S  \<equiv> \<forall>D. nonEmpty D \<and> D \<^bold>\<le> S \<longrightarrow> S(\<^bold>\<And>D)"
 definition supremum_closed' :: "('w \<sigma>)\<sigma> \<Rightarrow> bool" 
-  where "supremum_closed' S \<equiv> \<forall>D. nonEmpty D \<and> D \<preceq> S \<longrightarrow> S(\<^bold>\<Or>D)"
+  where "supremum_closed' S \<equiv> \<forall>D. nonEmpty D \<and> D \<^bold>\<le> S \<longrightarrow> S(\<^bold>\<Or>D)"
 
 (**Note that arbitrary infimum- (resp. supremum-) closed sets include the top (resp. bottom) element.*)
 lemma "infimum_closed S \<Longrightarrow> S \<^bold>\<top>" unfolding infimum_closed_def conn order by force
@@ -97,7 +97,7 @@ lemma inf_meet_closed: "\<forall>S. infimum_closed' S \<longrightarrow> meet_clo
         { fix X::"'w \<sigma>" and Y::"'w \<sigma>"
           let ?D="\<lambda>Z. Z=X \<or> Z=Y"
           { assume "S X \<and> S Y"
-            hence "?D \<preceq> S" using subset_def by blast
+            hence "?D \<^bold>\<le> S" using subset_def by blast
             moreover have "nonEmpty ?D" by auto
             ultimately have "S(\<^bold>\<And>?D)" using inf_closed infimum_closed'_def by (smt (z3))
             hence "S(\<lambda>w. \<forall>Z. (Z=X \<or> Z=Y) \<longrightarrow> Z w)" unfolding infimum_def by simp
@@ -115,7 +115,7 @@ lemma sup_join_closed: "\<forall>P. supremum_closed' P \<longrightarrow> join_cl
         { fix X::"'w \<sigma>" and Y::"'w \<sigma>"
           let ?D="\<lambda>Z. Z=X \<or> Z=Y"
           { assume "S X \<and> S Y"
-            hence "?D \<preceq> S" using subset_def by blast
+            hence "?D \<^bold>\<le> S" using subset_def by blast
             moreover have "nonEmpty ?D" by auto
             ultimately have "S(\<^bold>\<Or>?D)" using sup_closed supremum_closed'_def by (smt (z3))
             hence "S(\<lambda>w. \<exists>Z. (Z=X \<or> Z=Y) \<and> Z w)" unfolding supremum_def by simp

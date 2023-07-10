@@ -25,7 +25,7 @@ lemma "EXPN \<C> = CNTR \<B>" using EXPN_CNTR_dual1 EXPN_fp by blast
 abbreviation cneg ("\<^bold>\<not>_"[70]71) where "cneg \<equiv> \<C>\<^sup>-"
 
 (**In terms of the border operator the negation looks as follows:*)
-lemma cneg_char: "EXPN \<C> \<longrightarrow> \<^bold>\<not>A \<approx> \<^bold>\<midarrow>A \<^bold>\<or> (\<B> A)" by (smt (verit, ccfv_SIG) EXPN_def compl_def dimpl_def join_def ofp_comm_dc2 op_fixpoint_def sdfun_dcompl_def setequ_def subset_def)
+lemma cneg_char: "EXPN \<C> \<longrightarrow> \<^bold>\<not>A \<^bold>= \<^bold>\<midarrow>A \<^bold>\<or> (\<B> A)" by (smt (verit, ccfv_SIG) EXPN_def compl_def dimpl_def join_def ofp_comm_dc2 op_fixpoint_def sdfun_dcompl_def setequ_def subset_def)
 
 abbreviation "CLOSURE \<phi> \<equiv> ADDI \<phi> \<and> EXPN \<phi> \<and> NORM \<phi> \<and> IDEM \<phi>"
 
@@ -51,15 +51,15 @@ abbreviation op_con_b::"w \<sigma> \<Rightarrow> w \<sigma>" ("\<^bold>\<circ>\<
   where "\<^bold>\<circ>\<^sup>BA \<equiv> \<B>\<^sup>c A"
 
 (**Observe that assumming EXPN \<C> are we allowed to exchange A and B variants.*)
-lemma pincAB: "EXPN \<C> \<longrightarrow> \<bullet>\<^sup>AA \<approx> \<bullet>\<^sup>BA" by (smt (verit, ccfv_threshold) cneg_char compl_def dimpl_def join_def meet_def op_dual_def op_fixpoint_def sdfun_dcompl_def setequ_def)
-lemma pconAB: "EXPN \<C> \<longrightarrow> \<^bold>\<circ>\<^sup>AA \<approx> \<^bold>\<circ>\<^sup>BA" by (metis pincAB setequ_ext svfun_compl_def)
+lemma pincAB: "EXPN \<C> \<longrightarrow> \<bullet>\<^sup>AA \<^bold>= \<bullet>\<^sup>BA" by (smt (verit, ccfv_threshold) cneg_char compl_def dimpl_def join_def meet_def op_dual_def op_fixpoint_def sdfun_dcompl_def setequ_def)
+lemma pconAB: "EXPN \<C> \<longrightarrow> \<^bold>\<circ>\<^sup>AA \<^bold>= \<^bold>\<circ>\<^sup>BA" by (metis pincAB setequ_ext svfun_compl_def)
 
 (**Variants A and B give us slightly different properties (there are countermodels for those not shown).*)
-lemma Prop1: "\<^bold>\<circ>\<^sup>BA \<approx> \<I>\<^sup>f\<^sup>p A" by (simp add: dual_compl_char1 ofp_comm_dc1 setequ_ext)
-lemma Prop2: "\<^bold>\<circ>\<^sup>AA \<approx> A \<^bold>\<rightarrow> \<I> A" by (simp add: BA_deMorgan2 impl_char op_dual_def sdfun_dcompl_def)
-lemma Prop3: "fp \<C> A \<longleftrightarrow> \<^bold>\<circ>\<^sup>B\<^bold>\<midarrow>A \<approx> \<^bold>\<top>" by (metis Prop1 dual_invol fp_d_rel setequ_ext)
-lemma Prop4a: "fp \<I> A \<longleftrightarrow> \<^bold>\<circ>\<^sup>BA \<approx> \<^bold>\<top>" by (simp add: dual_compl_char1 fp_rel ofp_comm_dc1)
-lemma Prop4b: "fp \<I> A  \<longrightarrow> \<^bold>\<circ>\<^sup>AA \<approx> \<^bold>\<top>" by (metis BA_impl L13 L4 Prop2 fixpoints_def setequ_ext)
+lemma Prop1: "\<^bold>\<circ>\<^sup>BA \<^bold>= \<I>\<^sup>f\<^sup>p A" by (simp add: dual_compl_char1 ofp_comm_dc1 setequ_ext)
+lemma Prop2: "\<^bold>\<circ>\<^sup>AA \<^bold>= A \<^bold>\<rightarrow> \<I> A" by (simp add: BA_deMorgan2 impl_char op_dual_def sdfun_dcompl_def)
+lemma Prop3: "fp \<C> A \<longleftrightarrow> \<^bold>\<circ>\<^sup>B\<^bold>\<midarrow>A \<^bold>= \<^bold>\<top>" by (metis Prop1 dual_invol fp_d_rel setequ_ext)
+lemma Prop4a: "fp \<I> A \<longleftrightarrow> \<^bold>\<circ>\<^sup>BA \<^bold>= \<^bold>\<top>" by (simp add: dual_compl_char1 fp_rel ofp_comm_dc1)
+lemma Prop4b: "fp \<I> A  \<longrightarrow> \<^bold>\<circ>\<^sup>AA \<^bold>= \<^bold>\<top>" by (metis BA_impl L13 L4 Prop2 fixpoints_def setequ_ext)
 
 (**The 'principle of gentle explosion' works for both variants (both locally and globally)*)
 lemma "[\<^bold>\<circ>\<^sup>Aa, a, \<^bold>\<not>a \<turnstile> b]" by (metis (mono_tags, lifting) compl_def meet_def subset_def) 

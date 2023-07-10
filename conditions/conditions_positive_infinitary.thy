@@ -7,18 +7,18 @@ begin
 
 (**Distribution over infinite joins (suprema) or infinite additivity (iADDI).*)
 definition iADDI::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("iADDI")
-  where "iADDI \<phi>   \<equiv> \<forall>S. \<phi>(\<^bold>\<Or>S) \<approx> \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>" 
+  where "iADDI \<phi>   \<equiv> \<forall>S. \<phi>(\<^bold>\<Or>S) \<^bold>= \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>" 
 definition iADDI_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("iADDI\<^sup>a")
-  where "iADDI\<^sup>a \<phi> \<equiv> \<forall>S. \<phi>(\<^bold>\<Or>S) \<preceq> \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>" 
+  where "iADDI\<^sup>a \<phi> \<equiv> \<forall>S. \<phi>(\<^bold>\<Or>S) \<^bold>\<le> \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>" 
 definition iADDI_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("iADDI\<^sup>b")
-  where "iADDI\<^sup>b \<phi> \<equiv> \<forall>S. \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk> \<preceq> \<phi>(\<^bold>\<Or>S)"
+  where "iADDI\<^sup>b \<phi> \<equiv> \<forall>S. \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk> \<^bold>\<le> \<phi>(\<^bold>\<Or>S)"
 (**Distribution over infinite meets (infima) or infinite multiplicativity (iMULT).*)
 definition iMULT::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("iMULT")
-  where "iMULT \<phi>   \<equiv> \<forall>S. \<phi>(\<^bold>\<And>S) \<approx> \<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk>" 
+  where "iMULT \<phi>   \<equiv> \<forall>S. \<phi>(\<^bold>\<And>S) \<^bold>= \<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk>" 
 definition iMULT_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("iMULT\<^sup>a")
-  where "iMULT\<^sup>a \<phi> \<equiv> \<forall>S. \<phi>(\<^bold>\<And>S) \<preceq> \<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk>"
+  where "iMULT\<^sup>a \<phi> \<equiv> \<forall>S. \<phi>(\<^bold>\<And>S) \<^bold>\<le> \<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk>"
 definition iMULT_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("iMULT\<^sup>b")
-  where "iMULT\<^sup>b \<phi> \<equiv> \<forall>S. \<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk> \<preceq> \<phi>(\<^bold>\<And>S)"
+  where "iMULT\<^sup>b \<phi> \<equiv> \<forall>S. \<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk> \<^bold>\<le> \<phi>(\<^bold>\<And>S)"
 
 declare iADDI_def[cond] iADDI_a_def[cond] iADDI_b_def[cond]
         iMULT_def[cond] iMULT_a_def[cond] iMULT_b_def[cond]
@@ -36,8 +36,8 @@ lemma iADDIb_equ: "iADDI\<^sup>b \<phi> = ADDI\<^sup>b \<phi>" proof -
     hence p1: "\<phi>(\<^bold>\<Or>?S) = \<phi>(A \<^bold>\<or> B)" by simp
     have "\<lbrakk>\<phi> ?S\<rbrakk> = (\<lambda>Z. Z=(\<phi> A) \<or> Z=(\<phi> B))" unfolding image_def by metis
     hence p2: "\<^bold>\<Or>\<lbrakk>\<phi> ?S\<rbrakk> = (\<phi> A) \<^bold>\<or> (\<phi> B)" unfolding supremum_def join_def by auto
-    have " \<^bold>\<Or>\<lbrakk>\<phi> ?S\<rbrakk> \<preceq> \<phi>(\<^bold>\<Or>?S)" using iaddib iADDI_b_def by blast    
-    hence "(\<phi> A) \<^bold>\<or> (\<phi> B) \<preceq> \<phi>(A \<^bold>\<or> B)" using p1 p2 by simp
+    have " \<^bold>\<Or>\<lbrakk>\<phi> ?S\<rbrakk> \<^bold>\<le> \<phi>(\<^bold>\<Or>?S)" using iaddib iADDI_b_def by blast    
+    hence "(\<phi> A) \<^bold>\<or> (\<phi> B) \<^bold>\<le> \<phi>(A \<^bold>\<or> B)" using p1 p2 by simp
   } thus ?thesis by (simp add: ADDI_b_def) qed
   have rl: "ADDI\<^sup>b \<phi> \<Longrightarrow> iADDI\<^sup>b \<phi>" unfolding iADDI_b_def by (smt (verit) MONO_ADDIb MONO_def lub_def image_def sup_lub upper_bounds_def) 
   from lr rl show ?thesis by auto
@@ -52,8 +52,8 @@ lemma iMULTa_equ: "iMULT\<^sup>a \<phi> = MULT\<^sup>a \<phi>" proof -
     hence p1: "\<phi>(\<^bold>\<And>?S) = \<phi>(A \<^bold>\<and> B)" by simp
     have "\<lbrakk>\<phi> ?S\<rbrakk> = (\<lambda>Z. Z=(\<phi> A) \<or> Z=(\<phi> B))" unfolding image_def by metis
     hence p2: "\<^bold>\<And>\<lbrakk>\<phi> ?S\<rbrakk> = (\<phi> A) \<^bold>\<and> (\<phi> B)" unfolding infimum_def meet_def by auto
-    have "\<phi>(\<^bold>\<And>?S) \<preceq> \<^bold>\<And>\<lbrakk>\<phi> ?S\<rbrakk>" using imulta iMULT_a_def by blast    
-    hence "\<phi>(A \<^bold>\<and> B) \<preceq> (\<phi> A) \<^bold>\<and> (\<phi> B)" using p1 p2 by simp
+    have "\<phi>(\<^bold>\<And>?S) \<^bold>\<le> \<^bold>\<And>\<lbrakk>\<phi> ?S\<rbrakk>" using imulta iMULT_a_def by blast    
+    hence "\<phi>(A \<^bold>\<and> B) \<^bold>\<le> (\<phi> A) \<^bold>\<and> (\<phi> B)" using p1 p2 by simp
   } thus ?thesis by (simp add: MULT_a_def) qed
   have rl: "MULT\<^sup>a \<phi> \<Longrightarrow> iMULT\<^sup>a \<phi>" by (smt (verit) MONO_MULTa MONO_def glb_def iMULT_a_def inf_glb lower_bounds_def image_def)
   from lr rl show ?thesis by blast
@@ -98,13 +98,13 @@ proof -
 assume mono: "MONO \<phi>" and cntr: "CNTR \<phi>" and idem:"IDEM\<^sup>b \<phi>" {
   assume ic:"infimum_closed (fp \<phi>)" {
     fix S
-    from ic have "\<forall>D. D \<preceq> (fp \<phi>) \<longrightarrow> (fp \<phi>)(\<^bold>\<And>D)" unfolding infimum_closed_def by simp
-    hence "let D=\<lbrakk>\<phi> S\<rbrakk> in (\<forall>X. D X \<longrightarrow> (X \<approx> \<phi> X)) \<longrightarrow> \<^bold>\<And>D \<approx> \<phi> \<^bold>\<And>D" by (simp add: fixpoints_def setequ_ext subset_def) 
-    moreover from idem have "(\<forall>X. \<lbrakk>\<phi> S\<rbrakk> X \<longrightarrow> (X \<approx> \<phi> X))" by (metis (mono_tags, lifting) CNTR_def IDEM_b_def cntr image_def setequ_char)
-    ultimately have aux: "\<^bold>\<And>(\<lbrakk>\<phi> S\<rbrakk>) \<approx> \<phi>(\<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk>)" by meson
-    from cntr have "\<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk> \<preceq> \<^bold>\<And>S" by (smt (verit, best) CNTR_def image_def infimum_def subset_def)
-    hence "\<phi>(\<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk>) \<preceq> \<phi>(\<^bold>\<And>S)" using mono by (simp add: MONO_def) 
-    from this aux have "\<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk> \<preceq> \<phi>(\<^bold>\<And>S)" by (simp add: setequ_ext)
+    from ic have "\<forall>D. D \<^bold>\<le> (fp \<phi>) \<longrightarrow> (fp \<phi>)(\<^bold>\<And>D)" unfolding infimum_closed_def by simp
+    hence "let D=\<lbrakk>\<phi> S\<rbrakk> in (\<forall>X. D X \<longrightarrow> (X \<^bold>= \<phi> X)) \<longrightarrow> \<^bold>\<And>D \<^bold>= \<phi> \<^bold>\<And>D" by (simp add: fixpoints_def setequ_ext subset_def) 
+    moreover from idem have "(\<forall>X. \<lbrakk>\<phi> S\<rbrakk> X \<longrightarrow> (X \<^bold>= \<phi> X))" by (metis (mono_tags, lifting) CNTR_def IDEM_b_def cntr image_def setequ_char)
+    ultimately have aux: "\<^bold>\<And>(\<lbrakk>\<phi> S\<rbrakk>) \<^bold>= \<phi>(\<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk>)" by meson
+    from cntr have "\<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk> \<^bold>\<le> \<^bold>\<And>S" by (smt (verit, best) CNTR_def image_def infimum_def subset_def)
+    hence "\<phi>(\<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk>) \<^bold>\<le> \<phi>(\<^bold>\<And>S)" using mono by (simp add: MONO_def) 
+    from this aux have "\<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk> \<^bold>\<le> \<phi>(\<^bold>\<And>S)" by (simp add: setequ_ext)
   } hence "infimum_closed (fp \<phi>) \<longrightarrow> iMULT \<phi>" by (simp add: MONO_iMULTa iMULT_b_def iMULT_char mono)
 } thus ?thesis by simp 
 qed
@@ -114,13 +114,13 @@ proof -
 assume mono: "MONO \<phi>" and expn: "EXPN \<phi>" and idem:"IDEM\<^sup>a \<phi>" {
   assume sc:"supremum_closed (fp \<phi>)" {
     fix S
-    from sc have "\<forall>D. D \<preceq> (fp \<phi>) \<longrightarrow> (fp \<phi>)(\<^bold>\<Or>D)" unfolding supremum_closed_def by simp
-    hence "let D=\<lbrakk>\<phi> S\<rbrakk> in (\<forall>X. D X \<longrightarrow> (X \<approx> \<phi> X)) \<longrightarrow> \<^bold>\<Or>D \<approx> \<phi> \<^bold>\<Or>D" by (simp add: fixpoints_def setequ_ext subset_def)
-    moreover have "(\<forall>X. \<lbrakk>\<phi> S\<rbrakk> X \<longrightarrow> (X \<approx> \<phi> X))" by (metis (mono_tags, lifting) EXPN_def IDEM_a_def expn idem image_def setequ_char)
-    ultimately have aux: "\<^bold>\<Or>(\<lbrakk>\<phi> S\<rbrakk>) \<approx> \<phi>(\<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>)" by meson
-    have "\<^bold>\<Or>S \<preceq> \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>" by (metis EXPN_CNTR_dual1 EXPN_def IDEM_dual1 MONO_dual dual_invol expn fp_inf_closed_iMULT fp_inf_sup_closed_dual iADDI_def iADDI_iMULT_dual1 idem mono sc setequ_ext)
-    hence "\<phi>(\<^bold>\<Or>S) \<preceq> \<phi>(\<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>)" using mono by (simp add: MONO_def) 
-    from this aux have "\<phi>(\<^bold>\<Or>S) \<preceq> \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>" by (metis setequ_ext)
+    from sc have "\<forall>D. D \<^bold>\<le> (fp \<phi>) \<longrightarrow> (fp \<phi>)(\<^bold>\<Or>D)" unfolding supremum_closed_def by simp
+    hence "let D=\<lbrakk>\<phi> S\<rbrakk> in (\<forall>X. D X \<longrightarrow> (X \<^bold>= \<phi> X)) \<longrightarrow> \<^bold>\<Or>D \<^bold>= \<phi> \<^bold>\<Or>D" by (simp add: fixpoints_def setequ_ext subset_def)
+    moreover have "(\<forall>X. \<lbrakk>\<phi> S\<rbrakk> X \<longrightarrow> (X \<^bold>= \<phi> X))" by (metis (mono_tags, lifting) EXPN_def IDEM_a_def expn idem image_def setequ_char)
+    ultimately have aux: "\<^bold>\<Or>(\<lbrakk>\<phi> S\<rbrakk>) \<^bold>= \<phi>(\<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>)" by meson
+    have "\<^bold>\<Or>S \<^bold>\<le> \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>" by (metis EXPN_CNTR_dual1 EXPN_def IDEM_dual1 MONO_dual dual_invol expn fp_inf_closed_iMULT fp_inf_sup_closed_dual iADDI_def iADDI_iMULT_dual1 idem mono sc setequ_ext)
+    hence "\<phi>(\<^bold>\<Or>S) \<^bold>\<le> \<phi>(\<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>)" using mono by (simp add: MONO_def) 
+    from this aux have "\<phi>(\<^bold>\<Or>S) \<^bold>\<le> \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>" by (metis setequ_ext)
   } hence "supremum_closed (fp \<phi>) \<longrightarrow> iADDI \<phi>" by (simp add: MONO_ADDIb iADDI_a_def iADDI_char iADDIb_equ mono)
 } thus ?thesis by simp
 qed
@@ -198,19 +198,19 @@ It is worth mentioning that in Alexandrov topologies every point has a minimal/s
 namely the set of points related to it by the specialization preorder (reachability relation).
 We examine below  minimal conditions under which these relations obtain.*)
 
-lemma Cl_rel'_a:   "MONO \<phi> \<longrightarrow> (\<forall>A. \<C>[\<R>[\<phi>]] A \<preceq> \<phi> A)" unfolding Cl_rel_def MONO_def \<R>_def by (smt (verit, ccfv_SIG) subset_def)
-lemma Cl_rel'_b: "iADDI\<^sup>a \<phi> \<longrightarrow> (\<forall>A. \<phi> A \<preceq> \<C>[\<R>[\<phi>]] A)" proof -
+lemma Cl_rel'_a:   "MONO \<phi> \<longrightarrow> (\<forall>A. \<C>[\<R>[\<phi>]] A \<^bold>\<le> \<phi> A)" unfolding Cl_rel_def MONO_def \<R>_def by (smt (verit, ccfv_SIG) subset_def)
+lemma Cl_rel'_b: "iADDI\<^sup>a \<phi> \<longrightarrow> (\<forall>A. \<phi> A \<^bold>\<le> \<C>[\<R>[\<phi>]] A)" proof -
 { assume iaddia: "iADDI\<^sup>a \<phi>"
   { fix A::"'a \<sigma>"
     let ?S="\<lambda>B. \<exists>w. A w \<and> B=(\<lambda>u. u=w)"
-    have "A \<approx> (\<^bold>\<Or>?S)" unfolding supremum_def setequ_def by auto
-    hence "\<phi>(A) \<approx> \<phi>(\<^bold>\<Or>?S)" by (simp add: setequ_ext)
-    moreover have "\<^bold>\<Or>\<lbrakk>\<phi> ?S\<rbrakk> \<approx> \<C>[\<R>[\<phi>]] A" by (smt (verit) Cl_rel_def \<R>_def image_def setequ_def supremum_def)
-    moreover from iaddia have "\<phi>(\<^bold>\<Or>?S) \<preceq> \<^bold>\<Or>\<lbrakk>\<phi> ?S\<rbrakk>" unfolding iADDI_a_def by simp
-    ultimately have "\<phi> A \<preceq> \<C>[\<R>[\<phi>]] A" by (simp add: setequ_ext)
+    have "A \<^bold>= (\<^bold>\<Or>?S)" unfolding supremum_def setequ_def by auto
+    hence "\<phi>(A) \<^bold>= \<phi>(\<^bold>\<Or>?S)" by (simp add: setequ_ext)
+    moreover have "\<^bold>\<Or>\<lbrakk>\<phi> ?S\<rbrakk> \<^bold>= \<C>[\<R>[\<phi>]] A" by (smt (verit) Cl_rel_def \<R>_def image_def setequ_def supremum_def)
+    moreover from iaddia have "\<phi>(\<^bold>\<Or>?S) \<^bold>\<le> \<^bold>\<Or>\<lbrakk>\<phi> ?S\<rbrakk>" unfolding iADDI_a_def by simp
+    ultimately have "\<phi> A \<^bold>\<le> \<C>[\<R>[\<phi>]] A" by (simp add: setequ_ext)
 } } thus ?thesis by simp
 qed
-lemma Cl_rel': "iADDI \<phi> \<longrightarrow> \<phi> \<cong> \<C>[\<R>[\<phi>]]" by (simp add: MONO_iADDIb iADDI_char setequ_char Cl_rel'_a Cl_rel'_b svfun_equ_def)
+lemma Cl_rel': "iADDI \<phi> \<longrightarrow> \<phi> \<^bold>=' \<C>[\<R>[\<phi>]]" by (simp add: MONO_iADDIb iADDI_char setequ_char Cl_rel'_a Cl_rel'_b svfun_equ_def)
 lemma Cl_rel: "iADDI \<phi> \<longleftrightarrow> \<phi> = \<C>[\<R>[\<phi>]]" using Cl_rel' by (metis rC1 svfun_equ_ext)
 
 (**It is instructive to expand the definitions in the above result:*)

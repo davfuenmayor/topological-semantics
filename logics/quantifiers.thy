@@ -71,8 +71,8 @@ definition mexists_var::"('i \<Rightarrow> 'w \<sigma>) \<Rightarrow> ('i \<Righ
 
 (**Varying-domain quantification generalises its constant-domain counterpart*)
 
-lemma "\<^bold>\<Pi>[D]\<phi> = \<^bold>\<Pi>{D\<up>}\<phi>" by (simp add: mforall_const_def mforall_var_def)
-lemma "\<^bold>\<Sigma>[D]\<phi> = \<^bold>\<Sigma>{D\<up>}\<phi>" by (simp add: mexists_const_def mexists_var_def)
+lemma "\<^bold>\<Pi>[D]\<phi> = \<^bold>\<Pi>{D\<upharpoonleft>}\<phi>" by (simp add: mforall_const_def mforall_var_def)
+lemma "\<^bold>\<Sigma>[D]\<phi> = \<^bold>\<Sigma>{D\<upharpoonleft>}\<phi>" by (simp add: mexists_const_def mexists_var_def)
 
 (**Restricted quantifiers are dual to each other in the expected way*)
 lemma "\<^bold>\<Pi>[D]\<phi> = \<^bold>\<midarrow>(\<^bold>\<Sigma>[D]\<phi>\<^sup>c)" by (metis iDM_b im_prop2 mexists_const_char mforall_const_char setequ_ext)
@@ -80,18 +80,18 @@ lemma "\<^bold>\<Pi>{\<psi>}\<phi> = \<^bold>\<midarrow>(\<^bold>\<Sigma>{\<psi>
 
 
 (**We can use 2nd-order connectives on set-valued functions to encode restricted quantifiers as unrestricted*)
-lemma "\<^bold>\<Pi>{\<psi>}\<phi> = \<^bold>\<Pi>(\<psi> \<^bold>\<sqsupset> \<phi>)" by (simp add: impl_def mforall_def mforall_var_def svfun_impl_def)
-lemma "\<^bold>\<Sigma>{\<psi>}\<phi> = \<^bold>\<Sigma>(\<psi> \<^bold>\<sqinter> \<phi>)" by (simp add: meet_def mexists_def mexists_var_def svfun_meet_def)
+lemma "\<^bold>\<Pi>{\<psi>}\<phi> = \<^bold>\<Pi>(\<psi> \<^bold>\<rightarrow>' \<phi>)" by (simp add: impl_def mforall_def mforall_var_def svfun_impl_def)
+lemma "\<^bold>\<Sigma>{\<psi>}\<phi> = \<^bold>\<Sigma>(\<psi> \<^bold>\<and>' \<phi>)" by (simp add: meet_def mexists_def mexists_var_def svfun_meet_def)
 
 (**Observe that using these operators has the advantage of allowing for binder notation,*)
-lemma "\<^bold>\<Pi>{\<psi>}\<phi> = (\<^bold>\<forall>X. (\<psi> \<^bold>\<sqsupset> \<phi>) X)" by (simp add: impl_def mforall_def mforall_var_def svfun_impl_def)
-lemma "\<^bold>\<Sigma>{\<psi>}\<phi> = (\<^bold>\<exists>X. (\<psi> \<^bold>\<sqinter> \<phi>) X)" by (simp add: meet_def mexists_def mexists_var_def svfun_meet_def)
+lemma "\<^bold>\<Pi>{\<psi>}\<phi> = (\<^bold>\<forall>X. (\<psi> \<^bold>\<rightarrow>' \<phi>) X)" by (simp add: impl_def mforall_def mforall_var_def svfun_impl_def)
+lemma "\<^bold>\<Sigma>{\<psi>}\<phi> = (\<^bold>\<exists>X. (\<psi> \<^bold>\<and>' \<phi>) X)" by (simp add: meet_def mexists_def mexists_var_def svfun_meet_def)
 
 (**So to sumarize: different sorts of restricted quantification can be emulated 
   by employing 2nd-order operations to adequately relativise predicates: *)
 
-lemma "\<^bold>\<Pi>[D]\<phi> = (\<^bold>\<forall>X. (D\<up> \<^bold>\<sqsupset> \<phi>) X)" by (simp add: impl_def mforall_const_def mforall_def svfun_impl_def)
-lemma "\<^bold>\<Pi>{\<^bold>\<top>'}\<phi> = (\<^bold>\<forall>X. (\<^bold>\<top>' \<^bold>\<sqsupset> \<phi>) X)" by (simp add: impl_def mforall_def mforall_var_def svfun_impl_def)
+lemma "\<^bold>\<Pi>[D]\<phi> = (\<^bold>\<forall>X. (D\<upharpoonleft> \<^bold>\<rightarrow>' \<phi>) X)" by (simp add: impl_def mforall_const_def mforall_def svfun_impl_def)
+lemma "\<^bold>\<Pi>{\<^bold>\<top>'}\<phi> = (\<^bold>\<forall>X. (\<^bold>\<top>' \<^bold>\<rightarrow>' \<phi>) X)" by (simp add: impl_def mforall_def mforall_var_def svfun_impl_def)
 lemma "\<^bold>\<Pi>\<phi> = \<^bold>\<Pi>{\<^bold>\<top>'}\<phi>" by (simp add: mforall_def mforall_var_def svfun_top_def top_def)
 lemma "(\<^bold>\<forall>X. \<phi> X) = \<^bold>\<Pi>{\<^bold>\<top>'}\<phi>" by (simp add: mforall_def mforall_var_def svfun_top_def top_def)
 

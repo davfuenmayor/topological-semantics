@@ -3,45 +3,45 @@ theory conditions_relativized
 begin
 
 (****************** Relativized order and equality relations ****************)
-definition subset_in::\<open>'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> bool\<close> ("_\<preceq>\<^sub>__") 
-  where \<open>A \<preceq>\<^sub>U B \<equiv> \<forall>x. U x \<longrightarrow> (A x \<longrightarrow> B x)\<close>
-definition subset_out::\<open>'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> bool\<close> ("_\<preceq>\<^sup>__") 
-  where \<open>A \<preceq>\<^sup>U B \<equiv> \<forall>x. \<not>U x \<longrightarrow> (A x \<longrightarrow> B x)\<close>
+definition subset_in::\<open>'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> bool\<close> ("_\<^bold>\<le>\<^sub>__") 
+  where \<open>A \<^bold>\<le>\<^sub>U B \<equiv> \<forall>x. U x \<longrightarrow> (A x \<longrightarrow> B x)\<close>
+definition subset_out::\<open>'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> bool\<close> ("_\<^bold>\<le>\<^sup>__") 
+  where \<open>A \<^bold>\<le>\<^sup>U B \<equiv> \<forall>x. \<not>U x \<longrightarrow> (A x \<longrightarrow> B x)\<close>
 
-definition setequ_in::\<open>'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> bool\<close> ("_\<approx>\<^sub>__") 
-  where \<open>A \<approx>\<^sub>U B \<equiv> \<forall>x. U x \<longrightarrow> (A x \<longleftrightarrow> B x)\<close>
-definition setequ_out::\<open>'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> bool\<close> ("_\<approx>\<^sup>__") 
-  where \<open>A \<approx>\<^sup>U B \<equiv> \<forall>x. \<not>U x \<longrightarrow> (A x \<longleftrightarrow> B x)\<close>
+definition setequ_in::\<open>'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> bool\<close> ("_\<^bold>=\<^sub>__") 
+  where \<open>A \<^bold>=\<^sub>U B \<equiv> \<forall>x. U x \<longrightarrow> (A x \<longleftrightarrow> B x)\<close>
+definition setequ_out::\<open>'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> bool\<close> ("_\<^bold>=\<^sup>__") 
+  where \<open>A \<^bold>=\<^sup>U B \<equiv> \<forall>x. \<not>U x \<longrightarrow> (A x \<longleftrightarrow> B x)\<close>
 
 declare subset_in_def[order] subset_out_def[order] setequ_in_def[order] setequ_out_def[order]
 
-lemma subset_in_out: "(let U=C in (A \<preceq>\<^sub>U B)) = (let U=\<^bold>\<midarrow>C in (A \<preceq>\<^sup>U B))" by (simp add: compl_def subset_in_def subset_out_def)
-lemma setequ_in_out: "(let U=C in (A \<approx>\<^sub>U B)) = (let U=\<^bold>\<midarrow>C in (A \<approx>\<^sup>U B))" by (simp add: compl_def setequ_in_def setequ_out_def)
+lemma subset_in_out: "(let U=C in (A \<^bold>\<le>\<^sub>U B)) = (let U=\<^bold>\<midarrow>C in (A \<^bold>\<le>\<^sup>U B))" by (simp add: compl_def subset_in_def subset_out_def)
+lemma setequ_in_out: "(let U=C in (A \<^bold>=\<^sub>U B)) = (let U=\<^bold>\<midarrow>C in (A \<^bold>=\<^sup>U B))" by (simp add: compl_def setequ_in_def setequ_out_def)
 
-lemma subset_in_char: "(A \<preceq>\<^sub>U B) = (U \<^bold>\<and> A \<preceq> U \<^bold>\<and> B)" unfolding order conn by blast
-lemma subset_out_char: "(A \<preceq>\<^sup>U B) = (U \<^bold>\<or> A \<preceq> U \<^bold>\<or> B)" unfolding order conn by blast
-lemma setequ_in_char: "(A \<approx>\<^sub>U B) = (U \<^bold>\<and> A \<approx> U \<^bold>\<and> B)" unfolding order conn by blast
-lemma setequ_out_char: "(A \<approx>\<^sup>U B) = (U \<^bold>\<or> A \<approx> U \<^bold>\<or> B)" unfolding order conn by blast
+lemma subset_in_char: "(A \<^bold>\<le>\<^sub>U B) = (U \<^bold>\<and> A \<^bold>\<le> U \<^bold>\<and> B)" unfolding order conn by blast
+lemma subset_out_char: "(A \<^bold>\<le>\<^sup>U B) = (U \<^bold>\<or> A \<^bold>\<le> U \<^bold>\<or> B)" unfolding order conn by blast
+lemma setequ_in_char: "(A \<^bold>=\<^sub>U B) = (U \<^bold>\<and> A \<^bold>= U \<^bold>\<and> B)" unfolding order conn by blast
+lemma setequ_out_char: "(A \<^bold>=\<^sup>U B) = (U \<^bold>\<or> A \<^bold>= U \<^bold>\<or> B)" unfolding order conn by blast
 
 (**Relativization cannot be meaningfully applied to conditions (n)NORM or (n)DNRM.*)
-lemma "NORM \<phi>  = (let U = \<^bold>\<top> in ((\<phi> \<^bold>\<bottom>) \<approx>\<^sub>U \<^bold>\<bottom>))" by (simp add: NORM_def setequ_def setequ_in_def top_def)
-lemma "(let U = \<^bold>\<bottom> in ((\<phi> \<^bold>\<bottom>) \<approx>\<^sub>U \<^bold>\<bottom>))" by (simp add: bottom_def setequ_in_def)
+lemma "NORM \<phi>  = (let U = \<^bold>\<top> in ((\<phi> \<^bold>\<bottom>) \<^bold>=\<^sub>U \<^bold>\<bottom>))" by (simp add: NORM_def setequ_def setequ_in_def top_def)
+lemma "(let U = \<^bold>\<bottom> in ((\<phi> \<^bold>\<bottom>) \<^bold>=\<^sub>U \<^bold>\<bottom>))" by (simp add: bottom_def setequ_in_def)
 
 (*Relativization ('in' resp. 'out') leaves (n)EXPN/(n)CNTR unchanged or trivializes them.*)
-lemma "EXPN \<phi>  = (\<forall>A. A \<preceq>\<^sub>A \<phi> A)" by (simp add: EXPN_def subset_def subset_in_def)
-lemma "CNTR \<phi>  = (\<forall>A. (\<phi> A) \<preceq>\<^sup>A A)" by (metis (mono_tags, lifting) CNTR_def subset_def subset_out_def)
-lemma "\<forall>A. A \<preceq>\<^sup>A \<phi> A" by (simp add: subset_out_def)
-lemma "\<forall>A. (\<phi> A) \<preceq>\<^sub>A A" by (simp add: subset_in_def)
+lemma "EXPN \<phi>  = (\<forall>A. A \<^bold>\<le>\<^sub>A \<phi> A)" by (simp add: EXPN_def subset_def subset_in_def)
+lemma "CNTR \<phi>  = (\<forall>A. (\<phi> A) \<^bold>\<le>\<^sup>A A)" by (metis (mono_tags, lifting) CNTR_def subset_def subset_out_def)
+lemma "\<forall>A. A \<^bold>\<le>\<^sup>A \<phi> A" by (simp add: subset_out_def)
+lemma "\<forall>A. (\<phi> A) \<^bold>\<le>\<^sub>A A" by (simp add: subset_in_def)
 
 
 (****************** Relativized ADDI variants ****************)
 
 definition ADDIr::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("ADDIr")
-  where "ADDIr \<phi>  \<equiv> \<forall>A B. let U = (A \<^bold>\<or> B) in      (\<phi>(A \<^bold>\<or> B) \<approx>\<^sup>U (\<phi> A) \<^bold>\<or> (\<phi> B))"
+  where "ADDIr \<phi>  \<equiv> \<forall>A B. let U = (A \<^bold>\<or> B) in      (\<phi>(A \<^bold>\<or> B) \<^bold>=\<^sup>U (\<phi> A) \<^bold>\<or> (\<phi> B))"
 definition ADDIr_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("ADDIr\<^sup>a")
-  where "ADDIr\<^sup>a \<phi> \<equiv> \<forall>A B. let U = (A \<^bold>\<or> B) in      (\<phi>(A \<^bold>\<or> B) \<preceq>\<^sup>U (\<phi> A) \<^bold>\<or> (\<phi> B))" 
+  where "ADDIr\<^sup>a \<phi> \<equiv> \<forall>A B. let U = (A \<^bold>\<or> B) in      (\<phi>(A \<^bold>\<or> B) \<^bold>\<le>\<^sup>U (\<phi> A) \<^bold>\<or> (\<phi> B))" 
 definition ADDIr_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("ADDIr\<^sup>b")
-  where "ADDIr\<^sup>b \<phi> \<equiv> \<forall>A B. let U = (A \<^bold>\<or> B) in ((\<phi> A) \<^bold>\<or> (\<phi> B) \<preceq>\<^sup>U \<phi>(A \<^bold>\<or> B))"
+  where "ADDIr\<^sup>b \<phi> \<equiv> \<forall>A B. let U = (A \<^bold>\<or> B) in ((\<phi> A) \<^bold>\<or> (\<phi> B) \<^bold>\<le>\<^sup>U \<phi>(A \<^bold>\<or> B))"
  
 declare ADDIr_def[cond] ADDIr_a_def[cond] ADDIr_b_def[cond]
 
@@ -59,11 +59,11 @@ lemma ADDIr_b_equ: "EXPN \<phi> \<Longrightarrow> ADDIr\<^sup>b \<phi> = ADDI\<^
 (****************** Relativized MULT variants ****************)
 
 definition MULTr::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("MULTr")
-  where "MULTr \<phi>  \<equiv> \<forall>A B. let U = (A \<^bold>\<and> B) in      (\<phi>(A \<^bold>\<and> B) \<approx>\<^sub>U (\<phi> A) \<^bold>\<and> (\<phi> B))"
+  where "MULTr \<phi>  \<equiv> \<forall>A B. let U = (A \<^bold>\<and> B) in      (\<phi>(A \<^bold>\<and> B) \<^bold>=\<^sub>U (\<phi> A) \<^bold>\<and> (\<phi> B))"
 definition MULTr_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("MULTr\<^sup>a")
-  where "MULTr\<^sup>a \<phi> \<equiv> \<forall>A B. let U = (A \<^bold>\<and> B) in      (\<phi>(A \<^bold>\<and> B) \<preceq>\<^sub>U (\<phi> A) \<^bold>\<and> (\<phi> B))"
+  where "MULTr\<^sup>a \<phi> \<equiv> \<forall>A B. let U = (A \<^bold>\<and> B) in      (\<phi>(A \<^bold>\<and> B) \<^bold>\<le>\<^sub>U (\<phi> A) \<^bold>\<and> (\<phi> B))"
 definition MULTr_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("MULTr\<^sup>b")
-  where "MULTr\<^sup>b \<phi> \<equiv> \<forall>A B. let U = (A \<^bold>\<and> B) in ((\<phi> A) \<^bold>\<and> (\<phi> B) \<preceq>\<^sub>U \<phi>(A \<^bold>\<and> B))"
+  where "MULTr\<^sup>b \<phi> \<equiv> \<forall>A B. let U = (A \<^bold>\<and> B) in ((\<phi> A) \<^bold>\<and> (\<phi> B) \<^bold>\<le>\<^sub>U \<phi>(A \<^bold>\<and> B))"
 
 declare MULTr_def[cond] MULTr_a_def[cond] MULTr_b_def[cond]
 
@@ -80,9 +80,9 @@ lemma MULTr_b_equ':"nCNTR \<phi> \<Longrightarrow> MULTr\<^sup>b \<phi> = MULT\<
 
 (**** Weak variants of monotonicity ***)
 definition MONOw1::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("MONOw\<^sup>1") 
-  where "MONOw\<^sup>1 \<phi> \<equiv> \<forall>A B. A \<preceq> B \<longrightarrow> (\<phi> A) \<preceq> B \<^bold>\<or> (\<phi> B)"
+  where "MONOw\<^sup>1 \<phi> \<equiv> \<forall>A B. A \<^bold>\<le> B \<longrightarrow> (\<phi> A) \<^bold>\<le> B \<^bold>\<or> (\<phi> B)"
 definition MONOw2::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("MONOw\<^sup>2")
-  where "MONOw\<^sup>2 \<phi> \<equiv> \<forall>A B. A \<preceq> B \<longrightarrow> A \<^bold>\<and> (\<phi> A) \<preceq> (\<phi> B)"
+  where "MONOw\<^sup>2 \<phi> \<equiv> \<forall>A B. A \<^bold>\<le> B \<longrightarrow> A \<^bold>\<and> (\<phi> A) \<^bold>\<le> (\<phi> B)"
 
 declare MONOw1_def[cond] MONOw2_def[cond]
 
@@ -112,11 +112,11 @@ lemma nEXPN_MONOw2_impl: "nEXPN \<phi> \<longrightarrow> MONOw\<^sup>2 \<phi>" b
 (****************** Relativized nADDI variants ****************)
 
 definition nADDIr::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nADDIr")
-  where "nADDIr \<phi>  \<equiv> \<forall>A B. let U = (A \<^bold>\<or> B) in      (\<phi>(A \<^bold>\<or> B) \<approx>\<^sup>U (\<phi> A) \<^bold>\<and> (\<phi> B))"
+  where "nADDIr \<phi>  \<equiv> \<forall>A B. let U = (A \<^bold>\<or> B) in      (\<phi>(A \<^bold>\<or> B) \<^bold>=\<^sup>U (\<phi> A) \<^bold>\<and> (\<phi> B))"
 definition nADDIr_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nADDIr\<^sup>a")
-  where "nADDIr\<^sup>a \<phi> \<equiv> \<forall>A B. let U = (A \<^bold>\<or> B) in ((\<phi> A) \<^bold>\<and> (\<phi> B) \<preceq>\<^sup>U \<phi>(A \<^bold>\<or> B))" 
+  where "nADDIr\<^sup>a \<phi> \<equiv> \<forall>A B. let U = (A \<^bold>\<or> B) in ((\<phi> A) \<^bold>\<and> (\<phi> B) \<^bold>\<le>\<^sup>U \<phi>(A \<^bold>\<or> B))" 
 definition nADDIr_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nADDIr\<^sup>b")
-  where "nADDIr\<^sup>b \<phi> \<equiv> \<forall>A B. let U = (A \<^bold>\<or> B) in      (\<phi>(A \<^bold>\<or> B) \<preceq>\<^sup>U (\<phi> A) \<^bold>\<and> (\<phi> B))"
+  where "nADDIr\<^sup>b \<phi> \<equiv> \<forall>A B. let U = (A \<^bold>\<or> B) in      (\<phi>(A \<^bold>\<or> B) \<^bold>\<le>\<^sup>U (\<phi> A) \<^bold>\<and> (\<phi> B))"
  
 declare nADDIr_def[cond] nADDIr_a_def[cond] nADDIr_b_def[cond]
 
@@ -135,11 +135,11 @@ lemma nADDIr_b_equ: "nEXPN \<phi> \<Longrightarrow> nADDIr\<^sup>b \<phi> = nADD
 (****************** Relativized nMULT variants ****************)
 
 definition nMULTr::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nMULTr")
-  where "nMULTr \<phi>  \<equiv> \<forall>A B. let U = (A \<^bold>\<and> B) in      (\<phi>(A \<^bold>\<and> B) \<approx>\<^sub>U (\<phi> A) \<^bold>\<or> (\<phi> B))"
+  where "nMULTr \<phi>  \<equiv> \<forall>A B. let U = (A \<^bold>\<and> B) in      (\<phi>(A \<^bold>\<and> B) \<^bold>=\<^sub>U (\<phi> A) \<^bold>\<or> (\<phi> B))"
 definition nMULTr_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nMULTr\<^sup>a")
-  where "nMULTr\<^sup>a \<phi> \<equiv> \<forall>A B. let U = (A \<^bold>\<and> B) in ((\<phi> A) \<^bold>\<or> (\<phi> B) \<preceq>\<^sub>U \<phi>(A \<^bold>\<and> B))"
+  where "nMULTr\<^sup>a \<phi> \<equiv> \<forall>A B. let U = (A \<^bold>\<and> B) in ((\<phi> A) \<^bold>\<or> (\<phi> B) \<^bold>\<le>\<^sub>U \<phi>(A \<^bold>\<and> B))"
 definition nMULTr_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nMULTr\<^sup>b")
-  where "nMULTr\<^sup>b \<phi> \<equiv> \<forall>A B. let U = (A \<^bold>\<and> B) in      (\<phi>(A \<^bold>\<and> B) \<preceq>\<^sub>U (\<phi> A) \<^bold>\<or> (\<phi> B))"
+  where "nMULTr\<^sup>b \<phi> \<equiv> \<forall>A B. let U = (A \<^bold>\<and> B) in      (\<phi>(A \<^bold>\<and> B) \<^bold>\<le>\<^sub>U (\<phi> A) \<^bold>\<or> (\<phi> B))"
 
 declare nMULTr_def[cond] nMULTr_a_def[cond] nMULTr_b_def[cond]
 
@@ -157,9 +157,9 @@ lemma nMULTr_b_equ':"nCNTR \<phi> \<Longrightarrow> nMULTr\<^sup>b \<phi> = nMUL
 
 (**** Weak variants of antitonicity ***)
 definition ANTIw1::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("ANTIw\<^sup>1") 
-  where "ANTIw\<^sup>1 \<phi> \<equiv> \<forall>A B. A \<preceq> B \<longrightarrow> (\<phi> B) \<preceq> B \<^bold>\<or> (\<phi> A)"
+  where "ANTIw\<^sup>1 \<phi> \<equiv> \<forall>A B. A \<^bold>\<le> B \<longrightarrow> (\<phi> B) \<^bold>\<le> B \<^bold>\<or> (\<phi> A)"
 definition ANTIw2::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("ANTIw\<^sup>2")
-  where "ANTIw\<^sup>2 \<phi> \<equiv> \<forall>A B. A \<preceq> B \<longrightarrow> A \<^bold>\<and> (\<phi> B) \<preceq> (\<phi> A)"
+  where "ANTIw\<^sup>2 \<phi> \<equiv> \<forall>A B. A \<^bold>\<le> B \<longrightarrow> A \<^bold>\<and> (\<phi> B) \<^bold>\<le> (\<phi> A)"
 
 declare ANTIw1_def[cond] ANTIw2_def[cond]
 
@@ -232,17 +232,17 @@ lemma MULTr_b_fpc: "MULTr\<^sup>b \<phi> = nMULTr\<^sup>b \<phi>\<^sup>f\<^sup>p
 (****************** Relativized IDEM variants ****************)
 
 definition IDEMr_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("IDEMr\<^sup>a")
-  where "IDEMr\<^sup>a \<phi> \<equiv> \<forall>A. \<phi>(A \<^bold>\<or> \<phi> A) \<preceq>\<^sup>A (\<phi> A)"
+  where "IDEMr\<^sup>a \<phi> \<equiv> \<forall>A. \<phi>(A \<^bold>\<or> \<phi> A) \<^bold>\<le>\<^sup>A (\<phi> A)"
 definition IDEMr_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("IDEMr\<^sup>b") 
-  where "IDEMr\<^sup>b \<phi> \<equiv> \<forall>A. (\<phi> A) \<preceq>\<^sub>A \<phi>(A \<^bold>\<and> \<phi> A)"
+  where "IDEMr\<^sup>b \<phi> \<equiv> \<forall>A. (\<phi> A) \<^bold>\<le>\<^sub>A \<phi>(A \<^bold>\<and> \<phi> A)"
 declare IDEMr_a_def[cond] IDEMr_b_def[cond]
 
 (****************** Relativized nIDEM variants ****************)
 
 definition nIDEMr_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nIDEMr\<^sup>a") 
-  where "nIDEMr\<^sup>a \<phi> \<equiv> \<forall>A. (\<phi> A) \<preceq>\<^sup>A \<phi>(A \<^bold>\<or> \<^bold>\<midarrow>(\<phi> A))"
+  where "nIDEMr\<^sup>a \<phi> \<equiv> \<forall>A. (\<phi> A) \<^bold>\<le>\<^sup>A \<phi>(A \<^bold>\<or> \<^bold>\<midarrow>(\<phi> A))"
 definition nIDEMr_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nIDEMr\<^sup>b") 
-  where "nIDEMr\<^sup>b \<phi> \<equiv> \<forall>A. \<phi>(A \<^bold>\<and> \<^bold>\<midarrow>(\<phi> A)) \<preceq>\<^sub>A (\<phi> A)"
+  where "nIDEMr\<^sup>b \<phi> \<equiv> \<forall>A. \<phi>(A \<^bold>\<and> \<^bold>\<midarrow>(\<phi> A)) \<^bold>\<le>\<^sub>A (\<phi> A)"
 
 declare nIDEMr_a_def[cond] nIDEMr_b_def[cond]
 
@@ -283,7 +283,7 @@ lemma IDEMr_b_fpc: "IDEMr\<^sup>b \<phi> = nIDEMr\<^sup>b \<phi>\<^sup>f\<^sup>p
 (***************************************************)
 
 (*The original border condition B1' is equivalent to the conjuntion of nMULTr and CNTR*)
-abbreviation "B1' \<phi> \<equiv> \<forall>A B. \<phi>(A \<^bold>\<and> B) \<approx> (A \<^bold>\<and> \<phi> B) \<^bold>\<or> (\<phi> A \<^bold>\<and> B)" 
+abbreviation "B1' \<phi> \<equiv> \<forall>A B. \<phi>(A \<^bold>\<and> B) \<^bold>= (A \<^bold>\<and> \<phi> B) \<^bold>\<or> (\<phi> A \<^bold>\<and> B)" 
 
 lemma "B1' \<phi> = (nMULTr \<phi> \<and> CNTR \<phi>)" proof -
   have l2ra: "B1' \<phi> \<longrightarrow> nMULTr \<phi>" unfolding cond by (smt (z3) join_def meet_def setequ_ext setequ_in_def)
@@ -293,7 +293,7 @@ lemma "B1' \<phi> = (nMULTr \<phi> \<and> CNTR \<phi>)" proof -
 qed
 
 (*Modulo conditions nMULTr and CNTR the border condition B4 is equivalent to nIDEMr\<^sup>b*)
-abbreviation "B4 \<phi> \<equiv> \<forall>A. \<phi>(\<^bold>\<midarrow>\<phi>(\<^bold>\<midarrow>A)) \<preceq> A"
+abbreviation "B4 \<phi> \<equiv> \<forall>A. \<phi>(\<^bold>\<midarrow>\<phi>(\<^bold>\<midarrow>A)) \<^bold>\<le> A"
 
 lemma "nMULTr \<phi> \<Longrightarrow> CNTR \<phi> \<Longrightarrow> B4 \<phi> = nIDEMr\<^sup>b \<phi>" proof -
   assume a1: "nMULTr \<phi>" and a2: "CNTR \<phi>"
