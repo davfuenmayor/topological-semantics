@@ -210,7 +210,7 @@ lemma Cl_rel'_b: "iADDI\<^sup>a \<phi> \<longrightarrow> (\<forall>A. \<phi> A \
     ultimately have "\<phi> A \<^bold>\<le> \<C>[\<R>[\<phi>]] A" by (simp add: setequ_ext)
 } } thus ?thesis by simp
 qed
-lemma Cl_rel': "iADDI \<phi> \<longrightarrow> \<phi> \<^bold>=' \<C>[\<R>[\<phi>]]" by (simp add: MONO_iADDIb iADDI_char setequ_char Cl_rel'_a Cl_rel'_b svfun_equ_def)
+lemma Cl_rel': "iADDI \<phi> \<longrightarrow> \<phi> \<^bold>=\<^sup>: \<C>[\<R>[\<phi>]]" by (simp add: MONO_iADDIb iADDI_char setequ_char Cl_rel'_a Cl_rel'_b svfun_equ_def)
 lemma Cl_rel: "iADDI \<phi> \<longleftrightarrow> \<phi> = \<C>[\<R>[\<phi>]]" using Cl_rel' by (metis rC1 svfun_equ_ext)
 
 (**It is instructive to expand the definitions in the above result:*)

@@ -80,20 +80,20 @@ lemma "\<^bold>\<Pi>{\<psi>}\<phi> = \<^bold>\<midarrow>(\<^bold>\<Sigma>{\<psi>
 
 
 (**We can use 2nd-order connectives on set-valued functions to encode restricted quantifiers as unrestricted*)
-lemma "\<^bold>\<Pi>{\<psi>}\<phi> = \<^bold>\<Pi>(\<psi> \<^bold>\<rightarrow>' \<phi>)" by (simp add: impl_def mforall_def mforall_var_def svfun_impl_def)
-lemma "\<^bold>\<Sigma>{\<psi>}\<phi> = \<^bold>\<Sigma>(\<psi> \<^bold>\<and>' \<phi>)" by (simp add: meet_def mexists_def mexists_var_def svfun_meet_def)
+lemma "\<^bold>\<Pi>{\<psi>}\<phi> = \<^bold>\<Pi>(\<psi> \<^bold>\<rightarrow>\<^sup>: \<phi>)" by (simp add: impl_def mforall_def mforall_var_def svfun_impl_def)
+lemma "\<^bold>\<Sigma>{\<psi>}\<phi> = \<^bold>\<Sigma>(\<psi> \<^bold>\<and>\<^sup>: \<phi>)" by (simp add: meet_def mexists_def mexists_var_def svfun_meet_def)
 
 (**Observe that using these operators has the advantage of allowing for binder notation,*)
-lemma "\<^bold>\<Pi>{\<psi>}\<phi> = (\<^bold>\<forall>X. (\<psi> \<^bold>\<rightarrow>' \<phi>) X)" by (simp add: impl_def mforall_def mforall_var_def svfun_impl_def)
-lemma "\<^bold>\<Sigma>{\<psi>}\<phi> = (\<^bold>\<exists>X. (\<psi> \<^bold>\<and>' \<phi>) X)" by (simp add: meet_def mexists_def mexists_var_def svfun_meet_def)
+lemma "\<^bold>\<Pi>{\<psi>}\<phi> = (\<^bold>\<forall>X. (\<psi> \<^bold>\<rightarrow>\<^sup>: \<phi>) X)" by (simp add: impl_def mforall_def mforall_var_def svfun_impl_def)
+lemma "\<^bold>\<Sigma>{\<psi>}\<phi> = (\<^bold>\<exists>X. (\<psi> \<^bold>\<and>\<^sup>: \<phi>) X)" by (simp add: meet_def mexists_def mexists_var_def svfun_meet_def)
 
 (**So to sumarize: different sorts of restricted quantification can be emulated 
   by employing 2nd-order operations to adequately relativise predicates: *)
 
-lemma "\<^bold>\<Pi>[D]\<phi> = (\<^bold>\<forall>X. (D\<upharpoonleft> \<^bold>\<rightarrow>' \<phi>) X)" by (simp add: impl_def mforall_const_def mforall_def svfun_impl_def)
-lemma "\<^bold>\<Pi>{\<^bold>\<top>'}\<phi> = (\<^bold>\<forall>X. (\<^bold>\<top>' \<^bold>\<rightarrow>' \<phi>) X)" by (simp add: impl_def mforall_def mforall_var_def svfun_impl_def)
-lemma "\<^bold>\<Pi>\<phi> = \<^bold>\<Pi>{\<^bold>\<top>'}\<phi>" by (simp add: mforall_def mforall_var_def svfun_top_def top_def)
-lemma "(\<^bold>\<forall>X. \<phi> X) = \<^bold>\<Pi>{\<^bold>\<top>'}\<phi>" by (simp add: mforall_def mforall_var_def svfun_top_def top_def)
+lemma "\<^bold>\<Pi>[D]\<phi> = (\<^bold>\<forall>X. (D\<upharpoonleft> \<^bold>\<rightarrow>\<^sup>: \<phi>) X)" by (simp add: impl_def mforall_const_def mforall_def svfun_impl_def)
+lemma "\<^bold>\<Pi>{\<^bold>\<top>\<^sup>:}\<phi> = (\<^bold>\<forall>X. (\<^bold>\<top>\<^sup>: \<^bold>\<rightarrow>\<^sup>: \<phi>) X)" by (simp add: impl_def mforall_def mforall_var_def svfun_impl_def)
+lemma "\<^bold>\<Pi>\<phi> = \<^bold>\<Pi>{\<^bold>\<top>\<^sup>:}\<phi>" by (simp add: mforall_def mforall_var_def svfun_top_def top_def)
+lemma "(\<^bold>\<forall>X. \<phi> X) = \<^bold>\<Pi>{\<^bold>\<top>\<^sup>:}\<phi>" by (simp add: mforall_def mforall_var_def svfun_top_def top_def)
 
 named_theorems quant (*to group together definitions related to quantification*)
 declare mforall_def[quant] mexists_def[quant]
