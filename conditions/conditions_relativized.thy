@@ -2,12 +2,16 @@ theory conditions_relativized
   imports conditions_negative
 begin
 
-(****************** Relativized order and equality relations ****************)
+subsection \<open>Relativized Conditions\<close>
+
+(**We continue defining and interrelating axiomatic conditions on unary operations (operators). 
+ This time we consider their 'relativized' variants.*)
+
+(**Relativized order and equality relations.*)
 definition subset_in::\<open>'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> bool\<close> ("_\<^bold>\<le>\<^sub>__") 
   where \<open>A \<^bold>\<le>\<^sub>U B \<equiv> \<forall>x. U x \<longrightarrow> (A x \<longrightarrow> B x)\<close>
 definition subset_out::\<open>'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> bool\<close> ("_\<^bold>\<le>\<^sup>__") 
   where \<open>A \<^bold>\<le>\<^sup>U B \<equiv> \<forall>x. \<not>U x \<longrightarrow> (A x \<longrightarrow> B x)\<close>
-
 definition setequ_in::\<open>'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> bool\<close> ("_\<^bold>=\<^sub>__") 
   where \<open>A \<^bold>=\<^sub>U B \<equiv> \<forall>x. U x \<longrightarrow> (A x \<longleftrightarrow> B x)\<close>
 definition setequ_out::\<open>'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> 'p \<sigma> \<Rightarrow> bool\<close> ("_\<^bold>=\<^sup>__") 
@@ -34,8 +38,7 @@ lemma "\<forall>A. A \<^bold>\<le>\<^sup>A \<phi> A" by (simp add: subset_out_de
 lemma "\<forall>A. (\<phi> A) \<^bold>\<le>\<^sub>A A" by (simp add: subset_in_def)
 
 
-(****************** Relativized ADDI variants ****************)
-
+(**Relativized ADDI variants.*)
 definition ADDIr::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("ADDIr")
   where "ADDIr \<phi>  \<equiv> \<forall>A B. let U = (A \<^bold>\<or> B) in      (\<phi>(A \<^bold>\<or> B) \<^bold>=\<^sup>U (\<phi> A) \<^bold>\<or> (\<phi> B))"
 definition ADDIr_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("ADDIr\<^sup>a")
@@ -56,8 +59,7 @@ lemma "nEXPN \<phi> \<Longrightarrow> ADDIr\<^sup>b \<phi> \<longrightarrow> ADD
 lemma ADDIr_b_equ: "EXPN \<phi> \<Longrightarrow> ADDIr\<^sup>b \<phi> = ADDI\<^sup>b \<phi>" unfolding cond by (smt (z3) subset_def subset_out_def)
 
 
-(****************** Relativized MULT variants ****************)
-
+(**Relativized MULT variants.*)
 definition MULTr::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("MULTr")
   where "MULTr \<phi>  \<equiv> \<forall>A B. let U = (A \<^bold>\<and> B) in      (\<phi>(A \<^bold>\<and> B) \<^bold>=\<^sub>U (\<phi> A) \<^bold>\<and> (\<phi> B))"
 definition MULTr_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("MULTr\<^sup>a")
@@ -78,7 +80,7 @@ lemma "MULTr\<^sup>b \<phi> \<longrightarrow> MULT\<^sup>b \<phi>" nitpick oops
 lemma MULTr_b_equ:  "CNTR \<phi> \<Longrightarrow> MULTr\<^sup>b \<phi> = MULT\<^sup>b \<phi>" unfolding cond by (smt (verit, del_insts) meet_def subset_def subset_in_def)
 lemma MULTr_b_equ':"nCNTR \<phi> \<Longrightarrow> MULTr\<^sup>b \<phi> = MULT\<^sup>b \<phi>" unfolding cond by (smt (z3) compl_def subset_def subset_in_def)
 
-(**** Weak variants of monotonicity ***)
+(**Weak variants of monotonicity.*)
 definition MONOw1::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("MONOw\<^sup>1") 
   where "MONOw\<^sup>1 \<phi> \<equiv> \<forall>A B. A \<^bold>\<le> B \<longrightarrow> (\<phi> A) \<^bold>\<le> B \<^bold>\<or> (\<phi> B)"
 definition MONOw2::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("MONOw\<^sup>2")
@@ -103,14 +105,13 @@ lemma MONOw2_impl: "MONO \<phi> \<longrightarrow> MONOw\<^sup>2 \<phi>" by (simp
 lemma "MONOw\<^sup>2 \<phi> \<longrightarrow> MONO \<phi>" nitpick oops
 
 
-(** We have in fact that (n)CNTR (resp. (n)EXPN) implies MONOw\<^sup>1/ADDIr\<^sup>b (resp. MONOw\<^sup>2/MULTr\<^sup>a) *)
+(** We have in fact that (n)CNTR (resp. (n)EXPN) implies MONOw-1/ADDIr-b (resp. MONOw-2/MULTr-a).*)
 lemma CNTR_MONOw1_impl: "CNTR \<phi> \<longrightarrow> MONOw\<^sup>1 \<phi>" by (metis CNTR_def L3 MONOw1_def subset_char1)
 lemma nCNTR_MONOw1_impl: "nCNTR \<phi> \<longrightarrow> MONOw\<^sup>1 \<phi>" by (smt (verit, ccfv_threshold) MONOw1_def compl_def join_def nCNTR_def subset_def)
 lemma EXPN_MONOw2_impl: "EXPN \<phi> \<longrightarrow> MONOw\<^sup>2 \<phi>" by (metis EXPN_def L4 MONOw2_def subset_char1)
 lemma nEXPN_MONOw2_impl: "nEXPN \<phi> \<longrightarrow> MONOw\<^sup>2 \<phi>" by (smt (verit) MONOw2_def compl_def meet_def nEXPN_def subset_def)
 
-(****************** Relativized nADDI variants ****************)
-
+(**Relativized nADDI variants.*)
 definition nADDIr::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nADDIr")
   where "nADDIr \<phi>  \<equiv> \<forall>A B. let U = (A \<^bold>\<or> B) in      (\<phi>(A \<^bold>\<or> B) \<^bold>=\<^sup>U (\<phi> A) \<^bold>\<and> (\<phi> B))"
 definition nADDIr_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nADDIr\<^sup>a")
@@ -132,8 +133,7 @@ lemma "EXPN \<phi> \<Longrightarrow> nADDIr\<^sup>b \<phi> \<longrightarrow> nAD
 lemma nADDIr_b_equ: "nEXPN \<phi> \<Longrightarrow> nADDIr\<^sup>b \<phi> = nADDI\<^sup>b \<phi>" unfolding cond by (smt (z3) compl_def subset_def subset_out_def)
 
 
-(****************** Relativized nMULT variants ****************)
-
+(**Relativized nMULT variants.*)
 definition nMULTr::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nMULTr")
   where "nMULTr \<phi>  \<equiv> \<forall>A B. let U = (A \<^bold>\<and> B) in      (\<phi>(A \<^bold>\<and> B) \<^bold>=\<^sub>U (\<phi> A) \<^bold>\<or> (\<phi> B))"
 definition nMULTr_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nMULTr\<^sup>a")
@@ -155,7 +155,7 @@ lemma nMULTr_b_equ:  "CNTR \<phi> \<Longrightarrow> nMULTr\<^sup>b \<phi> = nMUL
 lemma nMULTr_b_equ':"nCNTR \<phi> \<Longrightarrow> nMULTr\<^sup>b \<phi> = nMULT\<^sup>b \<phi>" unfolding cond by (smt (z3) compl_def join_def meet_def subset_def subset_in_def)
 
 
-(**** Weak variants of antitonicity ***)
+(**Weak variants of antitonicity.*)
 definition ANTIw1::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("ANTIw\<^sup>1") 
   where "ANTIw\<^sup>1 \<phi> \<equiv> \<forall>A B. A \<^bold>\<le> B \<longrightarrow> (\<phi> B) \<^bold>\<le> B \<^bold>\<or> (\<phi> A)"
 definition ANTIw2::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("ANTIw\<^sup>2")
@@ -179,14 +179,13 @@ lemma "ANTIw\<^sup>1 \<phi> \<longrightarrow> ANTI \<phi>" nitpick oops
 lemma "ANTI \<phi> \<longrightarrow> ANTIw\<^sup>2 \<phi>" by (simp add: ANTI_nMULTa ANTIw2_nMULTr_a nMULTr_a_impl)
 lemma "ANTIw\<^sup>2 \<phi> \<longrightarrow> ANTI \<phi>" nitpick oops
 
-(** We have in fact that (n)CNTR (resp. (n)EXPN) implies ANTIw\<^sup>1/nADDIr\<^sup>b (resp. ANTIw\<^sup>2/nMULTr\<^sup>a) *)
+(**We have in fact that (n)CNTR (resp. (n)EXPN) implies ANTIw-1/nADDIr-b (resp. ANTIw-2/nMULTr-a).*)
 lemma CNTR_ANTIw1_impl: "CNTR \<phi> \<longrightarrow> ANTIw\<^sup>1 \<phi>" unfolding cond using L3 subset_char1 by blast
 lemma nCNTR_ANTIw1_impl: "nCNTR \<phi> \<longrightarrow> ANTIw\<^sup>1 \<phi>" unfolding cond by (metis (full_types) compl_def join_def subset_def)
 lemma EXPN_ANTIw2_impl: "EXPN \<phi> \<longrightarrow> ANTIw\<^sup>2 \<phi>" unfolding cond using L4 subset_char1 by blast
 lemma nEXPN_ANTIw2_impl: "nEXPN \<phi> \<longrightarrow> ANTIw\<^sup>2 \<phi>" unfolding cond by (metis (full_types) compl_def meet_def subset_def)
 
-(****************** Dual interrelations ****************)
-
+(**Dual interrelations.*)
 lemma ADDIr_dual1: "ADDIr\<^sup>a \<phi> = MULTr\<^sup>b \<phi>\<^sup>d" unfolding cond subset_in_char subset_out_char by (smt (z3) BA_cp BA_deMorgan1 BA_dn op_dual_def setequ_ext)
 lemma ADDIr_dual2: "ADDIr\<^sup>b \<phi> = MULTr\<^sup>a \<phi>\<^sup>d" unfolding cond subset_in_char subset_out_char by (smt (verit, ccfv_threshold) BA_cp BA_deMorgan1 BA_dn op_dual_def setequ_ext)
 lemma ADDIr_dual:  "ADDIr \<phi> = MULTr \<phi>\<^sup>d" using ADDIr_char ADDIr_dual1 ADDIr_dual2 MULTr_char by blast
@@ -196,8 +195,7 @@ lemma nADDIr_dual2: "nADDIr\<^sup>b \<phi> = nMULTr\<^sup>a \<phi>\<^sup>d" by (
 lemma nADDIr_dual: "nADDIr \<phi> = nMULTr \<phi>\<^sup>d" using nADDIr_char nADDIr_dual1 nADDIr_dual2 nMULTr_char by blast
 
 
-(****************** Complement interrelations ****************)
-
+(**Complement interrelations.*)
 lemma ADDIr_a_cmpl: "ADDIr\<^sup>a \<phi> = nADDIr\<^sup>a \<phi>\<^sup>-" unfolding cond by (smt (verit, del_insts) BA_deMorgan1 compl_def setequ_ext subset_out_def svfun_compl_def)
 lemma ADDIr_b_cmpl: "ADDIr\<^sup>b \<phi> = nADDIr\<^sup>b \<phi>\<^sup>-" unfolding cond by (smt (verit, del_insts) BA_deMorgan1 compl_def setequ_ext subset_out_def svfun_compl_def)
 lemma ADDIr_cmpl: "ADDIr \<phi> = nADDIr \<phi>\<^sup>-" by (simp add: ADDIr_a_cmpl ADDIr_b_cmpl ADDIr_char nADDIr_char)
@@ -206,8 +204,7 @@ lemma MULTr_b_cmpl: "MULTr\<^sup>b \<phi> = nMULTr\<^sup>b \<phi>\<^sup>-" unfol
 lemma MULTr_cmpl: "MULTr \<phi> = nMULTr \<phi>\<^sup>-" by (simp add: MULTr_a_cmpl MULTr_b_cmpl MULTr_char nMULTr_char)
 
 
-(****************** Fixed-point interrelations ****************)
-
+(**Fixed-point interrelations.*)
 lemma EXPN_fp:  "EXPN \<phi> = EXPN \<phi>\<^sup>f\<^sup>p" by (simp add: EXPN_def dimpl_def op_fixpoint_def subset_def)
 lemma EXPN_fpc: "EXPN \<phi> = nEXPN \<phi>\<^sup>f\<^sup>p\<^sup>-" using EXPN_fp nEXPN_CNTR_compl by blast
 lemma CNTR_fp:  "CNTR \<phi> = nCNTR \<phi>\<^sup>f\<^sup>p" by (metis EXPN_CNTR_dual1 EXPN_fp dual_compl_char2 dual_invol nCNTR_EXPN_compl ofp_comm_dc1 sfun_compl_invol)
@@ -229,16 +226,14 @@ lemma MULTr_b_fp: "MULTr\<^sup>b \<phi> = MULTr\<^sup>b \<phi>\<^sup>f\<^sup>p" 
 lemma MULTr_b_fpc: "MULTr\<^sup>b \<phi> = nMULTr\<^sup>b \<phi>\<^sup>f\<^sup>p\<^sup>-" using MULTr_b_cmpl MULTr_b_fp by blast
 
 
-(****************** Relativized IDEM variants ****************)
-
+(**Relativized IDEM variants.*)
 definition IDEMr_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("IDEMr\<^sup>a")
   where "IDEMr\<^sup>a \<phi> \<equiv> \<forall>A. \<phi>(A \<^bold>\<or> \<phi> A) \<^bold>\<le>\<^sup>A (\<phi> A)"
 definition IDEMr_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("IDEMr\<^sup>b") 
   where "IDEMr\<^sup>b \<phi> \<equiv> \<forall>A. (\<phi> A) \<^bold>\<le>\<^sub>A \<phi>(A \<^bold>\<and> \<phi> A)"
 declare IDEMr_a_def[cond] IDEMr_b_def[cond]
 
-(****************** Relativized nIDEM variants ****************)
-
+(**Relativized nIDEM variants.*)
 definition nIDEMr_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nIDEMr\<^sup>a") 
   where "nIDEMr\<^sup>a \<phi> \<equiv> \<forall>A. (\<phi> A) \<^bold>\<le>\<^sup>A \<phi>(A \<^bold>\<or> \<^bold>\<midarrow>(\<phi> A))"
 definition nIDEMr_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("nIDEMr\<^sup>b") 
@@ -247,42 +242,26 @@ definition nIDEMr_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool
 declare nIDEMr_a_def[cond] nIDEMr_b_def[cond]
 
 
-(****************** Complement interrelations ****************)
-
+(**Complement interrelations.*)
 lemma IDEMr_a_cmpl: "IDEMr\<^sup>a \<phi> = nIDEMr\<^sup>a \<phi>\<^sup>-" unfolding cond subset_in_def subset_out_def by (metis compl_def sfun_compl_invol svfun_compl_def)
 lemma IDEMr_b_cmpl: "IDEMr\<^sup>b \<phi> = nIDEMr\<^sup>b \<phi>\<^sup>-" unfolding cond subset_in_def subset_out_def by (metis compl_def sfun_compl_invol svfun_compl_def)
 
-(****************** Dual interrelation ****************)
-
+(**Dual interrelation.*)
 lemma IDEMr_dual: "IDEMr\<^sup>a \<phi> = IDEMr\<^sup>b \<phi>\<^sup>d" unfolding cond subset_in_def subset_out_def op_dual_def by (metis (mono_tags, opaque_lifting) BA_dn compl_def diff_char1 diff_char2 impl_char setequ_ext)
 lemma nIDEMr_dual: "nIDEMr\<^sup>a \<phi> = nIDEMr\<^sup>b \<phi>\<^sup>d" by (metis IDEMr_dual IDEMr_a_cmpl IDEMr_b_cmpl dual_compl_char1 dual_compl_char2 sfun_compl_invol)
 
-(****************** Fixed-point interrelations ****************)
-
-lemma IDEMr_a_fp: "IDEMr\<^sup>a \<phi> = nIDEMr\<^sup>a \<phi>\<^sup>f\<^sup>p" proof -
-  have l2r: "IDEMr\<^sup>a \<phi> \<longrightarrow> nIDEMr\<^sup>a \<phi>\<^sup>f\<^sup>p" 
-    unfolding cond subset_out_def op_fixpoint_def conn order apply simp (*by metis*) sorry (*fix proof reconstruction in kernel*)
-  have r2l: "nIDEMr\<^sup>a \<phi>\<^sup>f\<^sup>p \<longrightarrow> IDEMr\<^sup>a \<phi>" 
-    unfolding cond subset_out_def op_fixpoint_def conn order apply simp (*by metis*) sorry (*fix proof reconstruction in kernel*) 
-  from l2r r2l show ?thesis by blast
+(**Fixed-point interrelations.*)
+lemma nIDEMr_a_fpc: "nIDEMr\<^sup>a \<phi> = nIDEMr\<^sup>a \<phi>\<^sup>f\<^sup>p\<^sup>-" proof -
+  have "\<forall>A. (\<lambda>p. A p \<or> \<not>\<phi> A p) = (\<lambda>p. A p \<or> \<phi> A p = A p)" by blast
+  thus ?thesis unfolding cond subset_out_def ofp_fixpoint_compl_def conn order by simp
 qed
-lemma IDEMr_a_fpc: "IDEMr\<^sup>a \<phi> = IDEMr\<^sup>a \<phi>\<^sup>f\<^sup>p\<^sup>-" using IDEMr_a_fp by (metis IDEMr_a_cmpl sfun_compl_invol)
-
-lemma IDEMr_b_fp: "IDEMr\<^sup>b \<phi> = IDEMr\<^sup>b \<phi>\<^sup>f\<^sup>p" proof -
-  have l2r: "IDEMr\<^sup>b \<phi> \<longrightarrow> IDEMr\<^sup>b \<phi>\<^sup>f\<^sup>p" 
-    unfolding cond subset_in_def op_fixpoint_def conn order apply simp (*by metis*) sorry (*fix proof reconstruction in kernel*)
-  have r2l: "IDEMr\<^sup>b \<phi>\<^sup>f\<^sup>p \<longrightarrow> IDEMr\<^sup>b \<phi>" 
-    unfolding cond subset_in_def op_fixpoint_def conn order apply simp (*by metis*) sorry (*fix proof reconstruction in kernel*)
-  from l2r r2l show ?thesis by blast
-qed
+lemma IDEMr_a_fp: "IDEMr\<^sup>a \<phi> = nIDEMr\<^sup>a \<phi>\<^sup>f\<^sup>p" by (metis IDEMr_a_cmpl nIDEMr_a_fpc ofp_invol)
+lemma IDEMr_a_fpc: "IDEMr\<^sup>a \<phi> = IDEMr\<^sup>a \<phi>\<^sup>f\<^sup>p\<^sup>-" by (metis IDEMr_a_cmpl nIDEMr_a_fpc ofp_comm_compl)
+lemma IDEMr_b_fp: "IDEMr\<^sup>b \<phi> = IDEMr\<^sup>b \<phi>\<^sup>f\<^sup>p" by (metis IDEMr_a_fpc IDEMr_dual dual_compl_char1 dual_invol ofp_comm_compl ofp_comm_dc2)
 lemma IDEMr_b_fpc: "IDEMr\<^sup>b \<phi> = nIDEMr\<^sup>b \<phi>\<^sup>f\<^sup>p\<^sup>-" using IDEMr_b_fp IDEMr_b_cmpl by blast
 
 
-(***************************************************)
-(*** Verifying original border axioms by Zarycki ***)
-(***************************************************)
-
-(*The original border condition B1' is equivalent to the conjuntion of nMULTr and CNTR*)
+(**The original border condition B1' (by Zarycki) is equivalent to the conjuntion of nMULTr and CNTR.*)
 abbreviation "B1' \<phi> \<equiv> \<forall>A B. \<phi>(A \<^bold>\<and> B) \<^bold>= (A \<^bold>\<and> \<phi> B) \<^bold>\<or> (\<phi> A \<^bold>\<and> B)" 
 
 lemma "B1' \<phi> = (nMULTr \<phi> \<and> CNTR \<phi>)" proof -
@@ -292,7 +271,7 @@ lemma "B1' \<phi> = (nMULTr \<phi> \<and> CNTR \<phi>)" proof -
   from l2ra l2rb r2l show ?thesis by blast
 qed
 
-(*Modulo conditions nMULTr and CNTR the border condition B4 is equivalent to nIDEMr\<^sup>b*)
+(**Modulo conditions nMULTr and CNTR the border condition B4 is equivalent to nIDEMr-b.*)
 abbreviation "B4 \<phi> \<equiv> \<forall>A. \<phi>(\<^bold>\<midarrow>\<phi>(\<^bold>\<midarrow>A)) \<^bold>\<le> A"
 
 lemma "nMULTr \<phi> \<Longrightarrow> CNTR \<phi> \<Longrightarrow> B4 \<phi> = nIDEMr\<^sup>b \<phi>" proof -
@@ -301,7 +280,5 @@ lemma "nMULTr \<phi> \<Longrightarrow> CNTR \<phi> \<Longrightarrow> B4 \<phi> =
   have r2l: "nMULTr\<^sup>a \<phi> \<Longrightarrow> CNTR \<phi> \<Longrightarrow> nIDEMr\<^sup>b \<phi> \<longrightarrow> B4 \<phi>" unfolding cond by (smt (verit) compl_def join_def meet_def subset_def subset_in_def)
   from l2r r2l show ?thesis using a1 a2 nMULTr_char by blast
 qed
-
-
 
 end

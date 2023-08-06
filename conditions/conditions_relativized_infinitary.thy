@@ -1,6 +1,8 @@
 theory conditions_relativized_infinitary
   imports conditions_relativized conditions_negative_infinitary
-begin                        
+begin   
+
+subsection \<open>Infinitary Relativized Conditions\<close>
 
 (**We define and interrelate infinitary variants for some previously introduced
  axiomatic conditions on operators.*)
@@ -46,8 +48,7 @@ lemma inADDIr_char: "inADDIr \<phi> = (inADDIr\<^sup>a \<phi> \<and> inADDIr\<^s
 lemma inMULTr_char: "inMULTr \<phi> = (inMULTr\<^sup>a \<phi> \<and> inMULTr\<^sup>b \<phi>)" unfolding cond setequ_char setequ_in_char subset_in_char by (meson setequ_char)
 
 
-(****************** Dual interrelations ****************)
-
+(**Dual interrelations.*)
 lemma iADDIr_dual1: "iADDIr\<^sup>a \<phi> = iMULTr\<^sup>b \<phi>\<^sup>d" unfolding cond by (smt (z3) BA_cmpl_equ BA_cp BA_deMorgan2 dual_invol iDM_a iDM_b im_prop1 op_dual_def setequ_ext subset_in_char subset_out_char)
 lemma iADDIr_dual2: "iADDIr\<^sup>b \<phi> = iMULTr\<^sup>a \<phi>\<^sup>d" unfolding cond by (smt (z3) BA_cmpl_equ BA_cp BA_deMorgan2 dual_invol iDM_a iDM_b im_prop1 op_dual_def setequ_ext subset_in_char subset_out_char)
 lemma iADDIr_dual:  "iADDIr \<phi> = iMULTr \<phi>\<^sup>d" using iADDIr_char iADDIr_dual1 iADDIr_dual2 iMULTr_char by blast
@@ -56,8 +57,7 @@ lemma inADDIr_dual1: "inADDIr\<^sup>a \<phi> = inMULTr\<^sup>b \<phi>\<^sup>d" u
 lemma inADDIr_dual2: "inADDIr\<^sup>b \<phi> = inMULTr\<^sup>a \<phi>\<^sup>d" unfolding cond by (smt (z3) BA_cmpl_equ compl_def dual_invol iDM_a iDM_b im_prop3 op_dual_def setequ_ext subset_in_def subset_in_out)
 lemma inADDIr_dual:  "inADDIr \<phi> = inMULTr \<phi>\<^sup>d" using inADDIr_char inADDIr_dual1 inADDIr_dual2 inMULTr_char by blast
 
-(****************** Complement interrelations ****************)
-
+(**Complement interrelations.*)
 lemma iADDIr_a_cmpl: "iADDIr\<^sup>a \<phi> = inADDIr\<^sup>a \<phi>\<^sup>-" unfolding cond by (smt (z3) compl_def dualcompl_invol iDM_b im_prop2 setequ_ext subset_out_def svfun_compl_def)
 lemma iADDIr_b_cmpl: "iADDIr\<^sup>b \<phi> = inADDIr\<^sup>b \<phi>\<^sup>-" unfolding cond by (smt (z3) compl_def iDM_b im_prop2 setequ_ext sfun_compl_invol subset_out_def svfun_compl_def)
 lemma iADDIr_cmpl: "iADDIr \<phi> = inADDIr \<phi>\<^sup>-" by (simp add: iADDIr_a_cmpl iADDIr_b_cmpl iADDIr_char inADDIr_char)
@@ -66,8 +66,7 @@ lemma iMULTr_a_cmpl: "iMULTr\<^sup>a \<phi> = inMULTr\<^sup>a \<phi>\<^sup>-" un
 lemma iMULTr_b_cmpl: "iMULTr\<^sup>b \<phi> = inMULTr\<^sup>b \<phi>\<^sup>-" unfolding cond by (smt (z3) compl_def dualcompl_invol iDM_a im_prop2 setequ_ext subset_in_def svfun_compl_def)
 lemma iMULTr_cmpl: "MULTr \<phi> = nMULTr \<phi>\<^sup>-" by (simp add: MULTr_a_cmpl MULTr_b_cmpl MULTr_char nMULTr_char)
 
- (****************** Fixed-point interrelations ****************)
-
+(**Fixed-point interrelations.*)
 lemma iADDIr_a_fpc: "iADDIr\<^sup>a \<phi> = iADDIr\<^sup>a \<phi>\<^sup>f\<^sup>p\<^sup>-" unfolding cond subset_out_def image_def ofp_fixpoint_compl_def supremum_def sdiff_def by (smt (verit))
 lemma iADDIr_a_fp: "iADDIr\<^sup>a \<phi> = inADDIr\<^sup>a \<phi>\<^sup>f\<^sup>p" by (metis iADDIr_a_cmpl iADDIr_a_fpc sfun_compl_invol)
 lemma iADDIr_b_fpc: "iADDIr\<^sup>b \<phi> = iADDIr\<^sup>b \<phi>\<^sup>f\<^sup>p\<^sup>-" unfolding cond subset_out_def image_def ofp_fixpoint_compl_def supremum_def sdiff_def by (smt (verit))

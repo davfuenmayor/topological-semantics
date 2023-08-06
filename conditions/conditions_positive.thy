@@ -2,19 +2,22 @@ theory conditions_positive
   imports "../boolean_algebra/boolean_algebra_functional"
 begin
 
-(** We define and interrelate some useful axiomatic conditions on unary operations (operators) 
+section \<open>Topological Conditions\<close>
+
+(**We define and interrelate some useful axiomatic conditions on unary operations (operators) 
 having a 'w-parametric type @{type "'w \<sigma> \<Rightarrow> 'w \<sigma>"}.
 Boolean algebras extended with such operators give us different sorts of topological Boolean algebras.*)
 
+subsection \<open>Positive Conditions\<close>
 
 (**Monotonicity (MONO).*)
 definition MONO::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("MONO")
   where "MONO \<phi> \<equiv> \<forall>A B. A \<^bold>\<le> B \<longrightarrow> \<phi> A \<^bold>\<le> \<phi> B"
 
-named_theorems cond (*(*to group together axiomatic conditions*)*)
+named_theorems cond (*to group together axiomatic conditions*)
 declare MONO_def[cond]
 
-(**MONO is self-dual*)
+(**MONO is self-dual.*)
 lemma MONO_dual: "MONO \<phi> = MONO \<phi>\<^sup>d" by (smt (verit) BA_cp MONO_def dual_invol op_dual_def)
 
 
@@ -26,7 +29,7 @@ definition CNTR::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("
 
 declare EXPN_def[cond] CNTR_def[cond]
 
-(**EXPN and CNTR are dual to each other *)
+(**EXPN and CNTR are dual to each other.*)
 lemma EXPN_CNTR_dual1: "EXPN \<phi> = CNTR \<phi>\<^sup>d" unfolding cond by (metis BA_cp BA_dn op_dual_def setequ_ext)
 lemma EXPN_CNTR_dual2: "CNTR \<phi> = EXPN \<phi>\<^sup>d" by (simp add: EXPN_CNTR_dual1 dual_invol)
 
@@ -39,11 +42,11 @@ definition DNRM::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("
 
 declare NORM_def[cond] DNRM_def[cond]
 
-(**NORM and DNRM are dual to each other *)
+(**NORM and DNRM are dual to each other.*)
 lemma NOR_dual1: "NORM \<phi> = DNRM \<phi>\<^sup>d" unfolding cond by (simp add: bottom_def compl_def op_dual_def setequ_def top_def)
 lemma NOR_dual2: "DNRM \<phi> = NORM \<phi>\<^sup>d" by (simp add: NOR_dual1 dual_invol) 
 
-(**EXPN (CNTR) entail DNRM (NORM).*)
+(**EXPN (CNTR) entails DNRM (NORM).*)
 lemma EXPN_impl_DNRM: "EXPN \<phi> \<longrightarrow> DNRM \<phi>" unfolding cond by (simp add: setequ_def subset_def top_def)
 lemma CNTR_impl_NORM: "CNTR \<phi> \<longrightarrow> NORM \<phi>" by (simp add: EXPN_CNTR_dual2 EXPN_impl_DNRM NOR_dual1 dual_invol)
 
@@ -58,7 +61,7 @@ definition IDEM_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" 
 
 declare IDEM_def[cond] IDEM_a_def[cond] IDEM_b_def[cond]
 
-(**IDEM-a and IDEM-b are dual to each other *)
+(**IDEM-a and IDEM-b are dual to each other.*)
 lemma IDEM_dual1: "IDEM\<^sup>a \<phi> = IDEM\<^sup>b \<phi>\<^sup>d" unfolding cond by (metis (mono_tags, opaque_lifting) BA_cp BA_dn op_dual_def setequ_ext)
 lemma IDEM_dual2: "IDEM\<^sup>b \<phi> = IDEM\<^sup>a \<phi>\<^sup>d" by (simp add: IDEM_dual1 dual_invol)
 
@@ -70,13 +73,12 @@ lemma IDEM_dual: "IDEM \<phi> = IDEM \<phi>\<^sup>d" using IDEM_char IDEM_dual1 
 lemma EXPN_impl_IDEM_b: "EXPN \<phi> \<longrightarrow> IDEM\<^sup>b \<phi>" by (simp add: EXPN_def IDEM_b_def)
 lemma CNTR_impl_IDEM_a: "CNTR \<phi> \<longrightarrow> IDEM\<^sup>a \<phi>" by (simp add: CNTR_def IDEM_a_def)
 
-(**Moreover, IDEM has some other interesting characterizations. For instance, *)
-(**as having the property of collapsing the range and the set of fixed-points of an operator*)
-lemma IDEM_range_fp_char: "IDEM \<phi> = (\<lbrakk>\<phi> _\<rbrakk> = fp \<phi>)" unfolding cond range_def fixpoints_def by (metis setequ_ext)
-(**and via function composition*)
+(**Moreover, IDEM has some other interesting characterizations. For example, via function composition:*)
 lemma IDEM_fun_comp_char: "IDEM \<phi> = (\<phi> = \<phi> \<circ> \<phi>)" unfolding cond fun_comp_def by (metis setequ_ext)
+(**Or having the property of collapsing the range and the set of fixed-points of an operator:*)
+lemma IDEM_range_fp_char: "IDEM \<phi> = (\<lbrakk>\<phi> _\<rbrakk> = fp \<phi>)" unfolding cond range_def fixpoints_def by (metis setequ_ext)
 
-(**Distribution over joins or additivity (ADDI) and its dual...*)
+(**Distribution over joins or additivity (ADDI).*)
 definition ADDI::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("ADDI")
   where "ADDI \<phi>   \<equiv> \<forall>A B. \<phi>(A \<^bold>\<or> B) \<^bold>= (\<phi> A) \<^bold>\<or> (\<phi> B)" 
 definition ADDI_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("ADDI\<^sup>a")
@@ -84,7 +86,7 @@ definition ADDI_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" 
 definition ADDI_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("ADDI\<^sup>b")
   where "ADDI\<^sup>b \<phi> \<equiv> \<forall>A B.  (\<phi> A) \<^bold>\<or> (\<phi> B) \<^bold>\<le> \<phi>(A \<^bold>\<or> B)" 
 
-(**... distribution over meets or multiplicativity (MULT).*)
+(**Distribution over meets or multiplicativity (MULT).*)
 definition MULT::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("MULT") 
   where "MULT \<phi>   \<equiv> \<forall>A B. \<phi>(A \<^bold>\<and> B) \<^bold>= (\<phi> A) \<^bold>\<and> (\<phi> B)" 
 definition MULT_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("MULT\<^sup>a")
@@ -117,14 +119,14 @@ lemma ADDI_MULT_dual2: "MULT \<phi> = ADDI \<phi>\<^sup>d" by (simp add: ADDI_MU
 
 (**We verify properties regarding closure over meets/joins for fixed-points.*)
 
-(**MULT implies meet-closedness of the set of fixed-points (the converse requires additional assumptions)*)
+(**MULT implies meet-closedness of the set of fixed-points (the converse requires additional assumptions).*)
 lemma MULT_meetclosed: "MULT \<phi> \<Longrightarrow> meet_closed (fp \<phi>)" by (simp add: MULT_def fixpoints_def meet_closed_def setequ_ext)
-lemma "meet_closed (fp \<phi>) \<Longrightarrow> MULT \<phi>" nitpick oops (*countermodel found: needs further assumptions*)
+lemma "meet_closed (fp \<phi>) \<Longrightarrow> MULT \<phi>" nitpick oops (**countermodel found: needs further assumptions.*)
 lemma meetclosed_MULT: "MONO \<phi> \<Longrightarrow> CNTR \<phi> \<Longrightarrow> IDEM\<^sup>b \<phi> \<Longrightarrow> meet_closed (fp \<phi>) \<Longrightarrow> MULT \<phi>" by (smt (z3) CNTR_def IDEM_b_def MONO_MULTa MONO_def MULT_a_def MULT_def fixpoints_def meet_closed_def meet_def setequ_char setequ_ext subset_def)
 
-(**ADDI implies join-closedness of the set of fixed-points (the converse requires additional assumptions)*)
+(**ADDI implies join-closedness of the set of fixed-points (the converse requires additional assumptions).*)
 lemma ADDI_joinclosed: "ADDI \<phi> \<Longrightarrow> join_closed (fp \<phi>)" by (simp add: ADDI_def fixpoints_def join_closed_def setequ_ext)
-lemma "join_closed (fp \<phi>) \<Longrightarrow> ADDI \<phi>" nitpick oops (*countermodel found: needs further assumptions*)
+lemma "join_closed (fp \<phi>) \<Longrightarrow> ADDI \<phi>" nitpick oops (**countermodel found: needs further assumptions*)
 lemma joinclosed_ADDI: "MONO \<phi> \<Longrightarrow> EXPN \<phi> \<Longrightarrow> IDEM\<^sup>a \<phi> \<Longrightarrow> join_closed (fp \<phi>) \<Longrightarrow> ADDI \<phi>" by (smt (verit, ccfv_threshold) ADDI_MULT_dual1 BA_deMorgan2 EXPN_CNTR_dual1 IDEM_dual1 MONO_dual fp_dual join_closed_def meet_closed_def meetclosed_MULT sdfun_dcompl_def setequ_ext)
 
 (**Assuming MONO, we have that EXPN (CNTR) implies meet-closed (join-closed) for the set of fixed-points.*)

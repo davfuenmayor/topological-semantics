@@ -2,10 +2,12 @@ theory conditions_negative_infinitary
   imports conditions_negative conditions_positive_infinitary
 begin
 
+subsection \<open>Infinitary Negative Conditions\<close>
+
 (**We define and interrelate infinitary variants for some previously introduced
  axiomatic conditions on operators.*)
 
-(**anti-distribution over infinite joins (suprema) or infinite anti-additivity (inADDI).*)
+(**Anti-distribution over infinite joins (suprema) or infinite anti-additivity (inADDI).*)
 definition inADDI::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("inADDI")
   where "inADDI \<phi>  \<equiv> \<forall>S. \<phi>(\<^bold>\<Or>S) \<^bold>= \<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk>" 
 definition inADDI_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("inADDI\<^sup>a")
@@ -13,7 +15,7 @@ definition inADDI_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool
 definition inADDI_b::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("inADDI\<^sup>b")
   where "inADDI\<^sup>b \<phi> \<equiv> \<forall>S. \<phi>(\<^bold>\<Or>S) \<^bold>\<le> \<^bold>\<And>\<lbrakk>\<phi> S\<rbrakk>"
 
-(**anti-distribution over infinite meets (infima) or infinite anti-multiplicativity (inMULT).*)
+(**Anti-distribution over infinite meets (infima) or infinite anti-multiplicativity (inMULT).*)
 definition inMULT::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("inMULT")
   where "inMULT \<phi>  \<equiv> \<forall>S. \<phi>(\<^bold>\<And>S) \<^bold>= \<^bold>\<Or>\<lbrakk>\<phi> S\<rbrakk>" 
 definition inMULT_a::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> bool" ("inMULT\<^sup>a")
@@ -79,7 +81,7 @@ lemma inADDIa_inMULTb_dual2: "inMULT\<^sup>b \<phi> = inADDI\<^sup>a \<phi>\<^su
 lemma inADDI_inMULT_dual1: "inADDI \<phi> = inMULT \<phi>\<^sup>d" using inADDI_char inADDIa_inMULTb_dual1 inMULT_char inMULTa_inADDIb_dual2 by blast
 lemma inADDI_inMULT_dual2: "inMULT \<phi> = inADDI \<phi>\<^sup>d" by (simp add: dual_invol inADDI_inMULT_dual1)
 
-(**inADDI and inMULT are the 'complements' of iADDI and iMULT respectively*)
+(**inADDI and inMULT are the 'complements' of iADDI and iMULT respectively.*)
 lemma inADDIa_compl: "iADDI\<^sup>a \<phi> = inADDI\<^sup>a \<phi>\<^sup>-" by (metis BA_cmpl_equ BA_cp iADDI_a_def iDM_a im_prop2 inADDI_a_def setequ_ext svfun_compl_def)
 lemma inADDIb_compl: "iADDI\<^sup>b \<phi> = inADDI\<^sup>b \<phi>\<^sup>-" by (simp add: ANTI_MONO ANTI_inADDIb MONO_iADDIb)
 lemma inADDI_compl: "iADDI \<phi> = inADDI \<phi>\<^sup>-" by (simp add: iADDI_char inADDI_char inADDIa_compl inADDIb_compl)

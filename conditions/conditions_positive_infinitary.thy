@@ -2,6 +2,8 @@ theory conditions_positive_infinitary
   imports conditions_positive "../boolean_algebra/boolean_algebra_infinitary"
 begin
 
+subsection \<open>Infinitary Positive Conditions\<close>
+
 (**We define and interrelate infinitary variants for some previously introduced
  axiomatic conditions on operators.*)
 
@@ -28,9 +30,9 @@ lemma iMULT_char: "iMULT \<phi> = (iMULT\<^sup>a \<phi> \<and> iMULT\<^sup>b \<p
 
 (**ADDI-b and iADDI-b are in fact equivalent.*)
 lemma iADDIb_equ: "iADDI\<^sup>b \<phi> = ADDI\<^sup>b \<phi>" proof -
-  have lr: "iADDI\<^sup>b \<phi> \<Longrightarrow> ADDI\<^sup>b \<phi>" proof - (*prove as a one-liner by instantiating iADDI_b_def with S=(\<lambda>Z. Z=A \<or> Z=B)*)
+  have lr: "iADDI\<^sup>b \<phi> \<Longrightarrow> ADDI\<^sup>b \<phi>" proof -
   assume iaddib: "iADDI\<^sup>b \<phi>"
-  { fix A::"'a \<sigma>" and B::"'a \<sigma>" (* for some reason Isabelle doesn't like other letters as type variable. Why?*)
+  { fix A::"'a \<sigma>" and B::"'a \<sigma>" (*Isabelle forces us to use 'a as type variable name*)
     let ?S="\<lambda>Z. Z=A \<or> Z=B"
     have "\<^bold>\<Or>?S = A \<^bold>\<or> B" unfolding supremum_def join_def by blast
     hence p1: "\<phi>(\<^bold>\<Or>?S) = \<phi>(A \<^bold>\<or> B)" by simp
@@ -44,9 +46,9 @@ lemma iADDIb_equ: "iADDI\<^sup>b \<phi> = ADDI\<^sup>b \<phi>" proof -
 qed
 (**MULT-a and iMULT-a are also equivalent.*)
 lemma iMULTa_equ: "iMULT\<^sup>a \<phi> = MULT\<^sup>a \<phi>" proof -
-  have lr: "iMULT\<^sup>a \<phi> \<Longrightarrow> MULT\<^sup>a \<phi>" proof - (*prove as a one-liner by instantiating iMULT_a_def with S=(\<lambda>Z. Z=A \<or> Z=B)*)
+  have lr: "iMULT\<^sup>a \<phi> \<Longrightarrow> MULT\<^sup>a \<phi>" proof -
   assume imulta: "iMULT\<^sup>a \<phi>"
-  { fix A::"'a \<sigma>" and B::"'a \<sigma>"
+  { fix A::"'a \<sigma>" and B::"'a \<sigma>" (*Isabelle forces us to use 'a as type variable name*)
     let ?S="\<lambda>Z. Z=A \<or> Z=B"
     have "\<^bold>\<And>?S = A \<^bold>\<and> B" unfolding infimum_def meet_def by blast
     hence p1: "\<phi>(\<^bold>\<And>?S) = \<phi>(A \<^bold>\<and> B)" by simp
@@ -91,8 +93,8 @@ lemma fp_inf_closed_cond2: "iMULT\<^sup>b \<phi> \<and> CNTR \<phi> \<longrighta
 lemma fp_inf_closed_cond3: "MONO \<phi> \<and> EXPN \<phi> \<longrightarrow> infimum_closed (fp \<phi>)" by (metis EXPN_CNTR_dual1 MONO_dual fp_dual fp_sup_closed_cond3 inf_sup_closed_dc)
 
 (**OTOH, the converse conjectures have (finite) countermodels. They need additional assumptions.*)
-lemma "infimum_closed (fp \<phi>) \<longrightarrow> iMULT \<phi>" nitpick oops (*countermodel found: needs further assumptions*)
-lemma "supremum_closed (fp \<phi>) \<longrightarrow> iADDI \<phi>" nitpick oops (*countermodel found: needs further assumptions*)
+lemma "infimum_closed (fp \<phi>) \<longrightarrow> iMULT \<phi>" nitpick oops (**countermodel found: needs further assumptions*)
+lemma "supremum_closed (fp \<phi>) \<longrightarrow> iADDI \<phi>" nitpick oops (**countermodel found: needs further assumptions*)
 lemma fp_inf_closed_iMULT: "MONO \<phi> \<Longrightarrow> CNTR \<phi> \<Longrightarrow> IDEM\<^sup>b \<phi> \<Longrightarrow> infimum_closed (fp \<phi>) \<longrightarrow> iMULT \<phi>"
 proof -
 assume mono: "MONO \<phi>" and cntr: "CNTR \<phi>" and idem:"IDEM\<^sup>b \<phi>" {
@@ -108,8 +110,8 @@ assume mono: "MONO \<phi>" and cntr: "CNTR \<phi>" and idem:"IDEM\<^sup>b \<phi>
   } hence "infimum_closed (fp \<phi>) \<longrightarrow> iMULT \<phi>" by (simp add: MONO_iMULTa iMULT_b_def iMULT_char mono)
 } thus ?thesis by simp 
 qed
-lemma fp_sup_closed_iADDI: "MONO \<phi> \<Longrightarrow> EXPN \<phi> \<Longrightarrow> IDEM\<^sup>a \<phi> \<Longrightarrow> supremum_closed (fp \<phi>) \<longrightarrow> iADDI \<phi>" by (metis EXPN_CNTR_dual1 IDEM_dual2 MONO_dual dual_invol fp_inf_closed_iMULT fp_inf_sup_closed_dual iADDI_iMULT_dual1)
-(*
+lemma fp_sup_closed_iADDI: "MONO \<phi> \<Longrightarrow> EXPN \<phi> \<Longrightarrow> IDEM\<^sup>a \<phi> \<Longrightarrow> supremum_closed (fp \<phi>) \<longrightarrow> iADDI \<phi>" 
+  (* by (metis EXPN_CNTR_dual1 IDEM_dual2 MONO_dual dual_invol fp_inf_closed_iMULT fp_inf_sup_closed_dual iADDI_iMULT_dual1) *)
 proof -
 assume mono: "MONO \<phi>" and expn: "EXPN \<phi>" and idem:"IDEM\<^sup>a \<phi>" {
   assume sc:"supremum_closed (fp \<phi>)" {
@@ -124,7 +126,6 @@ assume mono: "MONO \<phi>" and expn: "EXPN \<phi>" and idem:"IDEM\<^sup>a \<phi>
   } hence "supremum_closed (fp \<phi>) \<longrightarrow> iADDI \<phi>" by (simp add: MONO_ADDIb iADDI_a_def iADDI_char iADDIb_equ mono)
 } thus ?thesis by simp
 qed
-*)
 
 section \<open>Alexandrov topologies and (generalized) specialization preorders\<close>
 
@@ -146,7 +147,7 @@ preorders in question are in general not even transitive. Here we just call them
 We will still call (generalized) closure/interior-like operations as such (for lack of a better name).
 We explore minimal conditions under which some relevant results for the semantics of modal logic obtain.*)
 
-(**Closure/interior(-like) operators can be derived from an arbitrary relation (as in modal logic)*)
+(**Closure/interior(-like) operators can be derived from an arbitrary relation (as in modal logic).*)
 definition Cl_rel::"('w \<Rightarrow> 'w \<Rightarrow> bool) \<Rightarrow> ('w \<sigma> \<Rightarrow> 'w \<sigma>)" ("\<C>[_]") 
   where "\<C>[R] \<equiv> \<lambda>A. \<lambda>w. \<exists>v. R w v \<and> A v"
 definition Int_rel::"('w \<Rightarrow> 'w \<Rightarrow> bool) \<Rightarrow> ('w \<sigma> \<Rightarrow> 'w \<sigma>)" ("\<I>[_]") 
@@ -180,17 +181,17 @@ definition \<R>::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> ('w \<Ri
 (**Preorder properties of the reachability relation follow from the corresponding operation's conditions.*)
 lemma rel_refl: "EXPN \<phi> \<longrightarrow> reflexive \<R>[\<phi>]" by (simp add: EXPN_def \<R>_def subset_def)
 lemma rel_trans: "MONO \<phi> \<and> IDEM\<^sup>a \<phi> \<longrightarrow> transitive \<R>[\<phi>]" by (smt (verit, best) IDEM_a_def MONO_def \<R>_def subset_def)
-lemma "IDEM\<^sup>a \<phi> \<longrightarrow> transitive \<R>[\<phi>]" nitpick oops (*counterexample*)
+lemma "IDEM\<^sup>a \<phi> \<longrightarrow> transitive \<R>[\<phi>]" nitpick oops (**counterexample*)
 
 (*The converse directions do not hold*)
-lemma "reflexive \<R>[\<phi>] \<longrightarrow> EXPN \<phi>" nitpick oops (*counterexample*)
-lemma "transitive \<R>[\<phi>] \<longrightarrow> IDEM\<^sup>a \<phi>" nitpick oops (*counterexample*)
-lemma "transitive \<R>[\<phi>] \<longrightarrow> MONO \<phi>" nitpick oops (*counterexample*)
+lemma "reflexive \<R>[\<phi>] \<longrightarrow> EXPN \<phi>" nitpick oops (**counterexample*)
+lemma "transitive \<R>[\<phi>] \<longrightarrow> IDEM\<^sup>a \<phi>" nitpick oops (**counterexample*)
+lemma "transitive \<R>[\<phi>] \<longrightarrow> MONO \<phi>" nitpick oops (**counterexample*)
 
 (**However, we can obtain finite countermodels for antisymmetry and symmetry given all relevant conditions.
 We will revisit this issue later and examine their relation with the topological separation axioms T0 and T1 resp.*)
-lemma "iADDI \<phi> \<Longrightarrow> EXPN \<phi> \<Longrightarrow> IDEM\<^sup>a \<phi> \<Longrightarrow> antisymmetric \<R>[\<phi>]" nitpick oops (*counterexample*)
-lemma "iADDI \<phi> \<Longrightarrow> EXPN \<phi> \<Longrightarrow> IDEM\<^sup>a \<phi> \<Longrightarrow> symmetric \<R>[\<phi>]" nitpick oops (*counterexample*)
+lemma "iADDI \<phi> \<Longrightarrow> EXPN \<phi> \<Longrightarrow> IDEM\<^sup>a \<phi> \<Longrightarrow> antisymmetric \<R>[\<phi>]" nitpick oops (**counterexample*)
+lemma "iADDI \<phi> \<Longrightarrow> EXPN \<phi> \<Longrightarrow> IDEM\<^sup>a \<phi> \<Longrightarrow> symmetric \<R>[\<phi>]" nitpick oops (**counterexample*)
 
 (**As mentioned previously, Alexandrov closure (and by duality interior) operations correspond to 
 specialization orderings (reachability relations).
@@ -221,8 +222,7 @@ lemma "supremum_closed (fp \<C>[R])" by (simp add: fp_sup_closed_cond1 rC1)
 lemma "infimum_closed  (fp \<I>[R])" by (metis dual_CI fp_inf_closed_cond1 iADDI_iMULT_dual2 rC1)
 
 
-(**We can now revisit the relationship between (anti)symmetry and the separation axioms T1 and T0.
-The operator \<C> is intended as a closure operator (and its dual as interior)*)
+(**We can now revisit the relationship between (anti)symmetry and the separation axioms T1 and T0.*)
 
 (**T0: any two distinct points in the space can be separated by a closed (or open) set (i.e. containing one point and not the other).*)
 abbreviation "T0 \<C> \<equiv> (\<forall>p q. p \<noteq> q \<longrightarrow> (\<exists>G. (fp \<C>) G \<and> \<not>(G p \<longleftrightarrow> G q)))"
@@ -231,7 +231,7 @@ abbreviation "T1 \<C> \<equiv> (\<forall>p q. p \<noteq> q \<longrightarrow> (\<
 
 (**We can (sanity) check that T1 entails T0 but not viceversa.*)
 lemma "T1 \<C> \<Longrightarrow> T0 \<C>" by meson
-lemma "T0 \<C> \<Longrightarrow> T1 \<C>" nitpick oops (*counterexample*)
+lemma "T0 \<C> \<Longrightarrow> T1 \<C>" nitpick oops (**counterexample*)
 
 
 (**Under appropriate conditions, T0-separation corresponds to antisymmetry of the specialization relation (here an ordering).*)

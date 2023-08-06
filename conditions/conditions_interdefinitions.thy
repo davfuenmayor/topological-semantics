@@ -2,6 +2,14 @@ theory conditions_interdefinitions
   imports conditions_positive
 begin
 
+subsection \<open>Conversion Functions between Topological Operators\<close>
+
+(**We verify minimal conditions under which operators resulting from conversion functions coincide.*)
+
+(**Conversions between interior, closure and exterior are straightforward and hold without restrictions: 
+  Interior and closure are each other duals. Exterior is the complement of closure.
+  We focus here on conversions involving the border and frontier operators.*)
+
 (**Interior operator as derived from border.*)
 definition Int_br::"('w \<sigma>\<Rightarrow>'w \<sigma>)\<Rightarrow>('w \<sigma>\<Rightarrow>'w \<sigma>)" ("\<I>\<^sub>B") 
   where "\<I>\<^sub>B \<B> \<equiv> \<lambda>A. A \<^bold>\<leftharpoonup> (\<B> A)"
@@ -33,6 +41,7 @@ definition Br_cl::"('w \<sigma>\<Rightarrow>'w \<sigma>)\<Rightarrow>('w \<sigma
 definition Br_fr::"('w \<sigma>\<Rightarrow>'w \<sigma>)\<Rightarrow>('w \<sigma>\<Rightarrow>'w \<sigma>)" ("\<B>\<^sub>F") 
   where "\<B>\<^sub>F \<F> \<equiv> \<lambda>A. A \<^bold>\<and> (\<F> A)"
 
+(**Inter-definitions involving border or frontier do not hold without restrictions.*)
 lemma "\<B> = \<B>\<^sub>C (\<C>\<^sub>B \<B>)" nitpick oops
 lemma "\<B> = \<B>\<^sub>I (\<I>\<^sub>B \<B>)" nitpick oops
 lemma "\<B> = \<B>\<^sub>F (\<F>\<^sub>B \<B>)" nitpick oops
@@ -40,18 +49,29 @@ lemma "\<F> = \<F>\<^sub>C (\<C>\<^sub>F \<F>)" nitpick oops
 lemma "\<F> = \<F>\<^sub>I (\<I>\<^sub>F \<F>)" nitpick oops
 lemma "\<F> = \<F>\<^sub>B (\<B>\<^sub>F \<F>)" nitpick oops
 
-abbreviation "SYMM \<phi> \<equiv> \<forall>A. \<phi>(\<^bold>\<midarrow>A) \<^bold>= \<phi> A"
+lemma "\<C> = \<C>\<^sub>B (\<B>\<^sub>C \<C>)" nitpick oops
+lemma "\<C> = \<C>\<^sub>F (\<F>\<^sub>C \<C>)" nitpick oops
+lemma "\<I> = \<I>\<^sub>B (\<B>\<^sub>C \<I>)" nitpick oops
+lemma "\<I> = \<I>\<^sub>F (\<F>\<^sub>C \<I>)" nitpick oops
 
-lemma "CNTR \<B> \<Longrightarrow> \<B> = \<B>\<^sub>C (\<C>\<^sub>B \<B>)" unfolding CNTR_def Br_cl_def Cl_br_def compl_def join_def meet_def subset_def by metis
-lemma "CNTR \<B> \<Longrightarrow> \<B> = \<B>\<^sub>I (\<I>\<^sub>B \<B>)" unfolding CNTR_def Br_int_def Int_br_def diff_def subset_def by metis
-lemma "CNTR \<B> \<Longrightarrow> \<B> = \<B>\<^sub>F (\<F>\<^sub>B \<B>)" unfolding CNTR_def Br_fr_def Fr_br_def subset_def compl_def join_def meet_def by metis
-lemma "SYMM \<F> \<Longrightarrow> \<F> = \<F>\<^sub>C (\<C>\<^sub>F \<F>)" unfolding Cl_fr_def Fr_cl_def compl_def join_def meet_def setequ_ext by metis
-lemma "SYMM \<F> \<Longrightarrow> \<F> = \<F>\<^sub>I (\<I>\<^sub>F \<F>)" unfolding Int_fr_def Fr_int_def compl_def diff_def join_def setequ_ext by metis
-lemma "SYMM \<F> \<Longrightarrow> \<F> = \<F>\<^sub>B (\<B>\<^sub>F \<F>)" unfolding Br_fr_def Fr_br_def compl_def join_def meet_def setequ_ext by metis
 
-lemma "EXPN \<C> \<Longrightarrow> \<C> = \<C>\<^sub>B (\<B>\<^sub>C \<C>)" oops
-  (* unfolding CNTR_def Br_cl_def Cl_br_def compl_def join_def meet_def subset_def by metis *)
+(**Inter-definitions involving border or frontier always assume the second Kuratowski condition 
+  (or its respective counterpart: C2, I2, B2 or F2).*)
+abbreviation "C2 \<phi> \<equiv> EXPN \<phi>"
+abbreviation "I2 \<phi> \<equiv> CNTR \<phi>"
+abbreviation "B2 \<phi> \<equiv> CNTR \<phi>"
+abbreviation "F2 \<phi> \<equiv> \<forall>A. \<phi>(\<^bold>\<midarrow>A) \<^bold>= \<phi> A"
 
-lemma "\<C> = (\<C>\<^sup>d)\<^sup>d" by (simp add: dual_invol)
+lemma "B2 \<B> \<Longrightarrow> \<B> = \<B>\<^sub>C (\<C>\<^sub>B \<B>)" unfolding CNTR_def Br_cl_def Cl_br_def conn order by metis
+lemma "B2 \<B> \<Longrightarrow> \<B> = \<B>\<^sub>I (\<I>\<^sub>B \<B>)" unfolding CNTR_def Br_int_def Int_br_def conn order by metis
+lemma "B2 \<B> \<Longrightarrow> \<B> = \<B>\<^sub>F (\<F>\<^sub>B \<B>)" unfolding CNTR_def Br_fr_def Fr_br_def conn order by metis
+lemma "F2 \<F> \<Longrightarrow> \<F> = \<F>\<^sub>C (\<C>\<^sub>F \<F>)" unfolding Cl_fr_def Fr_cl_def conn order by metis
+lemma "F2 \<F> \<Longrightarrow> \<F> = \<F>\<^sub>I (\<I>\<^sub>F \<F>)" unfolding Int_fr_def Fr_int_def conn order by metis
+lemma "F2 \<F> \<Longrightarrow> \<F> = \<F>\<^sub>B (\<B>\<^sub>F \<F>)" unfolding Br_fr_def Fr_br_def conn order by metis
+
+lemma "C2 \<C> \<Longrightarrow> \<C> = \<C>\<^sub>B (\<B>\<^sub>C \<C>)" unfolding EXPN_def Br_cl_def Cl_br_def conn order by metis
+lemma "C2 \<C> \<Longrightarrow> \<C> = \<C>\<^sub>F (\<F>\<^sub>C \<C>)" unfolding EXPN_def Fr_cl_def Cl_fr_def conn order by metis
+lemma "I2 \<I> \<Longrightarrow> \<I> = \<I>\<^sub>B (\<B>\<^sub>I \<I>)" unfolding CNTR_def Int_br_def Br_int_def conn order by metis
+lemma "I2 \<I> \<Longrightarrow> \<I> = \<I>\<^sub>F (\<F>\<^sub>I \<I>)" unfolding CNTR_def Int_fr_def Fr_int_def conn order by metis
 
 end
