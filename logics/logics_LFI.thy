@@ -1,5 +1,5 @@
-theory LFIs_border
-  imports "logical_consequence" "../conditions/conditions_relativized_infinitary"
+theory logics_LFI
+  imports "logics_logical_consequence" "../conditions/conditions_relativized_infinitary"
 begin
 
 subsection \<open>Logics of Formal Inconsistency (LFIs)\<close>

@@ -1,4 +1,4 @@
-theory logical_consequence
+theory logics_logical_consequence
   imports "../boolean_algebra/boolean_algebra"
 begin
 

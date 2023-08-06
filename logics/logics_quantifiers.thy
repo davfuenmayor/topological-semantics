@@ -1,4 +1,4 @@
-theory quantifiers
+theory logics_quantifiers
   imports "../boolean_algebra/boolean_algebra_infinitary"
 begin
 

@@ -1,5 +1,5 @@
-theory LFUs_closure
-  imports "logical_consequence" "../conditions/conditions_relativized_infinitary"
+theory logics_LFU
+  imports "logics_logical_consequence" "../conditions/conditions_relativized_infinitary"
 begin
 
 subsection \<open>Logics of Formal Undeterminedness (LFUs)\<close>
