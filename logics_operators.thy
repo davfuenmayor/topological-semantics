@@ -1,4 +1,4 @@
-theory conditions_interdefinitions
+theory logics_operators
   imports conditions_positive
 begin
 

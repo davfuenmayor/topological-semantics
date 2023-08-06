@@ -1,4 +1,4 @@
-theory boolean_algebra_functional
+theory boolean_algebra_operators
   imports boolean_algebra
 begin
 

@@ -1,5 +1,5 @@
 theory boolean_algebra_infinitary
-  imports boolean_algebra_functional
+  imports boolean_algebra_operators
 begin
 
 subsection \<open>Encoding infinitary Boolean operations\<close>

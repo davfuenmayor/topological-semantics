@@ -1,5 +1,5 @@
 theory conditions_positive
-  imports boolean_algebra_functional
+  imports boolean_algebra_operators
 begin
 
 section \<open>Topological Conditions\<close>
