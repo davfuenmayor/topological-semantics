@@ -1,5 +1,5 @@
 theory logics_quantifiers_example
-  imports logics_quantifiers "../conditions/conditions_positive_infinitary"
+  imports logics_quantifiers conditions_positive_infinitary
 begin
 
 subsection \<open>Examples on Quantifiers\<close>

@@ -1,5 +1,5 @@
-theory logics_logical_consequence
-  imports "../boolean_algebra/boolean_algebra"
+theory logics_consequence
+  imports boolean_algebra
 begin
 
 section \<open>Logics based on Topological Boolean Algebras\<close>

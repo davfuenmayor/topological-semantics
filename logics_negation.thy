@@ -1,5 +1,5 @@
 theory logics_negation
-  imports logics_logical_consequence "../conditions/conditions_relativized"
+  imports logics_consequence conditions_relativized
 begin
 
 subsection \<open>Properties of negation(-like) operators\<close>

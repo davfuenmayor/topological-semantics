@@ -1,5 +1,5 @@
 theory conditions_positive_infinitary
-  imports conditions_positive "../boolean_algebra/boolean_algebra_infinitary"
+  imports conditions_positive boolean_algebra_infinitary
 begin
 
 subsection \<open>Infinitary Positive Conditions\<close>

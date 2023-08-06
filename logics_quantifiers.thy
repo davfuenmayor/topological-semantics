@@ -1,5 +1,5 @@
 theory logics_quantifiers
-  imports "../boolean_algebra/boolean_algebra_infinitary"
+  imports boolean_algebra_infinitary
 begin
 
 subsection \<open>Quantifiers (restricted and unrestricted)\<close>
