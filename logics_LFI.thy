@@ -66,17 +66,17 @@ abbreviation "BORDER \<phi> \<equiv> nMULTr \<phi> \<and> CNTR \<phi> \<and> nDN
 
 (**We show how (local) contraposition variants (among others) can be recovered using the
  consistency operators.*)
-lemma "[\<circ>\<^sup>Ab, a \<^bold>\<rightarrow> b \<turnstile> \<^bold>\<not>b \<^bold>\<rightarrow> \<^bold>\<not>a]" nitpick oops
+lemma "[\<circ>\<^sup>Ab, a \<^bold>\<rightarrow> b \<turnstile> \<^bold>\<not>b \<^bold>\<rightarrow> \<^bold>\<not>a]" nitpick oops (**countermodel*)
 lemma cons_lcop0_A: "CNTR \<B> \<longrightarrow> [\<circ>\<^sup>Ab,  a \<^bold>\<rightarrow> b \<turnstile> \<^bold>\<not>b \<^bold>\<rightarrow> \<^bold>\<not>a]" by (smt (verit, del_insts) neg_char compl_def impl_char join_def meet_def subset_def)
-lemma "[\<circ>\<^sup>Bb, a \<^bold>\<rightarrow> b \<turnstile> \<^bold>\<not>b \<^bold>\<rightarrow> \<^bold>\<not>a]" nitpick oops
+lemma "[\<circ>\<^sup>Bb, a \<^bold>\<rightarrow> b \<turnstile> \<^bold>\<not>b \<^bold>\<rightarrow> \<^bold>\<not>a]" nitpick oops (**countermodel*)
 lemma cons_lcop0_B: "CNTR \<B> \<longrightarrow> [\<circ>\<^sup>Bb,  a \<^bold>\<rightarrow> b \<turnstile> \<^bold>\<not>b \<^bold>\<rightarrow> \<^bold>\<not>a]" by (metis cons_lcop0_A pconAB)
-lemma "[\<circ>\<^sup>Ab, a \<^bold>\<rightarrow> \<^bold>\<not>b \<turnstile> b \<^bold>\<rightarrow> \<^bold>\<not>a]" nitpick oops
+lemma "[\<circ>\<^sup>Ab, a \<^bold>\<rightarrow> \<^bold>\<not>b \<turnstile> b \<^bold>\<rightarrow> \<^bold>\<not>a]" nitpick oops (**countermodel*)
 lemma cons_lcop1_A: "CNTR \<B> \<longrightarrow> [\<circ>\<^sup>Ab, a \<^bold>\<rightarrow> \<^bold>\<not>b \<turnstile>  b \<^bold>\<rightarrow> \<^bold>\<not>a]" by (smt (verit, del_insts) neg_char compl_def impl_char join_def meet_def subset_def)
-lemma "[\<circ>\<^sup>Bb, a \<^bold>\<rightarrow> \<^bold>\<not>b \<turnstile> b \<^bold>\<rightarrow> \<^bold>\<not>a]" nitpick oops
+lemma "[\<circ>\<^sup>Bb, a \<^bold>\<rightarrow> \<^bold>\<not>b \<turnstile> b \<^bold>\<rightarrow> \<^bold>\<not>a]" nitpick oops (**countermodel*)
 lemma cons_lcop1_B: "CNTR \<B> \<longrightarrow> [\<circ>\<^sup>Bb, a \<^bold>\<rightarrow> \<^bold>\<not>b \<turnstile>  b \<^bold>\<rightarrow> \<^bold>\<not>a]" by (metis cons_lcop1_A pconAB)
-lemma "[\<circ>\<^sup>Ab, \<^bold>\<not>a \<^bold>\<rightarrow> b \<turnstile> \<^bold>\<not>b \<^bold>\<rightarrow> a]" nitpick oops
+lemma "[\<circ>\<^sup>Ab, \<^bold>\<not>a \<^bold>\<rightarrow> b \<turnstile> \<^bold>\<not>b \<^bold>\<rightarrow> a]" nitpick oops (**countermodel*)
 lemma cons_lcop2_A: "CNTR \<B> \<longrightarrow> [\<circ>\<^sup>Ab, \<^bold>\<not>a \<^bold>\<rightarrow> b \<turnstile> \<^bold>\<not>b \<^bold>\<rightarrow> a]" by (smt (verit, del_insts) neg_char compl_def impl_char join_def meet_def subset_def)
-lemma "[\<circ>\<^sup>Bb, \<^bold>\<not>a \<^bold>\<rightarrow> b \<turnstile> \<^bold>\<not>b \<^bold>\<rightarrow> a]" nitpick oops
+lemma "[\<circ>\<^sup>Bb, \<^bold>\<not>a \<^bold>\<rightarrow> b \<turnstile> \<^bold>\<not>b \<^bold>\<rightarrow> a]" nitpick oops (**countermodel*)
 lemma cons_lcop2_B: "CNTR \<B> \<longrightarrow> [\<circ>\<^sup>Bb, \<^bold>\<not>a \<^bold>\<rightarrow> b \<turnstile> \<^bold>\<not>b \<^bold>\<rightarrow> a]" by (metis cons_lcop2_A pconAB)
 
 (**The following axioms are commonly employed in the literature on LFIs to obtain stronger logics.

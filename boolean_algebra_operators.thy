@@ -2,7 +2,7 @@ theory boolean_algebra_operators
   imports boolean_algebra
 begin
 
-subsection \<open>Algebraic connectives on set-valued functions\<close>
+subsection \<open>Operations on set-valued functions\<close>
 
 (**Functions with sets in their codomain will be called here 'set-valued functions'.
   We conveniently define some (2nd-order) Boolean operations on them.*)
@@ -49,7 +49,7 @@ lemma svfun_deMorgan1: "(\<psi> \<^bold>\<and>\<^sup>: \<phi>)\<^sup>- = (\<psi>
 lemma svfun_deMorgan2: "(\<psi> \<^bold>\<or>\<^sup>: \<phi>)\<^sup>- = (\<psi>\<^sup>-) \<^bold>\<and>\<^sup>: (\<phi>\<^sup>-)" unfolding conn conn2 by simp
 
 
-subsection \<open>Further algebraic connectives on operators\<close>
+subsection \<open>Operators and their transformations\<close>
 
 (**Dual to set-valued functions we can have set-domain functions. For them we can define the 'dual-complement'.*)
 definition sdfun_dcompl::"('w \<sigma> \<Rightarrow> 'a) \<Rightarrow> ('w \<sigma> \<Rightarrow> 'a)" ("(_\<^sup>d\<^sup>-)") 
@@ -99,7 +99,7 @@ definition op_fixpoint::"('w \<sigma> \<Rightarrow> 'w \<sigma>) \<Rightarrow> (
 
 declare fixpoints_def[conn2] op_fixpoint_def[conn2]
 
-(**Interestingly, the fixed-point connective is definable in terms of the others.*)
+(**Interestingly, the fixed-point operation (or transformation) is definable in terms of the others.*)
 lemma op_fixpoint_char: "\<phi>\<^sup>f\<^sup>p = (\<phi> \<^bold>\<and>\<^sup>: \<^bold>e) \<^bold>\<or>\<^sup>: (\<phi>\<^sup>- \<^bold>\<and>\<^sup>: \<^bold>n)" unfolding conn2 order conn by blast
 
 (**Given an operator \<phi> the fixed-points of \<phi>'s dual is the set of complements of \<phi>'s fixed-points.*)

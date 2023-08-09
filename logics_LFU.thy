@@ -4,7 +4,7 @@ begin
 
 subsection \<open>Logics of Formal Undeterminedness (LFUs)\<close>
 
-(**The LFUs are a family of paracomplete logics featuring a 'determinedness' operator @{text "\<^bold>\<circ>"}
+(**The LFUs are a family of paracomplete logics featuring a 'determinedness' operator @{text "\<currency>"}
 that can be used to recover some classical properties of negation (in particular TND).
 LFUs behave in a sense dually to LFIs. Both can be semantically embedded as extensions of Boolean algebras.
 We show a shallow semantical embedding of a family of self-extensional LFUs using the closure operator

@@ -2,7 +2,7 @@ theory logics_operators
   imports conditions_positive
 begin
 
-subsection \<open>Conversion Functions between Topological Operators\<close>
+subsection \<open>Converting between topological operators\<close>
 
 (**We verify minimal conditions under which operators resulting from conversion functions coincide.*)
 
@@ -42,17 +42,17 @@ definition Br_fr::"('w \<sigma>\<Rightarrow>'w \<sigma>)\<Rightarrow>('w \<sigma
   where "\<B>\<^sub>F \<F> \<equiv> \<lambda>A. A \<^bold>\<and> (\<F> A)"
 
 (**Inter-definitions involving border or frontier do not hold without restrictions.*)
-lemma "\<B> = \<B>\<^sub>C (\<C>\<^sub>B \<B>)" nitpick oops
-lemma "\<B> = \<B>\<^sub>I (\<I>\<^sub>B \<B>)" nitpick oops
-lemma "\<B> = \<B>\<^sub>F (\<F>\<^sub>B \<B>)" nitpick oops
-lemma "\<F> = \<F>\<^sub>C (\<C>\<^sub>F \<F>)" nitpick oops
-lemma "\<F> = \<F>\<^sub>I (\<I>\<^sub>F \<F>)" nitpick oops
-lemma "\<F> = \<F>\<^sub>B (\<B>\<^sub>F \<F>)" nitpick oops
+lemma "\<B> = \<B>\<^sub>C (\<C>\<^sub>B \<B>)" nitpick oops (**countermodel*)
+lemma "\<B> = \<B>\<^sub>I (\<I>\<^sub>B \<B>)" nitpick oops (**countermodel*)
+lemma "\<B> = \<B>\<^sub>F (\<F>\<^sub>B \<B>)" nitpick oops (**countermodel*)
+lemma "\<F> = \<F>\<^sub>C (\<C>\<^sub>F \<F>)" nitpick oops (**countermodel*)
+lemma "\<F> = \<F>\<^sub>I (\<I>\<^sub>F \<F>)" nitpick oops (**countermodel*)
+lemma "\<F> = \<F>\<^sub>B (\<B>\<^sub>F \<F>)" nitpick oops (**countermodel*)
 
-lemma "\<C> = \<C>\<^sub>B (\<B>\<^sub>C \<C>)" nitpick oops
-lemma "\<C> = \<C>\<^sub>F (\<F>\<^sub>C \<C>)" nitpick oops
-lemma "\<I> = \<I>\<^sub>B (\<B>\<^sub>C \<I>)" nitpick oops
-lemma "\<I> = \<I>\<^sub>F (\<F>\<^sub>C \<I>)" nitpick oops
+lemma "\<C> = \<C>\<^sub>B (\<B>\<^sub>C \<C>)" nitpick oops (**countermodel*)
+lemma "\<C> = \<C>\<^sub>F (\<F>\<^sub>C \<C>)" nitpick oops (**countermodel*)
+lemma "\<I> = \<I>\<^sub>B (\<B>\<^sub>C \<I>)" nitpick oops (**countermodel*)
+lemma "\<I> = \<I>\<^sub>F (\<F>\<^sub>C \<I>)" nitpick oops (**countermodel*)
 
 
 (**Inter-definitions involving border or frontier always assume the second Kuratowski condition 

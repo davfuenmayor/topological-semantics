@@ -31,7 +31,7 @@ lemma setequ_out_char: "(A \<^bold>=\<^sup>U B) = (U \<^bold>\<or> A \<^bold>= U
 lemma "NORM \<phi>  = (let U = \<^bold>\<top> in ((\<phi> \<^bold>\<bottom>) \<^bold>=\<^sub>U \<^bold>\<bottom>))" by (simp add: NORM_def setequ_def setequ_in_def top_def)
 lemma "(let U = \<^bold>\<bottom> in ((\<phi> \<^bold>\<bottom>) \<^bold>=\<^sub>U \<^bold>\<bottom>))" by (simp add: bottom_def setequ_in_def)
 
-(*Relativization ('in' resp. 'out') leaves (n)EXPN/(n)CNTR unchanged or trivializes them.*)
+(**Relativization ('in' resp. 'out') leaves (n)EXPN/(n)CNTR unchanged or trivializes them.*)
 lemma "EXPN \<phi>  = (\<forall>A. A \<^bold>\<le>\<^sub>A \<phi> A)" by (simp add: EXPN_def subset_def subset_in_def)
 lemma "CNTR \<phi>  = (\<forall>A. (\<phi> A) \<^bold>\<le>\<^sup>A A)" by (metis (mono_tags, lifting) CNTR_def subset_def subset_out_def)
 lemma "\<forall>A. A \<^bold>\<le>\<^sup>A \<phi> A" by (simp add: subset_out_def)
@@ -55,7 +55,7 @@ lemma ADDIr_a_equ:  "EXPN \<phi> \<Longrightarrow> ADDIr\<^sup>a \<phi> = ADDI\<
 lemma ADDIr_a_equ':"nEXPN \<phi> \<Longrightarrow> ADDIr\<^sup>a \<phi> = ADDI\<^sup>a \<phi>" unfolding cond by (smt (verit, ccfv_threshold) compl_def subset_def subset_out_def)
 
 lemma ADDIr_b_impl: "ADDI\<^sup>b \<phi> \<longrightarrow> ADDIr\<^sup>b \<phi>" by (simp add: ADDI_b_def ADDIr_b_def subset_def subset_out_def)
-lemma "nEXPN \<phi> \<Longrightarrow> ADDIr\<^sup>b \<phi> \<longrightarrow> ADDI\<^sup>b \<phi>" nitpick oops
+lemma "nEXPN \<phi> \<Longrightarrow> ADDIr\<^sup>b \<phi> \<longrightarrow> ADDI\<^sup>b \<phi>" nitpick oops (**countermodel*)
 lemma ADDIr_b_equ: "EXPN \<phi> \<Longrightarrow> ADDIr\<^sup>b \<phi> = ADDI\<^sup>b \<phi>" unfolding cond by (smt (z3) subset_def subset_out_def)
 
 
@@ -72,11 +72,11 @@ declare MULTr_def[cond] MULTr_a_def[cond] MULTr_b_def[cond]
 lemma MULTr_char: "MULTr \<phi> = (MULTr\<^sup>a \<phi> \<and> MULTr\<^sup>b \<phi>)" unfolding cond by (meson setequ_char setequ_in_char subset_in_char)
 
 lemma MULTr_a_impl: "MULT\<^sup>a \<phi> \<longrightarrow> MULTr\<^sup>a \<phi>" by (simp add: MULT_a_def MULTr_a_def subset_def subset_in_def)
-lemma "nCNTR \<phi> \<Longrightarrow> MULTr\<^sup>a \<phi> \<longrightarrow> MULT\<^sup>a \<phi>" nitpick oops
+lemma "nCNTR \<phi> \<Longrightarrow> MULTr\<^sup>a \<phi> \<longrightarrow> MULT\<^sup>a \<phi>" nitpick oops (**countermodel*)
 lemma MULTr_a_equ: "CNTR \<phi> \<Longrightarrow> MULTr\<^sup>a \<phi> = MULT\<^sup>a \<phi>" unfolding cond by (smt (verit, del_insts) subset_def subset_in_def)
 
 lemma MULTr_b_impl: "MULT\<^sup>b \<phi> \<longrightarrow> MULTr\<^sup>b \<phi>" by (simp add: MULT_b_def MULTr_b_def subset_def subset_in_def)
-lemma "MULTr\<^sup>b \<phi> \<longrightarrow> MULT\<^sup>b \<phi>" nitpick oops
+lemma "MULTr\<^sup>b \<phi> \<longrightarrow> MULT\<^sup>b \<phi>" nitpick oops (**countermodel*)
 lemma MULTr_b_equ:  "CNTR \<phi> \<Longrightarrow> MULTr\<^sup>b \<phi> = MULT\<^sup>b \<phi>" unfolding cond by (smt (verit, del_insts) meet_def subset_def subset_in_def)
 lemma MULTr_b_equ':"nCNTR \<phi> \<Longrightarrow> MULTr\<^sup>b \<phi> = MULT\<^sup>b \<phi>" unfolding cond by (smt (z3) compl_def subset_def subset_in_def)
 
@@ -100,12 +100,12 @@ lemma MONOw2_MULTr_a: "MONOw\<^sup>2 \<phi> = MULTr\<^sup>a \<phi>" proof -
 qed
 
 lemma MONOw1_impl: "MONO \<phi> \<longrightarrow> MONOw\<^sup>1 \<phi>" by (simp add: ADDIr_b_impl MONO_ADDIb MONOw1_ADDIr_b)
-lemma "MONOw\<^sup>1 \<phi> \<longrightarrow> MONO \<phi>" nitpick oops
+lemma "MONOw\<^sup>1 \<phi> \<longrightarrow> MONO \<phi>" nitpick oops (**countermodel*)
 lemma MONOw2_impl: "MONO \<phi> \<longrightarrow> MONOw\<^sup>2 \<phi>" by (simp add: MONO_MULTa MONOw2_MULTr_a MULTr_a_impl)
-lemma "MONOw\<^sup>2 \<phi> \<longrightarrow> MONO \<phi>" nitpick oops
+lemma "MONOw\<^sup>2 \<phi> \<longrightarrow> MONO \<phi>" nitpick oops (**countermodel*)
 
 
-(** We have in fact that (n)CNTR (resp. (n)EXPN) implies MONOw-1/ADDIr-b (resp. MONOw-2/MULTr-a).*)
+(**We have in fact that (n)CNTR (resp. (n)EXPN) implies MONOw-1/ADDIr-b (resp. MONOw-2/MULTr-a).*)
 lemma CNTR_MONOw1_impl: "CNTR \<phi> \<longrightarrow> MONOw\<^sup>1 \<phi>" by (metis CNTR_def L3 MONOw1_def subset_char1)
 lemma nCNTR_MONOw1_impl: "nCNTR \<phi> \<longrightarrow> MONOw\<^sup>1 \<phi>" by (smt (verit, ccfv_threshold) MONOw1_def compl_def join_def nCNTR_def subset_def)
 lemma EXPN_MONOw2_impl: "EXPN \<phi> \<longrightarrow> MONOw\<^sup>2 \<phi>" by (metis EXPN_def L4 MONOw2_def subset_char1)
@@ -124,12 +124,12 @@ declare nADDIr_def[cond] nADDIr_a_def[cond] nADDIr_b_def[cond]
 lemma nADDIr_char: "nADDIr \<phi> = (nADDIr\<^sup>a \<phi> \<and> nADDIr\<^sup>b \<phi>)" unfolding cond by (meson setequ_char setequ_out_char subset_out_char)
 
 lemma nADDIr_a_impl: "nADDI\<^sup>a \<phi> \<longrightarrow> nADDIr\<^sup>a \<phi>" unfolding cond by (simp add: subset_def subset_out_def)
-lemma "nADDIr\<^sup>a \<phi> \<longrightarrow> nADDI\<^sup>a \<phi>" nitpick oops
+lemma "nADDIr\<^sup>a \<phi> \<longrightarrow> nADDI\<^sup>a \<phi>" nitpick oops (**countermodel*)
 lemma nADDIr_a_equ:  "EXPN \<phi> \<Longrightarrow> nADDIr\<^sup>a \<phi> = nADDI\<^sup>a \<phi>" unfolding cond by (smt (z3) subset_def subset_out_def)
 lemma nADDIr_a_equ':"nEXPN \<phi> \<Longrightarrow> nADDIr\<^sup>a \<phi> = nADDI\<^sup>a \<phi>" unfolding cond by (smt (z3) compl_def join_def meet_def subset_def subset_out_def)
 
 lemma nADDIr_b_impl: "nADDI\<^sup>b \<phi> \<longrightarrow> nADDIr\<^sup>b \<phi>" by (simp add: nADDI_b_def nADDIr_b_def subset_def subset_out_def)
-lemma "EXPN \<phi> \<Longrightarrow> nADDIr\<^sup>b \<phi> \<longrightarrow> nADDI\<^sup>b \<phi>" nitpick oops
+lemma "EXPN \<phi> \<Longrightarrow> nADDIr\<^sup>b \<phi> \<longrightarrow> nADDI\<^sup>b \<phi>" nitpick oops (**countermodel*)
 lemma nADDIr_b_equ: "nEXPN \<phi> \<Longrightarrow> nADDIr\<^sup>b \<phi> = nADDI\<^sup>b \<phi>" unfolding cond by (smt (z3) compl_def subset_def subset_out_def)
 
 
@@ -146,11 +146,11 @@ declare nMULTr_def[cond] nMULTr_a_def[cond] nMULTr_b_def[cond]
 lemma nMULTr_char: "nMULTr \<phi> = (nMULTr\<^sup>a \<phi> \<and> nMULTr\<^sup>b \<phi>)" unfolding cond by (meson setequ_char setequ_in_char subset_in_char)
 
 lemma nMULTr_a_impl: "nMULT\<^sup>a \<phi> \<longrightarrow> nMULTr\<^sup>a \<phi>" by (simp add: nMULT_a_def nMULTr_a_def subset_def subset_in_def)
-lemma "CNTR \<phi> \<Longrightarrow> nMULTr\<^sup>a \<phi> \<longrightarrow> nMULT\<^sup>a \<phi>" nitpick oops
+lemma "CNTR \<phi> \<Longrightarrow> nMULTr\<^sup>a \<phi> \<longrightarrow> nMULT\<^sup>a \<phi>" nitpick oops (**countermodel*)
 lemma nMULTr_a_equ: "nCNTR \<phi> \<Longrightarrow> nMULTr\<^sup>a \<phi> = nMULT\<^sup>a \<phi>" unfolding cond by (smt (z3) compl_def subset_def subset_in_def)
 
 lemma nMULTr_b_impl: "nMULT\<^sup>b \<phi> \<longrightarrow> nMULTr\<^sup>b \<phi>" by (simp add: nMULT_b_def nMULTr_b_def subset_def subset_in_def)
-lemma "nMULTr\<^sup>b \<phi> \<longrightarrow> nMULT\<^sup>b \<phi>" nitpick oops
+lemma "nMULTr\<^sup>b \<phi> \<longrightarrow> nMULT\<^sup>b \<phi>" nitpick oops (**countermodel*)
 lemma nMULTr_b_equ:  "CNTR \<phi> \<Longrightarrow> nMULTr\<^sup>b \<phi> = nMULT\<^sup>b \<phi>" unfolding cond by (smt (z3) compl_def join_def meet_def subset_def subset_in_def)
 lemma nMULTr_b_equ':"nCNTR \<phi> \<Longrightarrow> nMULTr\<^sup>b \<phi> = nMULT\<^sup>b \<phi>" unfolding cond by (smt (z3) compl_def join_def meet_def subset_def subset_in_def)
 
@@ -175,9 +175,9 @@ lemma ANTIw2_nMULTr_a: "ANTIw\<^sup>2 \<phi> = nMULTr\<^sup>a \<phi>" proof -
 qed
 
 lemma "ANTI \<phi> \<longrightarrow> ANTIw\<^sup>1 \<phi>" by (simp add: ANTI_nADDIb ANTIw1_nADDIr_b nADDIr_b_impl)
-lemma "ANTIw\<^sup>1 \<phi> \<longrightarrow> ANTI \<phi>" nitpick oops
+lemma "ANTIw\<^sup>1 \<phi> \<longrightarrow> ANTI \<phi>" nitpick oops (**countermodel*)
 lemma "ANTI \<phi> \<longrightarrow> ANTIw\<^sup>2 \<phi>" by (simp add: ANTI_nMULTa ANTIw2_nMULTr_a nMULTr_a_impl)
-lemma "ANTIw\<^sup>2 \<phi> \<longrightarrow> ANTI \<phi>" nitpick oops
+lemma "ANTIw\<^sup>2 \<phi> \<longrightarrow> ANTI \<phi>" nitpick oops (**countermodel*)
 
 (**We have in fact that (n)CNTR (resp. (n)EXPN) implies ANTIw-1/nADDIr-b (resp. ANTIw-2/nMULTr-a).*)
 lemma CNTR_ANTIw1_impl: "CNTR \<phi> \<longrightarrow> ANTIw\<^sup>1 \<phi>" unfolding cond using L3 subset_char1 by blast

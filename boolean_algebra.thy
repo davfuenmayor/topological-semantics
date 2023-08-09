@@ -2,7 +2,8 @@ theory boolean_algebra
   imports Main
 begin
 
-(**----------- Technicalities--------*)
+(*-----------------------------------*)
+(**Technical configuration*)
 declare[[smt_timeout=30]]
 declare[[show_types]]
 (* declare[[syntax_ambiguity_warning=false]] *)
@@ -16,7 +17,7 @@ hide_const(open) Groups.plus_class.plus no_notation Groups.plus_class.plus (infi
 hide_const(open) Groups.times_class.times no_notation Groups.times_class.times (infixl "*" 70) (*we don't use this*)
 hide_const(open) Groups.minus_class.minus no_notation Groups.minus_class.minus (infixl "-" 65) (*we don't use this*)
 hide_const(open) Groups.uminus_class.uminus no_notation Groups.uminus_class.uminus ("- _" [81] 80) (*we don't use this*)
-(**---------------------------------*)
+(*-----------------------------------*)
 
 section \<open>Shallow semantical embedding of (a logic of) Boolean algebras\<close>
 
@@ -35,7 +36,7 @@ and thus correspond to (characteristic functions of) sets of 'points'.
 Set-valued (resp. set-domain) functions are thus functions that have sets as their codomain (resp. domain),
 they are basically anything with a (parametric) type @{type "'a\<Rightarrow>'w \<sigma>"} (resp. @{type "'w \<sigma>\<Rightarrow>'a"}).*)
 
-(**Type for (characteristic functions of) sets (of points)*)
+(**Type for (characteristic functions of) sets (of 'points')*)
 type_synonym 'w \<sigma> = \<open>'w \<Rightarrow> bool\<close>
 
 (**In the sequel, we will (try to) enforce the following naming convention:*)
@@ -46,10 +47,9 @@ In some contexts, the letters S and D will be employed to denote sets/domains of
 
 (**(ii) Greek letters denote arbitrary set-valued functions (@{type "('a \<Rightarrow> 'w \<sigma>)"}).
 We employ the letters @{text "\<phi>"}, @{text "\<psi>"} and @{text "\<eta>"} to denote arbitrary unary operations
-(with type @{type "'w \<sigma> \<Rightarrow> 'w \<sigma>"}); and the letters @{text "\<xi>"} and @{text "\<delta>"} to denote 
-arbitrary binary operations (with type @{type "'w \<sigma> \<Rightarrow> 'w \<sigma> \<Rightarrow> 'w \<sigma>"}).*)
+(with type @{type "'w \<sigma> \<Rightarrow> 'w \<sigma>"}).*)
 
-(**(iii) Upper-case calligraphic letters (\<B>, \<I>, \<C>, \<P>, etc.) are reserved for unary operations that are
+(**(iii) Upper-case calligraphic letters (\<B>, \<I>, \<C>, \<F>, etc.) are reserved for unary operations that are
 intended to act as 'topological operators' in the given context.*)
 
 subsection \<open>Encoding Boolean operations\<close>

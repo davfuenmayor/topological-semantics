@@ -36,7 +36,7 @@ definition ECQw::"'w \<Omega>" where "ECQw \<eta> \<equiv> \<forall>a. ECQw\<^su
 definition ECQm::"'w \<Omega>" where "ECQm \<eta> \<equiv> \<forall>a. ECQm\<^sup>a \<eta>"
 declare ECQ_def[neg] ECQw_def[neg] ECQm_def[neg]
 
-(**Explore some (non)entailment relations:*)
+(**Explore some (non)entailment relations.*)
 lemma "ECQ  \<eta> \<Longrightarrow> ECQw \<eta>" unfolding neg conn order by blast
 lemma "ECQw \<eta> \<Longrightarrow> ECQ  \<eta>" nitpick oops (**counterexample*)
 lemma "ECQw \<eta> \<Longrightarrow> ECQm \<eta>" unfolding neg by simp
@@ -54,7 +54,7 @@ lemma "LNC \<eta> \<Longrightarrow> ECQm \<eta>" nitpick oops (**counterexample*
 
 subsubsection \<open>Contraposition rules\<close>
 
-(**CoP: contraposition (global/rule variants).
+(**CoP: contraposition (weak 'rule-like' variants).
 Variant 0 is antitonicity (ANTI). Variants 1-3 are stronger.*)
 abbreviation pCoP1 ("CoP1\<^sup>_\<^sup>_ _") where "CoP1\<^sup>a\<^sup>b \<eta> \<equiv> [a \<turnstile> \<eta> b] \<longrightarrow> [b \<turnstile> \<eta> a]"
 abbreviation pCoP2 ("CoP2\<^sup>_\<^sup>_ _") where "CoP2\<^sup>a\<^sup>b \<eta> \<equiv> [\<eta> a \<turnstile> b] \<longrightarrow> [\<eta> b \<turnstile> a]"
@@ -67,7 +67,7 @@ definition   CoP3 ::"'w \<Omega>" where "CoP3  \<eta> \<equiv> \<forall>a b. CoP
 
 declare CoP1_def[neg] CoP2_def[neg] CoP3_def[neg]
 
-(**Explore some (non)entailment relations:*)
+(**Explore some (non)entailment relations.*)
 lemma "CoP1 \<eta> \<Longrightarrow> CoP0 \<eta>" unfolding ANTI_def CoP1_def using subset_char1 by blast
 lemma "CoP0 \<eta> \<Longrightarrow> CoP1 \<eta>" nitpick oops (**counterexample*)
 lemma "CoP2 \<eta> \<Longrightarrow> CoP0 \<eta>" unfolding ANTI_def CoP2_def using subset_char1 by blast
@@ -84,7 +84,7 @@ lemma "CoP1 \<eta> \<Longrightarrow> CoP2 \<eta> \<Longrightarrow> TNDm \<eta>" 
 
 subsubsection \<open>Modus tollens rules\<close>
 
-(**MT: modus (tollendo) tollens (global/rule variants).*)
+(**MT: modus (tollendo) tollens (weak 'rule-like' variants).*)
 abbreviation pMT0 ("MT0\<^sup>_\<^sup>_ _") where "MT0\<^sup>a\<^sup>b \<eta> \<equiv> [a \<turnstile> b] \<and> [\<turnstile> \<eta> b] \<longrightarrow> [\<turnstile> \<eta> a]"
 abbreviation pMT1 ("MT1\<^sup>_\<^sup>_ _") where "MT1\<^sup>a\<^sup>b \<eta> \<equiv> [a \<turnstile> \<eta> b] \<and> [\<turnstile> b] \<longrightarrow> [\<turnstile> \<eta> a]"
 abbreviation pMT2 ("MT2\<^sup>_\<^sup>_ _") where "MT2\<^sup>a\<^sup>b \<eta> \<equiv> [\<eta> a \<turnstile> b] \<and> [\<turnstile> \<eta> b] \<longrightarrow> [\<turnstile> a]"
@@ -96,7 +96,7 @@ definition MT3::"'w \<Omega>" where "MT3 \<eta> \<equiv> \<forall>a b. MT3\<^sup
 
 declare MT0_def[neg] MT1_def[neg] MT2_def[neg] MT3_def[neg]
 
-(**Again, all MT variants are pairwise independent. We explore some (non)entailment relations:*)
+(**Again, all MT variants are pairwise independent. We explore some (non)entailment relations.*)
 lemma "CoP0 \<eta> \<Longrightarrow> MT0 \<eta>" unfolding neg order cond conn by blast
 lemma "CoP1 \<eta> \<Longrightarrow> MT1 \<eta>" unfolding neg order conn by blast
 lemma "CoP2 \<eta> \<Longrightarrow> MT2 \<eta>" unfolding neg order conn by blast
@@ -109,7 +109,7 @@ lemma MT123: "MT1 \<eta> \<Longrightarrow> MT2 \<eta> \<Longrightarrow> MT3 \<et
 
 subsubsection \<open>Double negation introduction and elimination\<close>
 
-(**DNI/DNE: double negation introduction/elimination (as axioms).*)
+(**DNI/DNE: double negation introduction/elimination (strong 'axiom-like' variants).*)
 abbreviation pDNI ("DNI\<^sup>_ _") where "DNI\<^sup>a \<eta> \<equiv> [a \<turnstile> \<eta>(\<eta> a)]"
 abbreviation pDNE ("DNE\<^sup>_ _") where "DNE\<^sup>a \<eta> \<equiv> [\<eta>(\<eta> a) \<turnstile> a]"
 definition DNI::"'w \<Omega>" where "DNI \<eta> \<equiv> \<forall>a. DNI\<^sup>a \<eta>"
@@ -131,19 +131,19 @@ lemma "DNI \<eta> \<Longrightarrow> DNE \<eta> \<Longrightarrow> MT1 \<eta>" nit
 lemma "DNI \<eta> \<Longrightarrow> DNE \<eta> \<Longrightarrow> MT2 \<eta>" nitpick oops (**counterexample*)
 lemma "DNI \<eta> \<Longrightarrow> DNE \<eta> \<Longrightarrow> MT3 \<eta>" nitpick oops (**counterexample*)
 
-(**DNI/DNE: double negation introduction/elimination (as rules).*)
+(**DNI/DNE: double negation introduction/elimination (weak 'rule-like' variants).*)
 abbreviation prDNI ("rDNI\<^sup>_ _") where "rDNI\<^sup>a \<eta> \<equiv> [\<turnstile> a] \<longrightarrow> [\<turnstile> \<eta>(\<eta> a)]"
 abbreviation prDNE ("rDNE\<^sup>_ _") where "rDNE\<^sup>a \<eta> \<equiv> [\<turnstile> \<eta>(\<eta> a)] \<longrightarrow> [\<turnstile> a]"
 definition rDNI::"'w \<Omega>" where "rDNI \<eta> \<equiv> \<forall>a. rDNI\<^sup>a \<eta>"
 definition rDNE::"'w \<Omega>" where "rDNE \<eta> \<equiv> \<forall>a. rDNE\<^sup>a \<eta>"
 declare rDNI_def[neg] rDNE_def[neg]
 
-(**The rule variants for DNI/DNE are strictly weaker than the axiom variants.*)
+(**The 'rule-like' variants for DNI/DNE are strictly weaker than the 'axiom-like' ones.*)
 lemma "DNI \<eta> \<Longrightarrow> rDNI \<eta>" unfolding neg order conn by simp
 lemma "rDNI \<eta> \<Longrightarrow> DNI \<eta>" nitpick oops (**counterexample*)
 lemma "DNE \<eta> \<Longrightarrow> rDNE \<eta>" unfolding neg order conn by blast
 lemma "rDNE \<eta> \<Longrightarrow> DNE \<eta>" nitpick oops (**counterexample*)
-(**The rule variants for DNI/DNE follow already from modus tollens.*)
+(**The 'rule-like' variants for DNI/DNE follow already from modus tollens.*)
 lemma MT1_rDNI: "MT1 \<eta> \<Longrightarrow> rDNI \<eta>" unfolding neg order by blast
 lemma MT2_rDNE: "MT2 \<eta> \<Longrightarrow> rDNE \<eta>" unfolding neg order by blast
 
@@ -178,10 +178,10 @@ lemma "CoP0 \<eta> \<Longrightarrow> nADDI\<^sup>a \<eta> \<Longrightarrow> nMUL
 lemma "CoP0 \<eta> \<Longrightarrow> nADDI\<^sup>a \<eta> \<Longrightarrow> nMULT\<^sup>b \<eta> \<Longrightarrow> DNI \<eta> \<Longrightarrow> DNE \<eta> \<Longrightarrow> ECQm \<eta>" nitpick oops (**counterexample*)
 lemma "CoP0 \<eta> \<Longrightarrow> nADDI\<^sup>a \<eta> \<Longrightarrow> nMULT\<^sup>b \<eta> \<Longrightarrow> DNI \<eta> \<Longrightarrow> DNE \<eta> \<Longrightarrow> TNDm \<eta>" nitpick oops (**counterexample*) 
 
-subsubsection \<open>Local contraposition axioms\<close>
+subsubsection \<open>Strong contraposition (axiom-like)\<close>
 (**Observe that the definitions below take implication as an additional parameter: @{text "\<iota>"}.*)
 
-(**lCoP: contraposition (local/axiom variants).*)
+(**lCoP: (local) contraposition (strong 'axiom-like' variants, using local consequence).*)
 abbreviation plCoP0 ("lCoP0\<^sup>_\<^sup>_ _ _") where "lCoP0\<^sup>a\<^sup>b \<iota> \<eta> \<equiv> [\<iota> a b \<turnstile> \<iota> (\<eta> b) (\<eta> a)]"
 abbreviation plCoP1 ("lCoP1\<^sup>_\<^sup>_ _ _") where "lCoP1\<^sup>a\<^sup>b \<iota> \<eta> \<equiv> [\<iota> a (\<eta> b) \<turnstile> \<iota> b (\<eta> a)]"
 abbreviation plCoP2 ("lCoP2\<^sup>_\<^sup>_ _ _") where "lCoP2\<^sup>a\<^sup>b \<iota> \<eta> \<equiv> [\<iota> (\<eta> a) b \<turnstile> \<iota> (\<eta> b) a]"
@@ -193,8 +193,8 @@ definition lCoP3::"('w \<sigma>\<Rightarrow>'w \<sigma>\<Rightarrow>'w \<sigma>)
 
 declare lCoP0_def[neg] lCoP1_def[neg] lCoP2_def[neg] lCoP3_def[neg]
 
-(**All local contraposition variants are in general independent from each other.
-However if we take classical implication we can verify some relationships.*)
+(**All these contraposition variants are in general independent from each other.
+However if we employ classical implication we can verify some relationships.*)
 
 lemma lCoP1_def2: "lCoP1(\<^bold>\<rightarrow>) \<eta> = (lCoP0(\<^bold>\<rightarrow>) \<eta> \<and> DNI \<eta>)" unfolding neg conn order by metis
 lemma lCoP2_def2: "lCoP2(\<^bold>\<rightarrow>) \<eta> = (lCoP0(\<^bold>\<rightarrow>) \<eta> \<and> DNE \<eta>)" unfolding neg conn order by blast
@@ -206,7 +206,7 @@ lemma "lCoP3(\<^bold>\<rightarrow>) \<eta> \<Longrightarrow> lCoP0(\<^bold>\<rig
 lemma "lCoP0(\<^bold>\<rightarrow>) \<eta> \<Longrightarrow> lCoP3(\<^bold>\<rightarrow>) \<eta>" nitpick oops (**counterexample*)
 lemma lCoP123: "lCoP1(\<^bold>\<rightarrow>) \<eta> \<and> lCoP2(\<^bold>\<rightarrow>) \<eta> \<Longrightarrow> lCoP3(\<^bold>\<rightarrow>) \<eta>" unfolding neg conn order by metis
 
-(**Local variants imply global ones as expected.*)
+(**Strong/axiom-like variants imply weak/rule-like ones as expected.*)
 lemma "lCoP0(\<^bold>\<rightarrow>) \<eta> \<Longrightarrow> CoP0 \<eta>" unfolding neg cond conn order by blast
 lemma "lCoP1(\<^bold>\<rightarrow>) \<eta> \<Longrightarrow> CoP1 \<eta>" unfolding neg conn order by blast
 lemma "lCoP2(\<^bold>\<rightarrow>) \<eta> \<Longrightarrow> CoP2 \<eta>" unfolding neg conn order by blast
@@ -221,7 +221,7 @@ lemma "ECQ \<eta> \<Longrightarrow> lCoP2(\<^bold>\<rightarrow>) \<eta>" nitpick
 
 subsubsection \<open>Local modus tollens axioms\<close>
 
-(**lMT: Modus tollens (local/axiom variants).*)
+(**lMT: (local) Modus tollens (strong, 'axiom-like' variants, using local consequence).*)
 abbreviation plMT0 ("lMT0\<^sup>_\<^sup>_ _ _") where "lMT0\<^sup>a\<^sup>b \<iota> \<eta> \<equiv> [\<iota> a b, \<eta> b \<turnstile> \<eta> a]"
 abbreviation plMT1 ("lMT1\<^sup>_\<^sup>_ _ _") where "lMT1\<^sup>a\<^sup>b \<iota> \<eta> \<equiv> [\<iota> a (\<eta> b), b \<turnstile> \<eta> a]"
 abbreviation plMT2 ("lMT2\<^sup>_\<^sup>_ _ _") where "lMT2\<^sup>a\<^sup>b \<iota> \<eta> \<equiv> [\<iota> (\<eta> a) b, \<eta> b \<turnstile> a]"
@@ -233,7 +233,7 @@ definition lMT3::"('w \<sigma>\<Rightarrow>'w \<sigma>\<Rightarrow>'w \<sigma>) 
   
 declare lMT0_def[neg] lMT1_def[neg] lMT2_def[neg] lMT3_def[neg]
 
-(**All local MT variants are in general independent from each other and also from local CoP instances.
+(**All these MT variants are in general independent from each other and also from (strong) CoP instances.
 However if we take classical implication we can verify that local MT and CoP are indeed equivalent.*)
 lemma "lMT0(\<^bold>\<rightarrow>) \<eta> = lCoP0(\<^bold>\<rightarrow>) \<eta>" unfolding neg conn order by blast
 lemma "lMT1(\<^bold>\<rightarrow>) \<eta> = lCoP1(\<^bold>\<rightarrow>) \<eta>" unfolding neg conn order by blast

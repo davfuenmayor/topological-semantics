@@ -12,7 +12,7 @@ abbreviation (input) gtrue::"'w \<sigma> \<Rightarrow> bool" ("[\<turnstile> _]"
 lemma gtrue_def: "[\<turnstile> A] \<equiv> A \<^bold>= \<^bold>\<top>" by (simp add: setequ_def top_def)
 
 (**When defining a logic over an existing algebra we have two choices: a global (truth preserving)
-and a local (degree preserving) notion of logical consequence. For LFIs we prefer the latter.*)
+and a local (degree preserving) notion of logical consequence. For LFIs/LFUs we prefer the latter.*)
 abbreviation (input) conseq_global1::"'w \<sigma> \<Rightarrow> 'w \<sigma>\<Rightarrow>bool" ("[_ \<turnstile>\<^sub>g _]") 
   where "[A \<turnstile>\<^sub>g B] \<equiv> [\<turnstile> A] \<longrightarrow> [\<turnstile> B]"
 abbreviation (input) conseq_global21::"'w \<sigma> \<Rightarrow> 'w \<sigma> \<Rightarrow> 'w \<sigma> \<Rightarrow> bool" ("[_,_ \<turnstile>\<^sub>g _]") 

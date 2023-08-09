@@ -19,7 +19,7 @@ declare infimum_def[conn] supremum_def[conn] (*add infimum and supremum to defin
 lemma iDM_a: "\<^bold>\<midarrow>(\<^bold>\<And>S) \<^bold>= \<^bold>\<Or>(S\<^sup>d\<^sup>-)" unfolding order conn conn2 by force
 lemma iDM_b:" \<^bold>\<midarrow>(\<^bold>\<Or>S) \<^bold>= \<^bold>\<And>(S\<^sup>d\<^sup>-)" unfolding order conn conn2 by force
 
-(**We show that the our encoded Boolean algebras are lattice-complete.
+(**We show that our encoded Boolean algebras are lattice-complete.
 The functions below return the set of upper-/lower-bounds of a set of sets S (wrt. domain D).*)
 definition upper_bounds::"('w \<sigma>)\<sigma> \<Rightarrow> ('w \<sigma>)\<sigma>" ("ub")
   where "ub S \<equiv> \<lambda>U. \<forall>X. S X \<longrightarrow> X \<^bold>\<le> U" 
@@ -44,7 +44,7 @@ definition glb_restr::"('w \<sigma>)\<sigma> \<Rightarrow> ('w \<sigma>)\<sigma>
   where "glb\<^sup>D S \<equiv> \<lambda>L. lb\<^sup>D S L \<and> (\<forall>X. lb\<^sup>D S X \<longrightarrow> X \<^bold>\<le> L)"
 
 (**Both pairs of definitions above are suitably related.
-(Note that the term \<^bold>\<top> below denotes the top element in the algebra of sets of sets (i.e. the powerset).)*)
+(Note that the @{term "\<^bold>\<top>"} below denotes the top element in the algebra of sets of sets (i.e. the powerset).)*)
 lemma lub_char: "lub S = (let D=\<^bold>\<top> in lub\<^sup>D S) " by (simp add: lub_def lub_restr_def ub_char)
 lemma glb_char: "glb S = (let D=\<^bold>\<top> in glb\<^sup>D S) " by (simp add: glb_def glb_restr_def lb_char)
 
@@ -71,8 +71,8 @@ lemma sup_empty: "isEmpty S \<Longrightarrow> \<^bold>\<Or>S \<^bold>= \<^bold>\
 lemma "infimum_closed S \<Longrightarrow> S \<^bold>\<top>" unfolding infimum_closed_def conn order by force
 lemma "supremum_closed S \<Longrightarrow> S \<^bold>\<bottom>" unfolding supremum_closed_def conn order by force
 (**However, the above does not hold for non-empty infimum- (resp. supremum-) closed sets.*)
-lemma "infimum_closed' S \<Longrightarrow> S \<^bold>\<top>" nitpick oops
-lemma "supremum_closed' S \<Longrightarrow> S \<^bold>\<bottom>" nitpick oops
+lemma "infimum_closed' S \<Longrightarrow> S \<^bold>\<top>" nitpick oops (**countermodel*)
+lemma "supremum_closed' S \<Longrightarrow> S \<^bold>\<bottom>" nitpick oops  (**countermodel*)
 
 (**We have in fact the following characterizations for the notions above.*)
 lemma inf_closed_char: "infimum_closed S = (infimum_closed' S \<and> S \<^bold>\<top>)" 
